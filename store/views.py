@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from .models import Book, Category, Cart, Order, Favorite, Review
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
 
 
 # Homepage: showing all books
@@ -14,6 +16,19 @@ def book_detail(request, book_id):
     book = Book.objects.get(id=book_id)
     reviews = Review.objects.filter(book=book)
     return render(request, 'store/book_detail.html', {'book': book, 'reviews': reviews})
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Account created for {username}!')
+            return redirect('login')  # Redirect to the login page after registration
+    else:
+        form = UserCreationForm()
+    return render(request, 'store/register.html', {'form': form})
 
 
 # Adding a book to the cart

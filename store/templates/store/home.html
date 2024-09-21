@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Orbital Bookstore</title>
+    <title>Orbital Bookstore - Home</title>
 </head>
 <body>
     <h1>Books Available</h1>
     <ul>
+        {% if user.is_authenticated %}
+            <li>Welcome, {{ user.username }}!</li>
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        {% else %}
+            <li><a href="{% url 'login' %}">Login</a> | <a href="{% url 'register' %}">Register</a></li>
+        {% endif %}
+    </ul>
+    <ul>
         {% for book in books %}
-        <li>
-            <a href="{% url 'book_detail' book.id %}">{{ book.title }}</a> - {{ book.price }}$
-        </li>
+        <li>{{ book.title }} by {{ book.author }} - ${{ book.price }}</li>
         {% endfor %}
     </ul>
 </body>
