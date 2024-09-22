@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Orbital Bookstore - Home</title>
+     {% load static %}
+    <link rel="stylesheet" href="{% static 'store/styles.css' %}">
+</head>
+<body>
+
+    {% include 'store/_navbar.html' %}
+
+    <h1>Orbital Bookstore</h1>
+    <h3>Books Available</h3>
+
+    <ul>
+        {% for book in books %}
+        <li class="book-item">
+            <a href="{% url 'book_detail' book.id %}">
+                <img src="{{ book.cover_art }}" alt="{{ book.title }} Cover Art" class="book-cover">
+                {{ book.title }} by {{ book.author }} - ${{ book.price }}
+            </a>
+            {% if user.is_authenticated %}
+            <div class="add-to-cart">
+                <form method="POST" action="{% url 'add_to_cart' book.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

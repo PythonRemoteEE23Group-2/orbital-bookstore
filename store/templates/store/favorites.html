@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Your Favorite Books</title>
+</head>
+<body>
+
+    <h1>Your Favorite Books</h1>
+
+    {% if favorites %}
+        <ul>
+        {% for favorite in favorites %}
+            <li>
+                <a href="{% url 'book_detail' favorite.book.id %}">
+                    <img src="{{ favorite.book.cover_art }}" alt="{{ favorite.book.title }} Cover Art" width="100">
+                    <strong>{{ favorite.book.title }}</strong> by {{ favorite.book.author }} - ${{ favorite.book.price }}
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>You have no favorite books yet.</p>
+    {% endif %}
+
+    <a href="{% url 'home' %}">Back to Book List</a>
+
+</body>
+</html>
