@@ -2,24 +2,44 @@
 <html lang="en">
 <head>
     <title>Orbital Bookstore - Home</title>
+    <style>
+        .book-item {
+            margin-bottom: 20px;
+        }
+        .book-cover {
+            width: 100px;
+            height: auto;
+        }
+        .add-to-cart {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Books Available</h1>
-    <ul>
-        {% if user.is_authenticated %}
-            <li>Welcome, {{ user.username }}!</li>
-            <form method="POST" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit">Logout</button>
-            </form>
-        {% else %}
-            <li><a href="{% url 'login' %}">Login</a> | <a href="{% url 'register' %}">Register</a></li>
-        {% endif %}
-    </ul>
+
+    {% include 'store/_navbar.html' %}
+
+    <h1>Orbital Bookstore</h1>
+    <h3>Books Available</h3>
+
     <ul>
         {% for book in books %}
-        <li>{{ book.title }} by {{ book.author }} - ${{ book.price }}</li>
+        <li class="book-item">
+            <a href="{% url 'book_detail' book.id %}">
+                <img src="{{ book.cover_art }}" alt="{{ book.title }} Cover Art" class="book-cover">
+                {{ book.title }} by {{ book.author }} - ${{ book.price }}
+            </a>
+            {% if user.is_authenticated %}
+            <div class="add-to-cart">
+                <form method="POST" action="{% url 'add_to_cart' book.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            {% endif %}
+        </li>
         {% endfor %}
     </ul>
+
 </body>
 </html>

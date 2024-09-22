@@ -1,0 +1,16 @@
+<div class="navbar">
+    <a href="/">Home</a>
+
+    {% if user.is_authenticated %}
+        <span>Welcome, {{ user.username }}!</span>
+        <a href="{% url 'view_favorites' %}">My Favorites</a>  <!-- Move this inside the authenticated block -->
+
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register' %}">Register</a>
+    {% endif %}
+</div>

@@ -3,9 +3,10 @@ from .models import Book, Category, Cart, Order, Favorite, Review
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
+from .models import User
+from django.shortcuts import get_object_or_404, redirect
 
 
-# Homepage: showing all books
 def home(request):
     books = Book.objects.all()
     return render(request, 'store/home.html', {'books': books})
@@ -31,13 +32,19 @@ def register(request):
     return render(request, 'store/register.html', {'form': form})
 
 
-# Adding a book to the cart
 @login_required
 def add_to_cart(request, book_id):
-    book = Book.objects.get(id=book_id)
+    book = get_object_or_404(Book, id=book_id)
+
     cart_item, created = Cart.objects.get_or_create(user=request.user, book=book)
-    cart_item.quantity += 1
-    cart_item.total_cost = cart_item.quantity * cart_item.book.price
+
+    if created:
+        cart_item.quantity = 1
+        cart_item.total_cost = book.price
+    else:
+        cart_item.quantity += 1
+        cart_item.total_cost = cart_item.quantity * book.price
+
     cart_item.save()
     return redirect('view_cart')
 
@@ -46,10 +53,9 @@ def add_to_cart(request, book_id):
 @login_required
 def view_cart(request):
     cart_items = Cart.objects.filter(user=request.user)
-    return render(request, 'cart.html', {'cart_items': cart_items})
+    return render(request, 'store/cart.html', {'cart_items': cart_items})
 
 
-# Checkout process
 @login_required
 def checkout(request):
     cart_items = Cart.objects.filter(user=request.user)
@@ -65,12 +71,60 @@ def checkout(request):
                 payment_status='Unpaid',
                 delivery_email=request.user.email
             )
-        cart_items.delete()
-        return redirect('order_success')
-    return render(request, 'checkout.html', {'cart_items': cart_items})
+        cart_items.delete()  # Clear the user's cart after creating the order
+        return redirect('order_success')  # Corrected URL redirection
+    return render(request, 'store/checkout.html', {'cart_items': cart_items})
 
 
-# Success page after placing an order
 @login_required
 def order_success(request):
-    return render(request, 'order_success.html')
+    return render(request, 'store/order_success.html')
+
+
+@login_required
+def add_to_favorites(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    favorite, created = Favorite.objects.get_or_create(
+        user=request.user,
+        book=book,
+        defaults={'fav_rating': 1}
+    )
+
+    if created:
+        messages.success(request, f'{book.title} has been added to your favorites.')
+    else:
+        messages.info(request, f'{book.title} is already in your favorites.')
+
+    return redirect('book_detail', book_id=book_id)
+
+
+@login_required
+def add_review(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    if request.method == 'POST':
+        rating = request.POST['rating']
+        review_text = request.POST['review_text']
+
+        Review.objects.create(
+            user=request.user,
+            book=book,
+            rating=rating,
+            review_text=review_text
+        )
+        messages.success(request, 'Your review has been added.')
+        return redirect('book_detail', book_id=book_id)
+
+    return render(request, 'store/add_review.html', {'book': book})
+
+
+@login_required
+def view_favorites(request):
+    favorites = Favorite.objects.filter(user=request.user)
+    return render(request, 'store/favorites.html', {'favorites': favorites})
+
+
+@login_required
+def view_reviews(request):
+    reviews = Review.objects.filter(user=request.user)
+    return render(request, 'store/reviews.html', {'reviews': reviews})
+

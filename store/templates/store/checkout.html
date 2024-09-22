@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Checkout</title>
+</head>
+<body>
+
+    <h1>Checkout</h1>
+
+    {% if cart_items %}
+        <h2>Your Cart</h2>
+        <ul>
+            {% for item in cart_items %}
+            <li>
+                <img src="{{ item.book.cover_art }}" alt="{{ item.book.title }} Cover Art" width="100"><br>
+                <strong>{{ item.book.title }}</strong> by {{ item.book.author }}<br>
+                Quantity: {{ item.quantity }}<br>
+                Price per item: ${{ item.book.price }}<br>
+                Total cost: ${{ item.total_cost }}
+            </li>
+            {% endfor %}
+        </ul>
+
+        <h3>Total Price: ${{ cart_items|sum:"total_cost" }}</h3>
+
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit">Proceed to Payment</button>
+        </form>
+    {% else %}
+        <p>Your cart is empty.</p>
+    {% endif %}
+
+    <a href="{% url 'home' %}">Continue Shopping</a>
+
+</body>
+</html>
