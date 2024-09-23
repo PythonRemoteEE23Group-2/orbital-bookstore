@@ -44,6 +44,7 @@ class Book(models.Model):
     cover_art = models.CharField(max_length=255, blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     availability = models.BooleanField(default=True)
+    download_link = models.URLField(max_length=400)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     subcategory = models.ForeignKey(Subcategory, on_delete=models.CASCADE, blank=True, null=True)
 
@@ -60,6 +61,7 @@ class Review(models.Model):
 
 
 class Favorite(models.Model):
+    fav_rating = models.IntegerField(default=1)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
 
@@ -68,11 +70,14 @@ class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    quantity = models.IntegerField(default=1)
+    total_cost = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     order_date = models.DateTimeField(auto_now_add=True)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, default=1)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
     total_cost = models.DecimalField(max_digits=10, decimal_places=2)
@@ -83,3 +88,13 @@ class Order(models.Model):
     email_sent_date = models.DateTimeField(null=True, blank=True)
     download_link = models.CharField(max_length=255, null=True, blank=True)
     download_expiry_date = models.DateTimeField(null=True, blank=True)
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f'{self.book.title} - {self.order.user.username}'

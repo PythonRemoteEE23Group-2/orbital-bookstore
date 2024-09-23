@@ -16,6 +16,12 @@
                     Quantity: {{ item.quantity }}<br>
                     Price per item: ${{ item.book.price }}<br>
                     Total cost: ${{ item.total_cost }}
+
+                    <!-- Remove item button -->
+                    <form method="POST" action="{% url 'remove_from_cart' item.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Remove</button>
+                    </form>
                 </li>
             {% endfor %}
         </ul>
