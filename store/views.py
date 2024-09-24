@@ -1,5 +1,5 @@
 import logging
-
+from django.db.models import Q
 from django.shortcuts import render
 from .models import Book, Category, Cart, Order, Favorite, Review, OrderItem
 from django.contrib.auth.decorators import login_required
@@ -189,3 +189,36 @@ def view_favorites(request):
 def view_reviews(request):
     reviews = Review.objects.filter(user=request.user)
     return render(request, 'store/reviews.html', {'reviews': reviews})
+
+
+@login_required
+def update_cart_quantity(request, item_id, operation):
+    cart_item = get_object_or_404(Cart, id=item_id, user=request.user)
+
+    if operation == 'increase':
+        cart_item.quantity += 1
+    elif operation == 'decrease' and cart_item.quantity > 1:
+        cart_item.quantity -= 1
+    elif operation == 'decrease' and cart_item.quantity == 1:
+        # If quantity reaches 0, remove the item
+        cart_item.delete()
+        return redirect('view_cart')
+
+    cart_item.total_cost = cart_item.quantity * cart_item.book.price
+    cart_item.save()
+
+    return redirect('view_cart')
+
+
+def search(request):
+    query = request.GET.get('q', '')
+    if query:
+        books = Book.objects.filter(
+            Q(title__icontains=query) |
+            Q(author__icontains=query) |
+            Q(description__icontains=query)
+        )
+    else:
+        books = Book.objects.none()
+
+    return render(request, 'store/search_results.html', {'books': books})

@@ -59,6 +59,21 @@
                 width: calc(50% - 10px);
             }
         }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .search-bar {
+            width: 300px;
+            padding: 5px;
+            font-size: 16px;
+        }
+        .search-button {
+            padding: 5px 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -69,6 +84,14 @@
     <div class="page-wrapper">
         <div class="container">
             {% include 'store/_navbar.html' %}
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <form method="GET" action="{% url 'search' %}">
+                    <input type="text" name="q" class="search-bar" placeholder="Search by title or author" required>
+                    <button type="submit" class="search-button">Search</button>
+                </form>
+            </div>
 
             <h1>Orbital Bookstore</h1>
             <h3>Books Available</h3>
