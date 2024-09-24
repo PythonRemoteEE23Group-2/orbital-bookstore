@@ -19,4 +19,7 @@ urlpatterns = [
     path('cart/remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('cart/update_quantity/<int:item_id>/<str:operation>/', views.update_cart_quantity, name='update_cart_quantity'),
     path('search/', views.search, name='search'),
+    path('about-us/', views.about_us, name='about_us'),
+    path('contact-us/', views.contact_us, name='contact_us'),
+    path('terms-and-conditions/', views.terms_and_conditions, name='terms_and_conditions'),
 ]

@@ -222,3 +222,12 @@ def search(request):
         books = Book.objects.none()
 
     return render(request, 'store/search_results.html', {'books': books})
+
+def about_us(request):
+    return render(request, 'store/about_us.html')
+
+def contact_us(request):
+    return render(request, 'store/contact_us.html')
+
+def terms_and_conditions(request):
+    return render(request, 'store/terms_and_conditions.html')

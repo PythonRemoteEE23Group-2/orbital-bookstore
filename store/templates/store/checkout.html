@@ -63,10 +63,10 @@
         <h3>Order Summary</h3>
         <ul>
             {% for item in cart_items %}
-            <li>{{ item.book.title }} - Quantity: {{ item.quantity }} - Price per item: ${{ item.book.price }}</li>
+            <li>{{ item.book.title }} - Quantity: {{ item.quantity }} - Price per item: €{{ item.book.price }}</li>
             {% endfor %}
         </ul>
-        <p>Total Price: ${{ total_price }}</p>
+        <p>Total Price: €{{ total_price }}</p>
 
         <h3>Payment Details</h3>
         <label for="payment_method">Payment Method</label>
