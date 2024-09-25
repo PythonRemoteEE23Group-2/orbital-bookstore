@@ -2,36 +2,87 @@
 <html lang="en">
 <head>
     <title>Checkout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1, h3 {
+            color: #333;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select {
+            margin-bottom: 10px;
+            padding: 8px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-
     <h1>Checkout</h1>
 
-    {% if cart_items %}
-        <h2>Your Cart</h2>
+    <form method="POST" action="{% url 'checkout' %}">
+        {% csrf_token %}
+        <h3>Order Summary</h3>
         <ul>
             {% for item in cart_items %}
-            <li>
-                <img src="{{ item.book.cover_art }}" alt="{{ item.book.title }} Cover Art" width="100"><br>
-                <strong>{{ item.book.title }}</strong> by {{ item.book.author }}<br>
-                Quantity: {{ item.quantity }}<br>
-                Price per item: ${{ item.book.price }}<br>
-                Total cost: ${{ item.total_cost }}
-            </li>
+            <li>{{ item.book.title }} - Quantity: {{ item.quantity }} - Price per item: €{{ item.book.price }}</li>
             {% endfor %}
         </ul>
+        <p>Total Price: €{{ total_price }}</p>
 
-        <h3>Total Price: ${{ cart_items|sum:"total_cost" }}</h3>
+        <h3>Payment Details</h3>
+        <label for="payment_method">Payment Method</label>
+        <select id="payment_method" name="payment_method">
+            <option value="Credit Card">Credit Card</option>
+            <option value="PayPal">PayPal</option>
+        </select>
 
-        <form method="POST">
-            {% csrf_token %}
-            <button type="submit">Proceed to Payment</button>
-        </form>
-    {% else %}
-        <p>Your cart is empty.</p>
-    {% endif %}
+        <h3>Delivery Email</h3>
+        <label for="delivery_email">Delivery Email</label>
+        <input type="email" id="delivery_email" name="email" value="{{ request.user.email }}" required>
 
-    <a href="{% url 'home' %}">Continue Shopping</a>
+        <button type="submit">Place Order</button>
+    </form>
 
+    <br>
+    <a href="{% url 'view_cart' %}">Back to Cart</a>
 </body>
 </html>

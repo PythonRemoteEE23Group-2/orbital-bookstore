@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Search Results</title>
+    <style>
+        .book-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            list-style-type: none;
+            padding: 0;
+            justify-content: center;
+        }
+        .book-item {
+            width: calc(25% - 15px);
+            min-width: 200px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .book-cover {
+            width: 100%;
+            height: auto;
+            max-height: 200px;
+            object-fit: cover;
+        }
+        .book-info {
+            margin-top: 10px;
+        }
+        .add-to-cart {
+            margin-top: 10px;
+        }
+        @media (max-width: 768px) {
+            .book-item {
+                width: calc(50% - 10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Search Results</h1>
+
+    {% if books %}
+        <ul class="book-list">
+            {% for book in books %}
+            <li class="book-item">
+                <a href="{% url 'book_detail' book.id %}">
+                    <img src="{{ book.cover_art }}" alt="{{ book.title }} Cover Art" class="book-cover">
+                    <div class="book-info">
+                        <h4>{{ book.title }}</h4>
+                        <p>by {{ book.author }}</p>
+                        <p>€{{ book.price }}</p>
+                    </div>
+                </a>
+                {% if user.is_authenticated %}
+                <div class="add-to-cart">
+                    <form method="POST" action="{% url 'add_to_cart' book.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Add to Cart</button>
+                    </form>
+                </div>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No books found matching your query.</p>
+    {% endif %}
+</body>
+</html>

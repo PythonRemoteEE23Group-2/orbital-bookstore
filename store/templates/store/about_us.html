@@ -1,7 +1,5 @@
 <div class="navbar">
     <a href="/">Home</a>
-    <a href="{% url 'shipping_information' %}">Shipping Information</a> <!-- Added link to Shipping Information page -->
-
     {% if user.is_authenticated %}
         <span>Welcome, {{ user.username }}!</span>
         <a href="{% url 'view_cart' %}">Cart ({{ cart_items_count }})</a>

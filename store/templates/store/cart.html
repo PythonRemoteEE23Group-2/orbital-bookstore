@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title><!DOCTYPE html>
-<html lang="en">
-<head>
     <title>Your Cart</title>
 </head>
 <body>
@@ -17,9 +13,25 @@
                 <li>
                     <img src="{{ item.book.cover_art }}" alt="{{ item.book.title }} Cover Art" width="100">
                     <strong>{{ item.book.title }}</strong> by {{ item.book.author }}<br>
-                    Quantity: {{ item.quantity }}<br>
-                    Price per item: ${{ item.book.price }}<br>
-                    Total cost: ${{ item.total_cost }}
+                    Price per item: €{{ item.book.price }}<br>
+                    Total cost: €{{ item.total_cost }}
+
+                    <!-- Quantity adjustment buttons -->
+                    <form method="POST" action="{% url 'update_cart_quantity' item.id 'increase' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit">+</button>
+                    </form>
+                    <span>{{ item.quantity }}</span>
+                    <form method="POST" action="{% url 'update_cart_quantity' item.id 'decrease' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit">-</button>
+                    </form>
+
+                    <!-- Remove item button -->
+                    <form method="POST" action="{% url 'remove_from_cart' item.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit">Remove</button>
+                    </form>
                 </li>
             {% endfor %}
         </ul>
@@ -33,11 +45,6 @@
     {% endif %}
 
     <a href="{% url 'home' %}">Continue Shopping</a>
-
-</body>
-</html></title>
-</head>
-<body>
 
 </body>
 </html>
