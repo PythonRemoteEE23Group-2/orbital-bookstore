@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <title>Orbital Bookstore - Home</title>
+  <!--  {% load static %}
+    <link rel="stylesheet" href="{% static 'store/styles.css' %}">-->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -112,7 +114,7 @@
                 {% for book in books %}
                 <li class="book-item">
                     <a href="{% url 'book_detail' book.id %}">
-                        <img src="{{ book.cover_art }}" alt="{{ book.title }} Cover Art" class="book-cover">
+                        <img src="{{ book.cover_art.url }}" alt="{{ book.title }} Cover Art" class="book-cover">
                         <div class="book-info">
                             <h4>{{ book.title }}</h4>
                             <p>by {{ book.author }}</p>

@@ -231,3 +231,6 @@ def contact_us(request):
 
 def terms_and_conditions(request):
     return render(request, 'store/terms_and_conditions.html')
+
+def shipping_information(request):
+    return render(request, 'store/shipping_information.html')

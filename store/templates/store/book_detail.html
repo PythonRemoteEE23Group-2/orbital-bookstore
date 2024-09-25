@@ -8,7 +8,7 @@
     <h1>{{ book.title }}</h1>
 
     <!-- Display the cover art using the URL stored in the 'cover_art' field -->
-    <img src="{{ book.cover_art }}" alt="{{ book.title }} Cover Art" width="300">
+    <img src="{{ book.cover_art.url }}" alt="{{ book.title }} Cover Art" width="300">
 
     <p>{{ book.description }}</p>
     <p>Price: ${{ book.price }}</p>

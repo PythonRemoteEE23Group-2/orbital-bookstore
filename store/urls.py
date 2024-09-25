@@ -1,6 +1,8 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -22,4 +24,5 @@ urlpatterns = [
     path('about-us/', views.about_us, name='about_us'),
     path('contact-us/', views.contact_us, name='contact_us'),
     path('terms-and-conditions/', views.terms_and_conditions, name='terms_and_conditions'),
-]
+    path('shipping-information/', views.shipping_information, name='shipping_information'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
