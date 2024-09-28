@@ -11,7 +11,7 @@
     <img src="{{ book.cover_art.url }}" alt="{{ book.title }} Cover Art" width="300">
 
     <p>{{ book.description }}</p>
-    <p>Price: ${{ book.price }}</p>
+    <p>Price: €{{ book.price }}</p>
     <p>Availability: {% if book.availability %}In Stock{% else %}Out of Stock{% endif %}</p>
 
     <!-- Add to Cart Form -->
