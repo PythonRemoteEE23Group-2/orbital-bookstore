@@ -3,7 +3,7 @@
 <head>
     <title>Search Results</title>
     <style>
-        .book-list {
+        .item-list {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
@@ -11,50 +11,105 @@
             padding: 0;
             justify-content: center;
         }
-        .book-item {
+        .item {
             width: calc(25% - 15px);
             min-width: 200px;
             border: 1px solid #ddd;
             padding: 10px;
             box-sizing: border-box;
         }
-        .book-cover {
+        .item-cover {
             width: 100%;
             height: auto;
             max-height: 200px;
             object-fit: cover;
         }
-        .book-info {
+        .item-info {
             margin-top: 10px;
         }
         .add-to-cart {
             margin-top: 10px;
         }
         @media (max-width: 768px) {
-            .book-item {
+            .item {
                 width: calc(50% - 10px);
             }
+        }
+        .back-home {
+            display: block;
+            margin-bottom: 20px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
+    <!-- Load custom filters -->
+    {% load custom_filters %}
+
+    <!-- Back to Home Link -->
+    <a href="{% url 'home' %}" class="back-home">Back to Home</a>
+
     <h1>Search Results</h1>
 
-    {% if books %}
-        <ul class="book-list">
-            {% for book in books %}
-            <li class="book-item">
-                <a href="{% url 'book_detail' book.id %}">
-                    <img src="{{ book.cover_art }}" alt="{{ book.title }} Cover Art" class="book-cover">
-                    <div class="book-info">
-                        <h4>{{ book.title }}</h4>
-                        <p>by {{ book.author }}</p>
-                        <p>€{{ book.price }}</p>
+    {% if items %}
+        <ul class="item-list">
+            {% for item in items %}
+            <li class="item">
+                <!-- Check and display based on item type using custom filters -->
+                {% if item|is_book %}
+                    <a href="{% url 'book_detail' item.id %}">
+                        <img src="{{ item.cover_art.url }}" alt="{{ item.title }} Cover Art" class="item-cover">
+                        <div class="item-info">
+                            <h4>{{ item.title }}</h4>
+                            <p>by {{ item.author }}</p>
+                            <p>€{{ item.price }}</p>
+                        </div>
+                    </a>
+                {% elif item|is_ebook %}
+                    <a href="{% url 'ebook_detail' item.id %}">
+                        <img src="{{ item.cover_art.url }}" alt="{{ item.title }} Cover Art" class="item-cover">
+                        <div class="item-info">
+                            <h4>{{ item.title }}</h4>
+                            <p>by {{ item.author }}</p>
+                            <p>€{{ item.price }}</p>
+                        </div>
+                    </a>
+                {% elif item|is_accessory %}
+                    <div class="item-info">
+                        <h4>{{ item.name }}</h4>
+                        <p>€{{ item.price }}</p>
                     </div>
-                </a>
+                {% elif item|is_book_wrap %}
+                    <div class="item-info">
+                        <h4>{{ item.accessory.name }} - {{ item.color }}</h4>
+                        <p>€{{ item.accessory.price }}</p>
+                    </div>
+                {% elif item|is_exlibris %}
+                    <div class="item-info">
+                        <h4>{{ item.accessory.name }} - {{ item.design }}</h4>
+                        <p>€{{ item.accessory.price }}</p>
+                    </div>
+                {% elif item|is_booklet_folder %}
+                    <div class="item-info">
+                        <h4>{{ item.school_office.name }} - {{ item.size }}</h4>
+                        <p>€{{ item.school_office.price }}</p>
+                    </div>
+                {% elif item|is_pencil %}
+                    <div class="item-info">
+                        <h4>{{ item.school_office.name }} - {{ item.pencil_type }}</h4>
+                        <p>€{{ item.school_office.price }}</p>
+                    </div>
+                {% elif item|is_school_office %}
+                    <div class="item-info">
+                        <h4>{{ item.name }}</h4>
+                        <p>€{{ item.price }}</p>
+                    </div>
+                {% endif %}
+
+                <!-- Add to Cart Form -->
                 {% if user.is_authenticated %}
                 <div class="add-to-cart">
-                    <form method="POST" action="{% url 'add_to_cart' book.id %}">
+                    <form method="POST" action="{% url 'add_to_cart' item.id %}">
                         {% csrf_token %}
                         <button type="submit">Add to Cart</button>
                     </form>
@@ -64,7 +119,7 @@
             {% endfor %}
         </ul>
     {% else %}
-        <p>No books found matching your query.</p>
+        <p>No items found matching your query.</p>
     {% endif %}
 </body>
 </html>

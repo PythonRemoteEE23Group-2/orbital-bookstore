@@ -52,6 +52,94 @@ class Book(models.Model):
         return self.title
 
 
+class Ebook(models.Model):
+    title = models.CharField(max_length=255)
+    author = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    cover_art = models.ImageField(upload_to='ebooks/', blank=True, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    availability = models.BooleanField(default=True)
+    download_link = models.URLField(max_length=400)
+
+    def __str__(self):
+        return self.title
+
+
+    # Accessory model
+class Accessory(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    availability = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+
+# Book Wraps as a subcategory of Accessories
+class BookWrap(models.Model):
+    accessory = models.OneToOneField(Accessory, on_delete=models.CASCADE)
+    color = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    availability = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"Book Wrap - {self.accessory.name}"
+
+
+# Exlibris as a subcategory of Accessories
+class Exlibris(models.Model):
+    accessory = models.OneToOneField(Accessory, on_delete=models.CASCADE)
+    design = models.CharField(max_length=255)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    availability = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"Exlibris - {self.accessory.name}"
+
+    # School and Office Supplies model
+class SchoolOffice(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    availability = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+    # Booklets/Folders as a subcategory of School and Office
+class BookletFolder(models.Model):
+    school_office = models.OneToOneField(SchoolOffice, on_delete=models.CASCADE)
+    size = models.CharField(max_length=50)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    availability = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"Booklet/Folder - {self.school_office.name}"
+
+
+    # Pencils as a subcategory of School and Office
+class Pencil(models.Model):
+    school_office = models.OneToOneField(SchoolOffice, on_delete=models.CASCADE)
+    pencil_type = models.CharField(max_length=50)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    availability = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"Pencil - {self.school_office.name}"
+
+
+    # Other supplies as a subcategory of School and Office
+class Other(models.Model):
+    school_office = models.OneToOneField(SchoolOffice, on_delete=models.CASCADE)
+    description = models.CharField(max_length=255)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    availability = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"Other - {self.school_office.name}"
+
+
 class Review(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -68,7 +156,15 @@ class Favorite(models.Model):
 
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, blank=True, null=True)
+    ebook = models.ForeignKey(Ebook, on_delete=models.CASCADE, blank=True, null=True)
+    accessory = models.ForeignKey(Accessory, on_delete=models.CASCADE, blank=True, null=True)
+    pencil = models.ForeignKey(Pencil, on_delete=models.CASCADE, blank=True, null=True)
+    other = models.ForeignKey(Other, on_delete=models.CASCADE, blank=True, null=True)
+    book_wrap = models.ForeignKey(BookWrap, on_delete=models.CASCADE, blank=True, null=True)
+    exlibris = models.ForeignKey(Exlibris, on_delete=models.CASCADE, blank=True, null=True)
+    booklet_folder = models.ForeignKey(BookletFolder, on_delete=models.CASCADE, blank=True, null=True)
+    school_office = models.ForeignKey(SchoolOffice, on_delete=models.CASCADE, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     quantity = models.IntegerField(default=1)
     total_cost = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
@@ -77,7 +173,18 @@ class Cart(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     order_date = models.DateTimeField(auto_now_add=True)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, default=1)
+
+    # Add fields for all item types
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, blank=True, null=True)
+    ebook = models.ForeignKey(Ebook, on_delete=models.CASCADE, blank=True, null=True)
+    accessory = models.ForeignKey(Accessory, on_delete=models.CASCADE, blank=True, null=True)
+    pencil = models.ForeignKey(Pencil, on_delete=models.CASCADE, blank=True, null=True)
+    other = models.ForeignKey(Other, on_delete=models.CASCADE, blank=True, null=True)
+    book_wrap = models.ForeignKey(BookWrap, on_delete=models.CASCADE, blank=True, null=True)
+    exlibris = models.ForeignKey(Exlibris, on_delete=models.CASCADE, blank=True, null=True)
+    booklet_folder = models.ForeignKey(BookletFolder, on_delete=models.CASCADE, blank=True, null=True)
+    school_office = models.ForeignKey(SchoolOffice, on_delete=models.CASCADE, blank=True, null=True)
+
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
     total_cost = models.DecimalField(max_digits=10, decimal_places=2)
@@ -98,3 +205,6 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f'{self.book.title} - {self.order.user.username}'
+
+
+

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Book Wraps</title>
+</head>
+<body>
+    <h1>Book Wraps</h1>
+    <p>Browse our collection of book wraps.</p>
+
+    <ul>
+    {% for book_wrap in book_wraps %}
+        <li>
+            <h3>{{ book_wrap.accessory.name }}</h3>
+            <p>{{ book_wrap.color }} - €{{ book_wrap.price }}</p>
+
+            {% if user.is_authenticated %}
+            <form method="POST" action="{% url 'add_to_cart' book_wrap.id %}">
+                {% csrf_token %}
+                <button type="submit">Add to Cart</button>
+            </form>
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+
+    <a href="{% url 'accessories' %}">Back to Accessories</a>
+    <br>
+    <a href="{% url 'home' %}">Back to Home</a>
+</body>
+</html>
