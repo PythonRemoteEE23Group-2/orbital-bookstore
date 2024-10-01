@@ -16,7 +16,7 @@
 
     <!-- Add to Cart Form -->
     {% if book.availability %}
-    <form method="POST" action="{% url 'add_to_cart' book.id %}">
+    <form method="POST" action="{% url 'add_to_cart' 'book' book.id %}">
         {% csrf_token %}
         <button type="submit">Add to Cart</button>
     </form>
@@ -49,12 +49,6 @@
     </p>
     {% endif %}
 
-    {% if user.is_authenticated %}
-    <form method="POST" action="{% url 'add_to_cart' ebook.id %}">
-        {% csrf_token %}
-        <button type="submit">Add to Cart</button>
-    </form>
-    {% endif %}
 
     <!-- Back to Book List -->
     <p><a href="{% url 'home' %}">Back to Book List</a></p>

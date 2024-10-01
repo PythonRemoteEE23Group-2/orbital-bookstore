@@ -64,74 +64,49 @@ def register(request):
 
 
 @login_required
-def add_to_cart(request, item_id):
-    # Fetch each item type and only add the one that is found
-    book = Book.objects.filter(id=item_id).first()
-    ebook = Ebook.objects.filter(id=item_id).first()
-    accessory = Accessory.objects.filter(id=item_id).first()
-    pencil = Pencil.objects.filter(id=item_id).first()
-    other = Other.objects.filter(id=item_id).first()
-    book_wrap = BookWrap.objects.filter(id=item_id).first()
-    bookmark = Bookmark.objects.filter(id=item_id).first()
-    booklet_folder = BookletFolder.objects.filter(id=item_id).first()
-    school_office = SchoolOffice.objects.filter(id=item_id).first()
+def add_to_cart(request, item_type, item_id):
+    # Initialize variables
+    item = None
+    item_price = 0
 
-    cart_item = None
+    # Fetch the item based on the item_type
+    if item_type == "book":
+        item = Book.objects.filter(id=item_id).first()
+    elif item_type == "ebook":
+        item = Ebook.objects.filter(id=item_id).first()
+    elif item_type == "accessory":
+        item = Accessory.objects.filter(id=item_id).first()
+    elif item_type == "pencil":
+        item = Pencil.objects.filter(id=item_id).first()
+    elif item_type == "other":
+        item = Other.objects.filter(id=item_id).first()
+    elif item_type == "book_wrap":
+        item = BookWrap.objects.filter(id=item_id).first()
+    elif item_type == "bookmark":
+        item = Bookmark.objects.filter(id=item_id).first()
+    elif item_type == "booklet_folder":
+        item = BookletFolder.objects.filter(id=item_id).first()
+    elif item_type == "school_office":
+        item = SchoolOffice.objects.filter(id=item_id).first()
 
-    if book:
-        cart_item, created = Cart.objects.get_or_create(user=request.user, book=book)
-    elif ebook:
-        cart_item, created = Cart.objects.get_or_create(user=request.user, ebook=ebook)
-    elif accessory:
-        cart_item, created = Cart.objects.get_or_create(user=request.user, accessory=accessory)
-    elif school_office:
-        cart_item, created = Cart.objects.get_or_create(user=request.user, school_office=school_office)
-    elif pencil:
-        cart_item, created = Cart.objects.get_or_create(user=request.user, pencil=pencil)
-    elif other:
-        cart_item, created = Cart.objects.get_or_create(user=request.user, other=other)
-    elif book_wrap:
-        cart_item, created = Cart.objects.get_or_create(user=request.user, book_wrap=book_wrap)
-    elif bookmark:
-        cart_item, created = Cart.objects.get_or_create(user=request.user, exlibris=bookmark)
-    elif booklet_folder:
-        cart_item, created = Cart.objects.get_or_create(user=request.user, booklet_folder=booklet_folder)
+    # Handle adding to cart
+    if item:
+        cart_item, created = Cart.objects.get_or_create(
+            user=request.user,
+            **{f'{item_type}': item}
+        )
+        item_price = item.price
+        if created:
+            cart_item.quantity = 1
+        else:
+            cart_item.quantity += 1
+        cart_item.total_cost = cart_item.quantity * item_price
+        cart_item.save()
     else:
         messages.error(request, "Item not found.")
         return redirect('home')
 
-    # Update quantity and total cost
-    if created:
-        cart_item.quantity = 1
-    else:
-        cart_item.quantity += 1
-
-    # Set the correct price based on the item type
-    if book:
-        cart_item.total_cost = cart_item.quantity * book.price
-    elif ebook:
-        cart_item.total_cost = cart_item.quantity * ebook.price
-    elif accessory:
-        cart_item.total_cost = cart_item.quantity * accessory.price
-    elif school_office:
-        cart_item.total_cost = cart_item.quantity * school_office.price
-    elif pencil:
-        cart_item.total_cost = cart_item.quantity * pencil.price
-    elif other:
-        cart_item.total_cost = cart_item.quantity * other.price
-    elif book_wrap:
-        cart_item.total_cost = cart_item.quantity * book_wrap.price
-    elif bookmark:
-        cart_item.total_cost = cart_item.quantity * bookmark.price
-    elif booklet_folder:
-        cart_item.total_cost = cart_item.quantity * booklet_folder.price
-
-    cart_item.save()
-
     return redirect('view_cart')
-
-
-
 
 
 # Viewing the cart
@@ -163,7 +138,7 @@ def checkout(request):
         (item.pencil.price if item.pencil else 0) +
         (item.other.price if item.other else 0) +
         (item.book_wrap.price if item.book_wrap else 0) +
-        (item.exlibris.price if item.exlibris else 0) +
+        (item.bookmark.price if item.bookmark else 0) +
         (item.booklet_folder.price if item.booklet_folder else 0) +
         (item.school_office.price if item.school_office else 0)
         for item in cart_items
@@ -205,8 +180,8 @@ def checkout(request):
                 order_data['other'] = item.other
             elif item.book_wrap:
                 order_data['book_wrap'] = item.book_wrap
-            elif item.exlibris:
-                order_data['exlibris'] = item.exlibris
+            elif item.bookmark:
+                order_data['bookmark'] = item.bookmark
             elif item.booklet_folder:
                 order_data['booklet_folder'] = item.booklet_folder
             elif item.school_office:
@@ -352,7 +327,7 @@ def search(request):
             Q(school_office__name__icontains=query) |
             Q(size__icontains=query)
         )
-        exlibris = Bookmark.objects.filter(
+        bookmarks = Bookmark.objects.filter(
             Q(accessory__name__icontains=query) |
             Q(design__icontains=query)
         )
@@ -367,7 +342,7 @@ def search(request):
 
         # Combine results from all item types into one list
         items = list(books) + list(ebooks) + list(accessories) + list(book_wraps) + \
-                list(school_and_office) + list(exlibris) + list(pencils) + list(booklets_folders)
+                list(school_and_office) + list(bookmarks) + list(pencils) + list(booklets_folders)
     else:
         items = []
 

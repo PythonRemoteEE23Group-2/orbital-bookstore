@@ -87,7 +87,7 @@ class BookWrap(models.Model):
         return f"Book Wrap - {self.accessory.name}"
 
 
-# Exlibris as a subcategory of Accessories
+# Bookmark as a subcategory of Accessories
 class Bookmark(models.Model):
     accessory = models.OneToOneField(Accessory, on_delete=models.CASCADE)
     design = models.CharField(max_length=255)
@@ -165,9 +165,9 @@ class Cart(models.Model):
     bookmark = models.ForeignKey(Bookmark, on_delete=models.CASCADE, blank=True, null=True)
     booklet_folder = models.ForeignKey(BookletFolder, on_delete=models.CASCADE, blank=True, null=True)
     school_office = models.ForeignKey(SchoolOffice, on_delete=models.CASCADE, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
     quantity = models.IntegerField(default=1)
     total_cost = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class Order(models.Model):

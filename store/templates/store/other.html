@@ -6,6 +6,25 @@
 <body>
     <h1>Other</h1>
     <p>Explore other products in this category.</p>
+    {% if others %}
+        <ul>
+        {% for other in others %}
+            <li>
+                <h3>{{ other.accessory.name }}</h3>
+                <p>{{ other.design }} - €{{ other.price }}</p>
+
+                {% if user.is_authenticated %}
+                <form method="POST" action="{% url 'add_to_cart' 'other' other.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Add to Cart</button>
+                </form>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No others found.</p>
+    {% endif %}
     <a href="{% url 'school_and_office' %}">Back to School and Office</a>
     <br>
     <a href="{% url 'home' %}">Back to Home</a>

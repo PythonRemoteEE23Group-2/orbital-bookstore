@@ -12,6 +12,13 @@
     <p><strong>Description:</strong> {{ ebook.description }}</p>
     <p><strong>Price:</strong> €{{ ebook.price }}</p>
 
+    {% if ebook.availability %}
+    <form method="POST" action="{% url 'add_to_cart' 'ebook' ebook.id %}">
+        {% csrf_token %}
+        <button type="submit">Add to Cart</button>
+    </form>
+    {% endif %}
+
     {% if ebook.cover_art %}
     <img src="{{ ebook.cover_art.url }}" alt="{{ ebook.title }} Cover Art" style="width: 200px;">
     {% else %}

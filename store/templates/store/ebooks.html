@@ -21,7 +21,7 @@
 
                 <!-- Add to Cart Button for E-book -->
                 {% if user.is_authenticated %}
-                <form method="POST" action="{% url 'add_to_cart' ebook.id %}">
+                <form method="POST" action="{% url 'add_to_cart' 'ebook' ebook.id %}">
                     {% csrf_token %}
                     <button type="submit">Add to Cart</button>
                 </form>

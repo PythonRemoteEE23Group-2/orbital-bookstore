@@ -14,7 +14,7 @@
             <p>{{ booklet_folder.size }} - €{{ booklet_folder.price }}</p>
 
             {% if user.is_authenticated %}
-            <form method="POST" action="{% url 'add_to_cart' booklet_folder.id %}">
+            <form method="POST" action="{% url 'add_to_cart' 'booklet_folder' booklet_folder.id %}">
                 {% csrf_token %}
                 <button type="submit">Add to Cart</button>
             </form>
