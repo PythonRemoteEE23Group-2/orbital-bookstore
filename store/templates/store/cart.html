@@ -31,9 +31,9 @@
                     {% elif item.book_wrap %}
                         <strong>{{ item.book_wrap.accessory.name }} - {{ item.book_wrap.color }}</strong><br>
                         Price per item: €{{ item.book_wrap.accessory.price }}<br>
-                    {% elif item.exlibris %}
-                        <strong>{{ item.exlibris.accessory.name }} - {{ item.exlibris.design }}</strong><br>
-                        Price per item: €{{ item.exlibris.accessory.price }}<br>
+                    {% elif item.bookmark %}
+                        <strong>{{ item.bookmark.accessory.name }} - {{ item.bookmark.design }}</strong><br>
+                        Price per item: €{{ item.bookmark.accessory.price }}<br>
                     {% elif item.booklet_folder %}
                         <strong>{{ item.booklet_folder.school_office.name }} - {{ item.booklet_folder.size }}</strong><br>
                         Price per item: €{{ item.booklet_folder.school_office.price }}<br>

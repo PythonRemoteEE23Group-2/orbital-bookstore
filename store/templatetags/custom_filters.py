@@ -1,5 +1,5 @@
 from django import template
-from store.models import Book, Ebook, Accessory, BookWrap, Exlibris, SchoolOffice, BookletFolder, Pencil, Other
+from store.models import Book, Ebook, Accessory, BookWrap, Bookmark, SchoolOffice, BookletFolder, Pencil, Other
 
 register = template.Library()
 
@@ -20,8 +20,8 @@ def is_book_wrap(item):
     return isinstance(item, BookWrap)
 
 @register.filter
-def is_exlibris(item):
-    return isinstance(item, Exlibris)
+def is_bookmark(item):
+    return isinstance(item, Bookmark)
 
 @register.filter
 def is_booklet_folder(item):

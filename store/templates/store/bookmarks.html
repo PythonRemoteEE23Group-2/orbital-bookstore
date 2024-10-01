@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Exlibris</title>
+    <title>Bookmarks</title>
 </head>
 <body>
-    <h1>Exlibris</h1>
-    <p>Explore our Exlibris collection.</p>
+    <h1>Bookmarks</h1>
+    <p>Explore our Bookmark collection.</p>
 
     <ul>
-    {% for exlibris in exlibris_items %}
+    {% for bookmark in bookmark_items %}
         <li>
-            <h3>{{ exlibris.accessory.name }}</h3>
-            <p>{{ exlibris.design }} - €{{ exlibris.price }}</p>
+            <h3>{{ bookmark.accessory.name }}</h3>
+            <p>{{ bookmark.design }} - €{{ bookmark.price }}</p>
 
             {% if user.is_authenticated %}
-            <form method="POST" action="{% url 'add_to_cart' exlibris.id %}">
+            <form method="POST" action="{% url 'add_to_cart' bookmark.id %}">
                 {% csrf_token %}
                 <button type="submit">Add to Cart</button>
             </form>

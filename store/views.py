@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth import login
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
-from .models import Book, Ebook, Accessory, BookWrap, Exlibris, SchoolOffice, BookletFolder, Pencil, Other, Cart, Order, Favorite, Review
+from .models import Book, Ebook, Accessory, BookWrap, Bookmark, SchoolOffice, BookletFolder, Pencil, Other, Cart, Order, Favorite, Review
 
 
 
@@ -72,7 +72,7 @@ def add_to_cart(request, item_id):
     pencil = Pencil.objects.filter(id=item_id).first()
     other = Other.objects.filter(id=item_id).first()
     book_wrap = BookWrap.objects.filter(id=item_id).first()
-    exlibris = Exlibris.objects.filter(id=item_id).first()
+    bookmark = Bookmark.objects.filter(id=item_id).first()
     booklet_folder = BookletFolder.objects.filter(id=item_id).first()
     school_office = SchoolOffice.objects.filter(id=item_id).first()
 
@@ -92,8 +92,8 @@ def add_to_cart(request, item_id):
         cart_item, created = Cart.objects.get_or_create(user=request.user, other=other)
     elif book_wrap:
         cart_item, created = Cart.objects.get_or_create(user=request.user, book_wrap=book_wrap)
-    elif exlibris:
-        cart_item, created = Cart.objects.get_or_create(user=request.user, exlibris=exlibris)
+    elif bookmark:
+        cart_item, created = Cart.objects.get_or_create(user=request.user, exlibris=bookmark)
     elif booklet_folder:
         cart_item, created = Cart.objects.get_or_create(user=request.user, booklet_folder=booklet_folder)
     else:
@@ -121,8 +121,8 @@ def add_to_cart(request, item_id):
         cart_item.total_cost = cart_item.quantity * other.price
     elif book_wrap:
         cart_item.total_cost = cart_item.quantity * book_wrap.price
-    elif exlibris:
-        cart_item.total_cost = cart_item.quantity * exlibris.price
+    elif bookmark:
+        cart_item.total_cost = cart_item.quantity * bookmark.price
     elif booklet_folder:
         cart_item.total_cost = cart_item.quantity * booklet_folder.price
 
@@ -352,7 +352,7 @@ def search(request):
             Q(school_office__name__icontains=query) |
             Q(size__icontains=query)
         )
-        exlibris = Exlibris.objects.filter(
+        exlibris = Bookmark.objects.filter(
             Q(accessory__name__icontains=query) |
             Q(design__icontains=query)
         )
@@ -407,9 +407,9 @@ def book_wraps(request):
     return render(request, 'store/book_wraps.html', {'book_wraps': book_wraps})
 
 
-def exlibris(request):
-    exlibris_items = Exlibris.objects.all()  # Fetch all exlibris
-    return render(request, 'store/exlibris.html', {'exlibris_items': exlibris_items})
+def bookmarks(request):
+    bookmarks = Bookmark.objects.all()  # Fetch all bookmarks
+    return render(request, 'store/bookmarks.html', {'bookmarks': bookmarks})
 
 
 def school_and_office(request):

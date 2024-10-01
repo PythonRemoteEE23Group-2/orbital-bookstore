@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import User, Category, Subcategory, Book, Review, Favorite, Cart, Order
-from .models import Ebook, Accessory, BookWrap, Exlibris, SchoolOffice, BookletFolder, Pencil, Other
+from .models import Ebook, Accessory, BookWrap, Bookmark, SchoolOffice, BookletFolder, Pencil, Other
 
 # Register each model in the admin interface
 
@@ -63,9 +63,9 @@ class AccessoryAdmin(admin.ModelAdmin):
 class BookWrapAdmin(admin.ModelAdmin):
     list_display = ('accessory', 'color')
 
-# Admin for Exlibris
-@admin.register(Exlibris)
-class ExlibrisAdmin(admin.ModelAdmin):
+# Admin for Bookmark
+@admin.register(Bookmark)
+class BookmarkAdmin(admin.ModelAdmin):
     list_display = ('accessory', 'design')
 
 # Admin for School and Office Supplies

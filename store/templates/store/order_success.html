@@ -22,8 +22,8 @@
                 <li>{{ order.other.description }} - No download available for other items.</li>
             {% elif order.book_wrap %}
                 <li>{{ order.book_wrap.accessory.name }} - No download available for book wraps.</li>
-            {% elif order.exlibris %}
-                <li>{{ order.exlibris.accessory.name }} - No download available for exlibris.</li>
+            {% elif order.bookmark %}
+                <li>{{ order.bookmark.accessory.name }} - No download available for bookmark.</li>
             {% elif order.booklet_folder %}
                 <li>{{ order.booklet_folder.school_office.name }} - No download available for booklets/folders.</li>
             {% elif order.school_office %}
