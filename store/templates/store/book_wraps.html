@@ -6,22 +6,23 @@
 <body>
     <h1>Book Wraps</h1>
     <p>Browse our collection of book wraps.</p>
+    <p>Book Wrap ID: {{ book_wrap.id }}</p>
 
-    <ul>
+
     {% for book_wrap in book_wraps %}
-        <li>
-            <h3>{{ book_wrap.accessory.name }}</h3>
-            <p>{{ book_wrap.color }} - €{{ book_wrap.price }}</p>
+    <div>
+        <h3>{{ book_wrap.accessory.name }} - {{ book_wrap.color }}</h3>
+        <p>Price: €{{ book_wrap.accessory.price }}</p>
 
-            {% if user.is_authenticated %}
+        {% if user.is_authenticated %}
             <form method="POST" action="{% url 'add_to_cart' book_wrap.id %}">
                 {% csrf_token %}
                 <button type="submit">Add to Cart</button>
             </form>
-            {% endif %}
-        </li>
-    {% endfor %}
-    </ul>
+        {% endif %}
+    </div>
+{% endfor %}
+
 
     <a href="{% url 'accessories' %}">Back to Accessories</a>
     <br>

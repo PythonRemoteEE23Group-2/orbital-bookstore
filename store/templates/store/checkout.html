@@ -63,7 +63,53 @@
         <h3>Order Summary</h3>
         <ul>
             {% for item in cart_items %}
-            <li>{{ item.book.title }} - Quantity: {{ item.quantity }} - Price per item: €{{ item.book.price }}</li>
+            <li>
+               {% if item.book %}
+                    <img src="{{ item.book.cover_art.url }}" alt="{{ item.book.title }}" width="100">
+                    <strong>{{ item.book.title }}</strong> by {{ item.book.author }}<br>
+                    Price per item: €{{ item.book.price }}<br>
+
+                {% elif item.ebook %}
+                    <img src="{{ item.ebook.cover_art.url }}" alt="{{ item.ebook.title }}" width="100">
+                    <strong>{{ item.ebook.title }}</strong> by {{ item.ebook.author }}<br>
+                    Price per item: €{{ item.ebook.price }}<br>
+
+                <!-- Display for Accessories -->
+                {% elif item.accessory %}
+                    <strong>{{ item.accessory.name }}</strong><br>
+                    Price per item: €{{ item.accessory.price }}<br>
+
+                <!-- Display for Book Wraps -->
+                {% elif item.book_wrap %}
+                    <strong>{{ item.book_wrap.accessory.name }} - {{ item.book_wrap.color }}</strong><br>
+                    Price per item: €{{ item.book_wrap.accessory.price }}<br>
+
+                {% elif item.exlibris %}
+                    <strong>{{ item.exlibris.accessory.name }} - {{ item.exlibris.design }}</strong><br>
+                    Price per item: €{{ item.exlibris.accessory.price }}<br>
+
+                {% elif item.school_and_office %}
+                    <strong>{{ item.school_and_office.accessory.name }} - {{ item.school_and_office.design }}</strong><br>
+                    Price per item: €{{ item.School_and_office.accessory.price }}<br>
+
+                {% elif item.booklets_folders %}
+                    <strong>{{ item.booklets_folders.accessory.name }} - {{ item.booklets_folders.design }}</strong><br>
+                    Price per item: €{{ item.booklets_folders.accessory.price }}<br>
+
+                {% elif item.pencils %}
+                    <strong>{{ item.pencils.accessory.name }} - {{ item.pencils.design }}</strong><br>
+                    Price per item: €{{ item.pencils.accessory.price }}<br>
+
+                {% elif item.other %}
+                    <strong>{{ item.other.accessory.name }} - {{ item.other.design }}</strong><br>
+                    Price per item: €{{ item.other.accessory.price }}<br>
+
+                {% endif %}
+
+                <!-- Quantity and Total Cost -->
+                Quantity: {{ item.quantity }}<br>
+                Total cost: €{{ item.total_cost }}<br>
+            </li>
             {% endfor %}
         </ul>
         <p>Total Price: €{{ total_price }}</p>

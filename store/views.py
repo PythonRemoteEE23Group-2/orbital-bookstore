@@ -65,7 +65,7 @@ def register(request):
 
 @login_required
 def add_to_cart(request, item_id):
-    # Fetch items from all possible models
+    # Fetch each item type and only add the one that is found
     book = Book.objects.filter(id=item_id).first()
     ebook = Ebook.objects.filter(id=item_id).first()
     accessory = Accessory.objects.filter(id=item_id).first()
@@ -76,34 +76,26 @@ def add_to_cart(request, item_id):
     booklet_folder = BookletFolder.objects.filter(id=item_id).first()
     school_office = SchoolOffice.objects.filter(id=item_id).first()
 
-    # Check and add item to cart
+    cart_item = None
+
     if book:
         cart_item, created = Cart.objects.get_or_create(user=request.user, book=book)
-        item_price = book.price
     elif ebook:
         cart_item, created = Cart.objects.get_or_create(user=request.user, ebook=ebook)
-        item_price = ebook.price
     elif accessory:
         cart_item, created = Cart.objects.get_or_create(user=request.user, accessory=accessory)
-        item_price = accessory.price
     elif school_office:
         cart_item, created = Cart.objects.get_or_create(user=request.user, school_office=school_office)
-        item_price = school_office.price
     elif pencil:
         cart_item, created = Cart.objects.get_or_create(user=request.user, pencil=pencil)
-        item_price = pencil.price
     elif other:
         cart_item, created = Cart.objects.get_or_create(user=request.user, other=other)
-        item_price = other.price
     elif book_wrap:
         cart_item, created = Cart.objects.get_or_create(user=request.user, book_wrap=book_wrap)
-        item_price = book_wrap.price
     elif exlibris:
         cart_item, created = Cart.objects.get_or_create(user=request.user, exlibris=exlibris)
-        item_price = exlibris.price
     elif booklet_folder:
         cart_item, created = Cart.objects.get_or_create(user=request.user, booklet_folder=booklet_folder)
-        item_price = booklet_folder.price
     else:
         messages.error(request, "Item not found.")
         return redirect('home')
@@ -111,13 +103,34 @@ def add_to_cart(request, item_id):
     # Update quantity and total cost
     if created:
         cart_item.quantity = 1
-        cart_item.total_cost = item_price
     else:
         cart_item.quantity += 1
-        cart_item.total_cost = cart_item.quantity * item_price
+
+    # Set the correct price based on the item type
+    if book:
+        cart_item.total_cost = cart_item.quantity * book.price
+    elif ebook:
+        cart_item.total_cost = cart_item.quantity * ebook.price
+    elif accessory:
+        cart_item.total_cost = cart_item.quantity * accessory.price
+    elif school_office:
+        cart_item.total_cost = cart_item.quantity * school_office.price
+    elif pencil:
+        cart_item.total_cost = cart_item.quantity * pencil.price
+    elif other:
+        cart_item.total_cost = cart_item.quantity * other.price
+    elif book_wrap:
+        cart_item.total_cost = cart_item.quantity * book_wrap.price
+    elif exlibris:
+        cart_item.total_cost = cart_item.quantity * exlibris.price
+    elif booklet_folder:
+        cart_item.total_cost = cart_item.quantity * booklet_folder.price
 
     cart_item.save()
+
     return redirect('view_cart')
+
+
 
 
 
@@ -409,7 +422,9 @@ def booklets_folders(request):
 
 
 def pencils(request):
-    return render(request, 'store/pencils.html')
+    pencils = Pencil.objects.all()  # Fetch all pencils
+    return render(request, 'store/pencils.html', {'pencils': pencils})
+
 
 
 def other(request):
