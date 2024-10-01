@@ -106,10 +106,10 @@
                     </div>
                 {% endif %}
 
-                <!-- Add to Cart Form -->
+                <!-- Add to Cart Form with item_type -->
                 {% if user.is_authenticated %}
                 <div class="add-to-cart">
-                    <form method="POST" action="{% url 'add_to_cart' item.id %}">
+                    <form method="POST" action="{% url 'add_to_cart' 'book' item.id %}">
                         {% csrf_token %}
                         <button type="submit">Add to Cart</button>
                     </form>

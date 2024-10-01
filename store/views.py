@@ -403,7 +403,9 @@ def pencils(request):
 
 
 def other(request):
-    return render(request, 'store/other.html')
+    other_items = Other.objects.all()  # Fetch all "Other" products
+    return render(request, 'store/other.html', {'other_items': other_items})
+
 
 
 def books_view(request):
