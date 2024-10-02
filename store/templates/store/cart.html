@@ -16,6 +16,10 @@
                     Quantity: {{ item.quantity }}<br>
                     Price per item: ${{ item.book.price }}<br>
                     Total cost: ${{ item.total_cost }}
+                    <form method="POST" action="{% url 'delete_from_cart' item.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
                 </li>
             {% endfor %}
         </ul>

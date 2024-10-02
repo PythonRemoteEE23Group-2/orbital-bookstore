@@ -1,5 +1,4 @@
 import logging
-
 from django.shortcuts import render, redirect
 from .models import Book, Category, Cart, Order, Favorite, Review, OrderItem
 from django.contrib.auth.decorators import login_required
@@ -11,17 +10,39 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
+from django.db.models import Q, Avg
 
 
 def home(request):
-    books = Book.objects.all()
+    query = request.GET.get('q')
+    selected_category = request.GET.get('category')
+
+    if query:
+        books = Book.objects.filter(Q(title__icontains=query) | Q(author__icontains=query))
+    else:
+        books = Book.objects.all()
+
+    if selected_category:
+        books = books.filter(category__id=selected_category)
+
+    categories = Category.objects.prefetch_related('book_set')
+
     cart_items_count = Cart.objects.filter(user=request.user).count() if request.user.is_authenticated else 0
-    return render(request, 'store/home.html', {'books': books, 'cart_items_count': cart_items_count})
+
+    books = books.annotate(average_rating=Avg('review__rating'))
+
+    return render(request, 'store/home.html', {
+        'categories': categories,
+        'books': books,
+        'cart_items_count': cart_items_count,
+        'selected_category': selected_category,
+        'query': query,
+    })
 
 
 def book_detail(request, book_id):
-    book = Book.objects.get(id=book_id)
-    reviews = Review.objects.filter(book=book)
+    book = get_object_or_404(Book, id=book_id)
+    reviews = book.review_set.all()
     return render(request, 'store/book_detail.html', {'book': book, 'reviews': reviews})
 
 
@@ -86,6 +107,14 @@ def add_to_cart(request, book_id):
 def view_cart(request):
     cart_items = Cart.objects.filter(user=request.user)
     return render(request, 'store/cart.html', {'cart_items': cart_items})
+
+
+@login_required
+def delete_from_cart(request, cart_item_id):
+    cart_item = get_object_or_404(Cart, id=cart_item_id, user=request.user)
+    cart_item.delete()
+
+    return redirect('view_cart')
 
 
 logger = logging.getLogger(__name__)

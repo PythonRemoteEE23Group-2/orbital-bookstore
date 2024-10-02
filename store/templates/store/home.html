@@ -69,8 +69,30 @@
             {% include 'store/_navbar.html' %}
 
             <h1>Orbital Bookstore</h1>
-            <h3>Books Available</h3>
 
+            <form method="GET" action="{% url 'home' %}">
+                <input type="text" name="q" value="{{ query }}" placeholder="Search books...">
+                <button type="submit">Search</button>
+            </form>
+
+            <form method="GET" action="{% url 'home' %}">
+                <select name="category" onchange="this.form.submit()">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if selected_category == category.id %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+
+            {% if user.is_authenticated %}
+                <div>
+                    <a href="{% url 'view_favorites' %}" class="btn">View Favorites</a>
+                </div>
+            {% endif %}
+
+            <h3>Books Available</h3>
             <ul class="book-list">
                 {% for book in books %}
                 <li class="book-item">
@@ -80,6 +102,11 @@
                             <h4>{{ book.title }}</h4>
                             <p>by {{ book.author }}</p>
                             <p>${{ book.price }}</p>
+                            {% if book.average_rating %}
+                                <p>Average Rating: {{ book.average_rating|floatformat:1 }} / 5</p>
+                            {% else %}
+                                <p>No ratings yet.</p>
+                            {% endif %}
                         </div>
                     </a>
                     {% if user.is_authenticated %}
