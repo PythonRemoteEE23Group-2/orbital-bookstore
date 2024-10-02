@@ -56,7 +56,6 @@ def register(request):
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
 
-        # Basic validation
         if password1 != password2:
             messages.error(request, 'Passwords do not match.')
             return render(request, 'store/register.html')
@@ -69,14 +68,12 @@ def register(request):
             messages.error(request, 'Email already registered.')
             return render(request, 'store/register.html')
 
-        # Create the user
         user = User.objects.create(
             username=username,
             email=email,
-            password=make_password(password1)  # Hash the password manually
+            password=make_password(password1)
         )
 
-        # Log the user in after registration (optional)
         login(request, user)
 
         messages.success(request, f'Account created for {user.username}!')
@@ -102,7 +99,6 @@ def add_to_cart(request, book_id):
     return redirect('view_cart')
 
 
-# Viewing the cart
 @login_required
 def view_cart(request):
     cart_items = Cart.objects.filter(user=request.user)
@@ -126,11 +122,9 @@ def checkout(request):
     total_price = sum(item.book.price * item.quantity for item in cart_items)
 
     if request.method == 'POST':
-        # Get the payment method from the form
         payment_method = request.POST.get('payment_method')
         delivery_email = request.POST.get('email')
 
-        # Check if payment method is provided
         if not payment_method:
             return render(request, 'store/checkout.html', {
                 'cart_items': cart_items,
@@ -138,7 +132,6 @@ def checkout(request):
                 'error_message': 'Please select a payment method.'
             })
 
-        # Create the orders
         for item in cart_items:
             Order.objects.create(
                 user=request.user,
@@ -147,12 +140,12 @@ def checkout(request):
                 quantity=item.quantity,
                 total_cost=item.book.price * item.quantity,
                 status='Pending',
-                payment_method=payment_method,  # Pass the payment method here
+                payment_method=payment_method,
                 payment_status='Unpaid',
                 delivery_email=delivery_email
             )
 
-        cart_items.delete()  # Clear the cart after order is created
+        cart_items.delete()
         return redirect('order_success')
 
     return render(request, 'store/checkout.html', {'cart_items': cart_items, 'total_price': total_price})
@@ -160,7 +153,6 @@ def checkout(request):
 
 @login_required
 def order_success(request):
-    # Fetch recent orders using order_date
     orders = Order.objects.filter(user=request.user).order_by('-order_date')[:5]
     return render(request, 'store/order_success.html', {'orders': orders})
 
