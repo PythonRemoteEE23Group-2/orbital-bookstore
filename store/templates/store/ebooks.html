@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>E-books</title>
+</head>
+<body>
+    <a href="{% url 'home' %}" class="back-home">Back to Home</a>
+    <h1>E-books</h1>
+    <p>Explore our collection of e-books.</p>
+
+    <ul>
+        {% if ebooks %}
+            {% for ebook in ebooks %}
+            <li>
+                <a href="{% url 'ebook_detail' ebook.id %}">
+                    <img src="{{ ebook.cover_art.url }}" alt="{{ ebook.title }}" width="200">
+                    <h3>{{ ebook.title }}</h3>
+                    <p>by {{ ebook.author }}</p>
+                    <p>€{{ ebook.price }}</p>
+                </a>
+
+                <!-- Add to Cart Button for E-book -->
+                {% if user.is_authenticated %}
+                <form method="POST" action="{% url 'add_to_cart' 'ebook' ebook.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Add to Cart</button>
+                </form>
+                {% endif %}
+            </li>
+            {% endfor %}
+        {% else %}
+            <p>No e-books found.</p>
+        {% endif %}
+    </ul>
+</body>
+</html>

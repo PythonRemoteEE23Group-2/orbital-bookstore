@@ -10,7 +10,25 @@
     <h2>Your Downloads</h2>
     <ul>
         {% for order in orders %}
-            <li>{{ order.book.title }} - <a href="{{ order.book.download_link }}" target="_blank">Download</a></li>
+            {% if order.book %}
+                <li>{{ order.book.title }} - <a href="{{ order.book.download_link }}" target="_blank">Download</a></li>
+            {% elif order.ebook %}
+                <li>{{ order.ebook.title }} - <a href="{{ order.ebook.download_link }}" target="_blank">Download</a></li>
+            {% elif order.accessory %}
+                <li>{{ order.accessory.name }} - No download available for accessories.</li>
+            {% elif order.pencil %}
+                <li>{{ order.pencil.school_office.name }} - No download available for pencils.</li>
+            {% elif order.other %}
+                <li>{{ order.other.description }} - No download available for other items.</li>
+            {% elif order.book_wrap %}
+                <li>{{ order.book_wrap.accessory.name }} - No download available for book wraps.</li>
+            {% elif order.bookmark %}
+                <li>{{ order.bookmark.accessory.name }} - No download available for bookmark.</li>
+            {% elif order.booklet_folder %}
+                <li>{{ order.booklet_folder.school_office.name }} - No download available for booklets/folders.</li>
+            {% elif order.school_office %}
+                <li>{{ order.school_office.name }} - No download available for school and office supplies.</li>
+            {% endif %}
         {% endfor %}
     </ul>
 

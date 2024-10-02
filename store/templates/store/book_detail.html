@@ -8,15 +8,15 @@
     <h1>{{ book.title }}</h1>
 
     <!-- Display the cover art using the URL stored in the 'cover_art' field -->
-    <img src="{{ book.cover_art }}" alt="{{ book.title }} Cover Art" width="300">
+    <img src="{{ book.cover_art.url }}" alt="{{ book.title }} Cover Art" width="200">
 
     <p>{{ book.description }}</p>
-    <p>Price: ${{ book.price }}</p>
+    <p>Price: €{{ book.price }}</p>
     <p>Availability: {% if book.availability %}In Stock{% else %}Out of Stock{% endif %}</p>
 
     <!-- Add to Cart Form -->
     {% if book.availability %}
-    <form method="POST" action="{% url 'add_to_cart' book.id %}">
+    <form method="POST" action="{% url 'add_to_cart' 'book' book.id %}">
         {% csrf_token %}
         <button type="submit">Add to Cart</button>
     </form>
@@ -48,6 +48,7 @@
         <a href="{% url 'add_review' book.id %}">Write a Review</a>
     </p>
     {% endif %}
+
 
     <!-- Back to Book List -->
     <p><a href="{% url 'home' %}">Back to Book List</a></p>

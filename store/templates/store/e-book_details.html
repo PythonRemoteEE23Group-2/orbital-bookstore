@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ ebook.title }} - Details</title>
+</head>
+<body>
+
+    <a href="{% url 'ebooks' %}" class="back-ebooks">Back to E-books</a>
+
+    <h1>{{ ebook.title }}</h1>
+    <p><strong>Author:</strong> {{ ebook.author }}</p>
+    <p><strong>Description:</strong> {{ ebook.description }}</p>
+    <p><strong>Price:</strong> €{{ ebook.price }}</p>
+
+    {% if ebook.availability %}
+    <form method="POST" action="{% url 'add_to_cart' 'ebook' ebook.id %}">
+        {% csrf_token %}
+        <button type="submit">Add to Cart</button>
+    </form>
+    {% endif %}
+
+    {% if ebook.cover_art %}
+    <img src="{{ ebook.cover_art.url }}" alt="{{ ebook.title }} Cover Art" style="width: 200px;">
+    {% else %}
+    <p>No cover art available.</p>
+    {% endif %}
+
+
+
+</body>
+</html>

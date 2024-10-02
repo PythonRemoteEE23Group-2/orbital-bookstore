@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Other Products</title>
+</head>
+<body>
+    <h1>Other Products</h1>
+    <p>Explore our collection of other products.</p>
+
+    {% if other_items %}
+        <ul>
+            {% for item in other_items %}
+                <li>
+                    <strong>{{ item.school_office.name }}</strong> - {{ item.description }}<br>
+                    Price: €{{ item.price }}<br>
+                    {% if user.is_authenticated %}
+                    <form method="POST" action="{% url 'add_to_cart' 'other' item.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Add to Cart</button>
+                    </form>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No other products available.</p>
+    {% endif %}
+
+    <a href="{% url 'home' %}">Back to Home</a>
+</body>
+</html>

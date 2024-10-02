@@ -1,14 +1,20 @@
-<div class="navbar">
-    <a href="/">Home</a>
-    {% if user.is_authenticated %}
-        <span>Welcome, {{ user.username }}!</span>
-        <a href="{% url 'view_cart' %}">Cart ({{ cart_items_count }})</a>
-        <form method="POST" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit">Logout</button>
-        </form>
-    {% else %}
-        <a href="{% url 'login' %}">Login</a>
-        <a href="{% url 'register' %}">Register</a>
-    {% endif %}
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About Us</title>
+</head>
+<body>
+    <a href="{% url 'home' %}" class="back-home">Back to Home</a>
+
+    <h1>About Us</h1>
+        <p>We are a self-made bookstore, we sell you free books for a high price,<br>
+            because that's the way it is these days.<br>
+            There may be many mistakes in our shop, because we are still students and do not know exactly<br>
+            what we are doing and what will come out of it. <br>
+            Feel free to use our e-shop :)
+        </p>
+
+
+</body>
+</html>
