@@ -1,35 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .cart-item {
+            list-style-type: none;
+            margin-bottom: 20px;
+        }
+        .cart-item img {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .cart-item form {
+            display: inline;
+        }
+        .cart-summary {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .empty-cart {
+            color: #ff0000;
+        }
+    </style>
 </head>
 <body>
 
     <h1>Your Cart</h1>
 
     {% if cart_items %}
-        <ul>
-            {% for item in cart_items %}
-                <li>
-                    <img src="{{ item.book.cover_art }}" alt="{{ item.book.title }} Cover Art" width="100">
-                    <strong>{{ item.book.title }}</strong> by {{ item.book.author }}<br>
-                    Quantity: {{ item.quantity }}<br>
-                    Price per item: ${{ item.book.price }}<br>
-                    Total cost: ${{ item.total_cost }}
-                    <form method="POST" action="{% url 'delete_from_cart' item.id %}">
-                        {% csrf_token %}
-                        <button type="submit">Delete</button>
-                    </form>
-                </li>
-            {% endfor %}
-        </ul>
-
-        <form method="POST" action="{% url 'checkout' %}">
+    {% for item in cart_items %}
+    <li class="cart-item">
+        <img src="{{ item.book.cover_art }}" alt="{{ item.book.title }} Cover Art" width="100">
+        <strong>{{ item.book.title }}</strong> by {{ item.book.author }}<br>
+        Quantity: {{ item.quantity }}<br>
+        Price per item: ${{ item.book.price }}<br>
+        Total cost: ${{ item.subtotal }}<br>
+        <form method="post">
             {% csrf_token %}
-            <button type="submit">Proceed to Checkout</button>
+            <input type="hidden" name="item_id" value="{{ item.id }}">
+            <button type="submit" name="action" value="subtract" aria-label="Decrease quantity">-</button>
+            <button type="submit" name="action" value="add" aria-label="Increase quantity">+</button>
         </form>
+    </li>
+    {% endfor %}
+
+    <p class="cart-summary">Total Cart Value: ${{ cart.total_cost }}</p>
+
+    <form method="post" action="{% url 'checkout' %}">
+        {% csrf_token %}
+        <button type="submit">Proceed to Checkout</button>
+    </form>
     {% else %}
-        <p>Your cart is empty.</p>
+    <p class="empty-cart">Your cart is empty.</p>
     {% endif %}
 
     <a href="{% url 'home' %}">Continue Shopping</a>

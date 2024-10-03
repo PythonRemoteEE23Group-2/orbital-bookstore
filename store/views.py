@@ -93,10 +93,28 @@ def add_to_cart(request, book_id):
 
 @login_required
 def view_cart(request):
-    cart, _ = Cart.objects.get_or_create(user=request.user)
+    cart, created = Cart.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        item_id = request.POST.get('item_id')
+        action = request.POST.get('action')
+
+        cart_item = get_object_or_404(CartItem, id=item_id, cart=cart)
+
+        if action == 'add':
+            cart_item.quantity += 1
+        elif action == 'subtract':
+            cart_item.quantity -= 1
+
+        if cart_item.quantity > 0:
+            cart_item.save()
+        else:
+            cart_item.delete()
+
+        return redirect('view_cart')
+
     cart_items = cart.items.all()
-    total_cost = cart.total_cost
-    return render(request, 'store/cart.html', {'cart_items': cart_items, 'total_cost': total_cost})
+    return render(request, 'store/cart.html', {'cart': cart, 'cart_items': cart_items})
 
 
 @login_required
@@ -148,8 +166,18 @@ def checkout(request):
 
 @login_required
 def order_success(request):
-    orders = Order.objects.filter(user=request.user).order_by('-order_date')[:5]
-    return render(request, 'store/order_success.html', {'orders': orders})
+    # Get the most recent order for the current user
+    latest_order = Order.objects.filter(user=request.user).order_by('-order_date').first()
+
+    if latest_order:
+        order_items = OrderItem.objects.filter(order=latest_order)
+    else:
+        order_items = []
+
+    return render(request, 'store/order_success.html', {
+        'order': latest_order,
+        'order_items': order_items,
+    })
 
 
 @login_required
