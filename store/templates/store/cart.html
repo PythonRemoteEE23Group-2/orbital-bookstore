@@ -1,65 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Cart</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .page-wrapper {
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            flex-grow: 1;
+        }
+        .cart-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            list-style-type: none;
+            padding: 0;
+            justify-content: center;
         }
         .cart-item {
-            list-style-type: none;
-            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            border: 1px solid #ddd;
+            padding: 10px;
+            box-sizing: border-box;
+            align-items: center;
         }
-        .cart-item img {
-            display: block;
-            margin-bottom: 10px;
+        .cart-info {
+            display: flex;
+            flex-direction: column;
         }
-        .cart-item form {
-            display: inline;
+        .book-cover {
+            width: 100px;
+            height: auto;
+            object-fit: cover;
         }
-        .cart-summary {
+        .item-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .item-controls form {
+            display: flex;
+            gap: 5px;
+        }
+        button {
+            padding: 5px 10px;
+            background-color: #00bcd4;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0097a7;
+        }
+        .checkout-btn {
+            display: flex;
+            justify-content: flex-end;
             margin-top: 20px;
-            font-weight: bold;
         }
         .empty-cart {
-            color: #ff0000;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        .continue-shopping {
+            margin-top: 20px;
+            text-align: center;
+        }
+        a {
+            color: #00bcd4;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
+    <div class="page-wrapper">
+        <div class="container">
+            <h1>Your Cart</h1>
 
-    <h1>Your Cart</h1>
+            {% if cart_items %}
+            <ul class="cart-list">
+                {% for item in cart_items %}
+                <li class="cart-item">
+                    <div class="cart-info">
+                        <img src="{{ item.book.cover_art }}" alt="{{ item.book.title }} Cover Art" class="book-cover">
+                        <strong>{{ item.book.title }}</strong> by {{ item.book.author }}<br>
+                        Price per item: ${{ item.book.price }}<br>
+                        Total cost: ${{ item.subtotal }}
+                    </div>
+                    <div class="item-controls">
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="item_id" value="{{ item.id }}">
+                            <button type="submit" name="action" value="subtract">-</button>
+                            <span>{{ item.quantity }}</span>
+                            <button type="submit" name="action" value="add">+</button>
+                        </form>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
 
-    {% if cart_items %}
-    {% for item in cart_items %}
-    <li class="cart-item">
-        <img src="{{ item.book.cover_art }}" alt="{{ item.book.title }} Cover Art" width="100">
-        <strong>{{ item.book.title }}</strong> by {{ item.book.author }}<br>
-        Quantity: {{ item.quantity }}<br>
-        Price per item: ${{ item.book.price }}<br>
-        Total cost: ${{ item.subtotal }}<br>
-        <form method="post">
-            {% csrf_token %}
-            <input type="hidden" name="item_id" value="{{ item.id }}">
-            <button type="submit" name="action" value="subtract" aria-label="Decrease quantity">-</button>
-            <button type="submit" name="action" value="add" aria-label="Increase quantity">+</button>
-        </form>
-    </li>
-    {% endfor %}
+            <div class="checkout-btn">
+                <p>Total Cart Value: ${{ cart.total_cost }}</p>
+                <form method="post" action="{% url 'checkout' %}">
+                    {% csrf_token %}
+                    <button type="submit">Proceed to Checkout</button>
+                </form>
+            </div>
 
-    <p class="cart-summary">Total Cart Value: ${{ cart.total_cost }}</p>
+            {% else %}
+            <p class="empty-cart">Your cart is empty.</p>
+            {% endif %}
 
-    <form method="post" action="{% url 'checkout' %}">
-        {% csrf_token %}
-        <button type="submit">Proceed to Checkout</button>
-    </form>
-    {% else %}
-    <p class="empty-cart">Your cart is empty.</p>
-    {% endif %}
-
-    <a href="{% url 'home' %}">Continue Shopping</a>
-
+            <div class="continue-shopping">
+                <a href="{% url 'home' %}">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
