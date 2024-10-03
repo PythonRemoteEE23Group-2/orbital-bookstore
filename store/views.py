@@ -1,35 +1,32 @@
 import logging
-from django.shortcuts import render, redirect
-from .models import Book, Category, Cart, Order, Favorite, Review, OrderItem
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import User
-from django.shortcuts import get_object_or_404, redirect
-from django import forms
-from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import get_user_model
+from django.contrib.auth import login, get_user_model
 from django.contrib.auth.hashers import make_password
-from django.db.models import Q, Avg
+from django.db.models import Q, Avg, Sum, F
+from .models import Book, Category, Cart, CartItem, Order, OrderItem, Favorite, Review, User
+
+logger = logging.getLogger(__name__)
 
 
 def home(request):
     query = request.GET.get('q')
     selected_category = request.GET.get('category')
 
+    books = Book.objects.all()
+
     if query:
-        books = Book.objects.filter(Q(title__icontains=query) | Q(author__icontains=query))
-    else:
-        books = Book.objects.all()
+        books = books.filter(Q(title__icontains=query) | Q(author__icontains=query))
 
     if selected_category:
-        books = books.filter(category__id=selected_category)
+        books = books.filter(subcategory__category__id=selected_category)
 
-    categories = Category.objects.prefetch_related('book_set')
+    categories = Category.objects.prefetch_related('subcategories__books')
 
-    cart_items_count = Cart.objects.filter(user=request.user).count() if request.user.is_authenticated else 0
+    cart_items_count = CartItem.objects.filter(cart__user=request.user).count() if request.user.is_authenticated else 0
 
-    books = books.annotate(average_rating=Avg('review__rating'))
+    books = books.annotate(average_rating=Avg('reviews__rating'))
 
     return render(request, 'store/home.html', {
         'categories': categories,
@@ -42,11 +39,8 @@ def home(request):
 
 def book_detail(request, book_id):
     book = get_object_or_404(Book, id=book_id)
-    reviews = book.review_set.all()
+    reviews = book.reviews.all()
     return render(request, 'store/book_detail.html', {'book': book, 'reviews': reviews})
-
-
-User = get_user_model()
 
 
 def register(request):
@@ -77,7 +71,7 @@ def register(request):
         login(request, user)
 
         messages.success(request, f'Account created for {user.username}!')
-        return redirect('home')  # Redirect after successful registration
+        return redirect('home')
 
     return render(request, 'store/register.html')
 
@@ -85,41 +79,39 @@ def register(request):
 @login_required
 def add_to_cart(request, book_id):
     book = get_object_or_404(Book, id=book_id)
+    cart, _ = Cart.objects.get_or_create(user=request.user)
 
-    cart_item, created = Cart.objects.get_or_create(user=request.user, book=book)
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, book=book)
 
-    if created:
-        cart_item.quantity = 1
-        cart_item.total_cost = book.price
-    else:
+    if not created:
         cart_item.quantity += 1
-        cart_item.total_cost = cart_item.quantity * book.price
+        cart_item.save()
 
-    cart_item.save()
+    messages.success(request, f'{book.title} has been added to your cart.')
     return redirect('view_cart')
 
 
 @login_required
 def view_cart(request):
-    cart_items = Cart.objects.filter(user=request.user)
-    return render(request, 'store/cart.html', {'cart_items': cart_items})
+    cart, _ = Cart.objects.get_or_create(user=request.user)
+    cart_items = cart.items.all()
+    total_cost = cart.total_cost
+    return render(request, 'store/cart.html', {'cart_items': cart_items, 'total_cost': total_cost})
 
 
 @login_required
 def delete_from_cart(request, cart_item_id):
-    cart_item = get_object_or_404(Cart, id=cart_item_id, user=request.user)
+    cart_item = get_object_or_404(CartItem, id=cart_item_id, cart__user=request.user)
     cart_item.delete()
-
+    messages.success(request, f'{cart_item.book.title} has been removed from your cart.')
     return redirect('view_cart')
-
-
-logger = logging.getLogger(__name__)
 
 
 @login_required
 def checkout(request):
-    cart_items = Cart.objects.filter(user=request.user)
-    total_price = sum(item.book.price * item.quantity for item in cart_items)
+    cart, _ = Cart.objects.get_or_create(user=request.user)
+    cart_items = cart.items.all()
+    total_cost = cart.total_cost
 
     if request.method == 'POST':
         payment_method = request.POST.get('payment_method')
@@ -128,27 +120,30 @@ def checkout(request):
         if not payment_method:
             return render(request, 'store/checkout.html', {
                 'cart_items': cart_items,
-                'total_price': total_price,
+                'total_cost': total_cost,
                 'error_message': 'Please select a payment method.'
             })
 
+        order = Order.objects.create(
+            user=request.user,
+            payment_method=payment_method,
+            payment_status='pending',
+            delivery_email=delivery_email
+        )
+
         for item in cart_items:
-            Order.objects.create(
-                user=request.user,
+            OrderItem.objects.create(
+                order=order,
                 book=item.book,
-                price=item.book.price,
                 quantity=item.quantity,
-                total_cost=item.book.price * item.quantity,
-                status='Pending',
-                payment_method=payment_method,
-                payment_status='Unpaid',
-                delivery_email=delivery_email
+                price=item.book.price
             )
 
-        cart_items.delete()
+        cart.items.all().delete()
+        messages.success(request, 'Your order has been placed successfully.')
         return redirect('order_success')
 
-    return render(request, 'store/checkout.html', {'cart_items': cart_items, 'total_price': total_price})
+    return render(request, 'store/checkout.html', {'cart_items': cart_items, 'total_cost': total_cost})
 
 
 @login_required
@@ -160,11 +155,7 @@ def order_success(request):
 @login_required
 def add_to_favorites(request, book_id):
     book = get_object_or_404(Book, id=book_id)
-    favorite, created = Favorite.objects.get_or_create(
-        user=request.user,
-        book=book,
-        defaults={'fav_rating': 1}
-    )
+    favorite, created = Favorite.objects.get_or_create(user=request.user, book=book)
 
     if created:
         messages.success(request, f'{book.title} has been added to your favorites.')
@@ -178,8 +169,8 @@ def add_to_favorites(request, book_id):
 def add_review(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     if request.method == 'POST':
-        rating = request.POST['rating']
-        review_text = request.POST['review_text']
+        rating = request.POST.get('rating')
+        review_text = request.POST.get('review_text')
 
         Review.objects.create(
             user=request.user,
