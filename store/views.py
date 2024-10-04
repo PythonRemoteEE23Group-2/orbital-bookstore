@@ -40,7 +40,16 @@ def home(request):
 def book_detail(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     reviews = book.reviews.all()
-    return render(request, 'store/book_detail.html', {'book': book, 'reviews': reviews})
+    user_has_reviewed = False
+    if request.user.is_authenticated:
+        user_has_reviewed = reviews.filter(user=request.user).exists()
+
+    context = {
+        'book': book,
+        'reviews': reviews,
+        'user_has_reviewed': user_has_reviewed,
+    }
+    return render(request, 'store/book_detail.html', context)
 
 
 def register(request):
