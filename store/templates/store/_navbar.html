@@ -6,18 +6,23 @@
     <title>Navbar</title>
     {% load static %}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Cormorant+Garamond:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* Custom Styling for Navbar */
+        body {
+            font-family: 'Libre Baskerville', serif; /* Peamine tekst */
+        }
         .navbar {
-            background-color: #70367d; /* Purple */
+            background-color: #001f3f; /* Tume sinine */
             padding: 10px 20px;
         }
         .navbar-brand {
-            color: #fff;
+            color: #ffffff; /* Valge */
             font-size: 24px;
             font-weight: bold;
             display: flex; /* Flexbox for alignment */
             align-items: center; /* Center logo and text vertically */
+            font-family: 'Cormorant Garamond', serif; /* Logo ja poe nimi */
         }
         .navbar-brand img {
             max-width: 80px; /* Logo size */
@@ -25,33 +30,34 @@
             margin-right: 5px; /* Space between logo and text */
         }
         .nav-link {
-            color: #fff !important;
+            color: #ffffff !important; /* Valge */
             font-size: 16px;
+            font-family: 'Libre Baskerville', serif; /* Lingid */
         }
         .nav-link:hover {
-            color: #f8f9fa !important;
+            color: #007bff !important; /* Tume hall */
         }
         .nav-link.active {
             font-weight: bold;
             text-decoration: underline;
         }
         .navbar-toggler {
-            background-color: #fff;
+            background-color: #ffffff; /* Valge */
         }
         .btn-logout {
-            color: #fff;
-            background-color: #6cc8d9; /* Button color */
+            color: #ffffff; /* Valge */
+            background-color: #007bff; /* Sinine */
             border: none;
         }
         .btn-logout:hover {
-            background-color: #c82333; /* Darker shade on hover */
+            background-color: #0056b3; /* Tumeda varjundi hover */
         }
         .cart-badge {
-            background-color: #ffc107;
+            background-color: #ffc107; /* Kuldne */
             font-size: 14px;
             padding: 2px 8px;
             border-radius: 50%;
-            color: #212529;
+            color: #212529; /* Tumeda värv */
         }
     </style>
 </head>
