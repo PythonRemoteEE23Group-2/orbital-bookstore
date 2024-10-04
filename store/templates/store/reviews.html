@@ -1,22 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Your Reviews</title>
+    <title>All Reviews</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .page-wrapper {
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            flex-grow: 1;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        .review-heading {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+        .review-user {
+            color: #555;
+        }
+        .back-to-home {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .back-to-home a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-to-home a:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 <body>
-    <h1>Your Reviews</h1>
-    {% if reviews %}
-        <ul>
-        {% for review in reviews %}
-            <li>
-                <strong>{{ review.book.title }}</strong><br>
-                Rating: {{ review.rating }}<br>
-                {{ review.review_text }}
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>You have not written any reviews yet.</p>
-    {% endif %}
+    <div class="page-wrapper">
+        <div class="container">
+            <h1>All Reviews</h1>
+
+            {% if reviews %}
+                <ul>
+                {% for review in reviews %}
+                    <li>
+                        <div class="review-heading">{{ review.book.title }}</div>
+                        <div class="review-user">by {{ review.user.username }}</div>
+                        <p>Rating: {{ review.rating }}</p>
+                        <p>{{ review.review_text }}</p>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p>No reviews available yet.</p>
+            {% endif %}
+
+            <div class="back-to-home">
+                <a href="{% url 'home' %}">Back to Home</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

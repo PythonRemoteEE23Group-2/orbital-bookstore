@@ -2,9 +2,9 @@ import logging
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.auth import login, get_user_model
+from django.contrib.auth import login
 from django.contrib.auth.hashers import make_password
-from django.db.models import Q, Avg, Sum, F
+from django.db.models import Q, Avg
 from .models import Book, Category, Cart, CartItem, Order, OrderItem, Favorite, Review, User
 
 logger = logging.getLogger(__name__)
@@ -218,7 +218,7 @@ def view_favorites(request):
     return render(request, 'store/favorites.html', {'favorites': favorites})
 
 
-@login_required
 def view_reviews(request):
-    reviews = Review.objects.filter(user=request.user)
+    reviews = Review.objects.all()
     return render(request, 'store/reviews.html', {'reviews': reviews})
+

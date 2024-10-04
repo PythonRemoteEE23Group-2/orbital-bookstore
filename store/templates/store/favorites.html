@@ -2,27 +2,113 @@
 <html lang="en">
 <head>
     <title>Your Favorite Books</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .page-wrapper {
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            flex-grow: 1;
+        }
+        .book-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            list-style-type: none;
+            padding: 0;
+            justify-content: center;
+        }
+        .book-item {
+            width: calc(25% - 15px);
+            min-width: 200px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .book-cover {
+            width: 100%;
+            height: auto;
+            max-height: 200px;
+            object-fit: cover;
+        }
+        .book-info {
+            margin-top: 10px;
+        }
+        .book-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .book-author {
+            color: #555;
+            font-size: 14px;
+        }
+        .book-price {
+            color: #000;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .empty-message {
+            text-align: center;
+            font-size: 18px;
+            color: #888;
+        }
+        .back-button {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .back-button a {
+            text-decoration: none;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .back-button a:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-
-    <h1>Your Favorite Books</h1>
-
-    {% if favorites %}
-        <ul>
-        {% for favorite in favorites %}
-            <li>
-                <a href="{% url 'book_detail' favorite.book.id %}">
-                    <img src="{{ favorite.book.cover_art }}" alt="{{ favorite.book.title }} Cover Art" width="100">
-                    <strong>{{ favorite.book.title }}</strong> by {{ favorite.book.author }} - ${{ favorite.book.price }}
-                </a>
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>You have no favorite books yet.</p>
-    {% endif %}
-
-    <a href="{% url 'home' %}">Back to Book List</a>
-
+    <div class="page-wrapper">
+        <div class="container">
+            <h1>Your Favorite Books</h1>
+            {% if favorites %}
+                <ul class="book-list">
+                    {% for favorite in favorites %}
+                    <li class="book-item">
+                        <a href="{% url 'book_detail' favorite.book.id %}">
+                            <img src="{{ favorite.book.cover_art }}" alt="{{ favorite.book.title }} Cover Art" class="book-cover">
+                            <div class="book-info">
+                                <div class="book-title">{{ favorite.book.title }}</div>
+                                <div class="book-author">by {{ favorite.book.author }}</div>
+                                <div class="book-price">${{ favorite.book.price }}</div>
+                            </div>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="empty-message">You have no favorite books yet.</p>
+            {% endif %}
+            <div class="back-button">
+                <a href="{% url 'home' %}">Back to Book List</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
