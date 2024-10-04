@@ -84,6 +84,7 @@ class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)])
+    product = models.CharField(max_length=100)
 
     @property
     def subtotal(self):

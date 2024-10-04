@@ -4,17 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Navbar</title>
+    {% load static %}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
     <style>
         /* Custom Styling for Navbar */
         .navbar {
-            background-color: #70367d; /* Blue */
+            background-color: #70367d; /* Purple */
             padding: 10px 20px;
         }
         .navbar-brand {
             color: #fff;
             font-size: 24px;
             font-weight: bold;
+            display: flex; /* Flexbox for alignment */
+            align-items: center; /* Center logo and text vertically */
+        }
+        .navbar-brand img {
+            max-width: 80px; /* Logo size */
+            height: auto;
+            margin-right: 5px; /* Space between logo and text */
         }
         .nav-link {
             color: #fff !important;
@@ -32,11 +40,11 @@
         }
         .btn-logout {
             color: #fff;
-            background-color: #6cc8d9; /* Red */
+            background-color: #6cc8d9; /* Button color */
             border: none;
         }
         .btn-logout:hover {
-            background-color: #c82333;
+            background-color: #c82333; /* Darker shade on hover */
         }
         .cart-badge {
             background-color: #ffc107;
@@ -51,7 +59,10 @@
 
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'home' %}">Orbital Bookstore</a>
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="{% static 'images/logo.jpg' %}" alt="Orbital Bookstore Logo"> <!-- Logo here -->
+            Orbital Bookstore
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
