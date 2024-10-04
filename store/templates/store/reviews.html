@@ -1,24 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Your Reviews</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Reviews</title>
+    <style>
+        body {
+            background-color: #cbcfcc;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .page-wrapper {
+            background-color: #ffffff;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        .container {
+            padding: 20px;
+        }
+        .review {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .review-heading {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .review-user {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .back-to-home {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .back-to-home a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #79a9a3;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .back-to-home a:hover {
+            background-color: #4eb065;
+        }
+    </style>
 </head>
 <body>
-    <a href="{% url 'home' %}" class="back-home">Back to Home</a>
+    <div class="page-wrapper">
+        <div class="container">
+            <h1>All Reviews</h1>
 
-    <h1>Your Reviews</h1>
-    {% if reviews %}
-        <ul>
-        {% for review in reviews %}
-            <li>
-                <strong>{{ review.book.title }}</strong><br>
-                Rating: {{ review.rating }}<br>
-                {{ review.review_text }}
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>You have not written any reviews yet.</p>
-    {% endif %}
+            {% if reviews %}
+                {% for review in reviews %}
+                    <div class="review">
+                        <div class="review-heading">
+                            {{ review.book.title }}
+                        </div>
+
+                        <div class="review-user">
+                            by {{ review.user.username }}
+                        </div>
+
+                        <p>Rating: {{ review.rating }}</p>
+
+                        <p>{{ review.review_text }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No reviews available yet.</p>
+            {% endif %}
+
+            <div class="back-to-home">
+                <a href="{% url 'home' %}">Back to Home</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

@@ -1,30 +1,55 @@
 import logging
-from django.db.models import Q
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import User
-from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth import login
-from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
-from .models import Book, Ebook, Accessory, BookWrap, Bookmark, SchoolOffice, BookletFolder, Pencil, Other, Cart, Order, Favorite, Review
+from django.db.models import Q, Avg
+from .models import Book, Category, Cart, CartItem, Order, OrderItem, Favorite, Review, User
 
-
+logger = logging.getLogger(__name__)
 
 
 def home(request):
-    cart_items_count = Cart.objects.filter(user=request.user).count() if request.user.is_authenticated else 0
-    return render(request, 'store/home.html', {'cart_items_count': cart_items_count})
+    query = request.GET.get('q')
+    selected_category = request.GET.get('category')
+
+    books = Book.objects.all()
+
+    if query:
+        books = books.filter(Q(title__icontains=query) | Q(author__icontains=query))
+
+    if selected_category:
+        books = books.filter(subcategory__category__id=selected_category)
+
+    categories = Category.objects.prefetch_related('subcategories__books')
+
+    cart_items_count = CartItem.objects.filter(cart__user=request.user).count() if request.user.is_authenticated else 0
+
+    books = books.annotate(average_rating=Avg('reviews__rating'))
+
+    return render(request, 'store/home.html', {
+        'categories': categories,
+        'books': books,
+        'cart_items_count': cart_items_count,
+        'selected_category': selected_category,
+        'query': query,
+    })
 
 
 def book_detail(request, book_id):
-    book = Book.objects.get(id=book_id)
-    reviews = Review.objects.filter(book=book)
-    return render(request, 'store/book_detail.html', {'book': book, 'reviews': reviews})
+    book = get_object_or_404(Book, id=book_id)
+    reviews = book.reviews.all()
+    user_has_reviewed = False
+    if request.user.is_authenticated:
+        user_has_reviewed = reviews.filter(user=request.user).exists()
 
-
-User = get_user_model()
+    context = {
+        'book': book,
+        'reviews': reviews,
+        'user_has_reviewed': user_has_reviewed,
+    }
+    return render(request, 'store/book_detail.html', context)
 
 
 def register(request):
@@ -34,7 +59,6 @@ def register(request):
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
 
-        # Basic validation
         if password1 != password2:
             messages.error(request, 'Passwords do not match.')
             return render(request, 'store/register.html')
@@ -47,102 +71,74 @@ def register(request):
             messages.error(request, 'Email already registered.')
             return render(request, 'store/register.html')
 
-        # Create the user
         user = User.objects.create(
             username=username,
             email=email,
-            password=make_password(password1)  # Hash the password manually
+            password=make_password(password1)
         )
 
-        # Log the user in after registration (optional)
         login(request, user)
 
         messages.success(request, f'Account created for {user.username}!')
-        return redirect('home')  # Redirect after successful registration
+        return redirect('home')
 
     return render(request, 'store/register.html')
 
 
 @login_required
-def add_to_cart(request, item_type, item_id):
-    # Initialize variables
-    item = None
-    item_price = 0
+def add_to_cart(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    cart, _ = Cart.objects.get_or_create(user=request.user)
 
-    # Fetch the item based on the item_type
-    if item_type == "book":
-        item = Book.objects.filter(id=item_id).first()
-    elif item_type == "ebook":
-        item = Ebook.objects.filter(id=item_id).first()
-    elif item_type == "accessory":
-        item = Accessory.objects.filter(id=item_id).first()
-    elif item_type == "pencil":
-        item = Pencil.objects.filter(id=item_id).first()
-    elif item_type == "other":
-        item = Other.objects.filter(id=item_id).first()
-    elif item_type == "book_wrap":
-        item = BookWrap.objects.filter(id=item_id).first()
-    elif item_type == "bookmark":
-        item = Bookmark.objects.filter(id=item_id).first()
-    elif item_type == "booklet_folder":
-        item = BookletFolder.objects.filter(id=item_id).first()
-    elif item_type == "school_office":
-        item = SchoolOffice.objects.filter(id=item_id).first()
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, book=book)
 
-    # Handle adding to cart
-    if item:
-        cart_item, created = Cart.objects.get_or_create(
-            user=request.user,
-            **{f'{item_type}': item}
-        )
-        item_price = item.price
-        if created:
-            cart_item.quantity = 1
-        else:
-            cart_item.quantity += 1
-        cart_item.total_cost = cart_item.quantity * item_price
+    if not created:
+        cart_item.quantity += 1
         cart_item.save()
-    else:
-        messages.error(request, "Item not found.")
-        return redirect('home')
 
+    messages.success(request, f'{book.title} has been added to your cart.')
     return redirect('view_cart')
 
 
-# Viewing the cart
 @login_required
 def view_cart(request):
-    cart_items = Cart.objects.filter(user=request.user)
-    return render(request, 'store/cart.html', {'cart_items': cart_items})
+    cart, created = Cart.objects.get_or_create(user=request.user)
 
+    if request.method == 'POST':
+        item_id = request.POST.get('item_id')
+        action = request.POST.get('action')
 
-logger = logging.getLogger(__name__)
+        cart_item = get_object_or_404(CartItem, id=item_id, cart=cart)
+
+        if action == 'add':
+            cart_item.quantity += 1
+        elif action == 'subtract':
+            cart_item.quantity -= 1
+
+        if cart_item.quantity > 0:
+            cart_item.save()
+        else:
+            cart_item.delete()
+
+        return redirect('view_cart')
+
+    cart_items = cart.items.all()
+    return render(request, 'store/cart.html', {'cart': cart, 'cart_items': cart_items})
 
 
 @login_required
-def remove_from_cart(request, item_id):
-    cart_item = get_object_or_404(Cart, id=item_id, user=request.user)
+def delete_from_cart(request, cart_item_id):
+    cart_item = get_object_or_404(CartItem, id=cart_item_id, cart__user=request.user)
     cart_item.delete()
-    return redirect('view_cart')  # Redirect to the cart page after deletion
+    messages.success(request, f'{cart_item.book.title} has been removed from your cart.')
+    return redirect('view_cart')
 
 
 @login_required
 def checkout(request):
-    cart_items = Cart.objects.filter(user=request.user)
-
-    # Update total price calculation to check all item types
-    total_price = sum(
-        (item.book.price if item.book else 0) +
-        (item.ebook.price if item.ebook else 0) +
-        (item.accessory.price if item.accessory else 0) +
-        (item.pencil.price if item.pencil else 0) +
-        (item.other.price if item.other else 0) +
-        (item.book_wrap.price if item.book_wrap else 0) +
-        (item.bookmark.price if item.bookmark else 0) +
-        (item.booklet_folder.price if item.booklet_folder else 0) +
-        (item.school_office.price if item.school_office else 0)
-        for item in cart_items
-    )
+    cart, _ = Cart.objects.get_or_create(user=request.user)
+    cart_items = cart.items.all()
+    total_cost = cart.total_cost
 
     if request.method == 'POST':
         payment_method = request.POST.get('payment_method')
@@ -151,90 +147,67 @@ def checkout(request):
         if not payment_method:
             return render(request, 'store/checkout.html', {
                 'cart_items': cart_items,
-                'total_price': total_price,
+                'total_cost': total_cost,
                 'error_message': 'Please select a payment method.'
             })
 
+        order = Order.objects.create(
+            user=request.user,
+            payment_method=payment_method,
+            payment_status='pending',
+            delivery_email=delivery_email
+        )
+
         for item in cart_items:
-            order_data = {
-                'user': request.user,
-                'price': item.total_cost / item.quantity,  # Use per-item price
-                'quantity': item.quantity,
-                'total_cost': item.total_cost,
-                'status': 'Pending',
-                'payment_method': payment_method,
-                'payment_status': 'Unpaid',
-                'delivery_email': delivery_email,
-            }
+            OrderItem.objects.create(
+                order=order,
+                book=item.book,
+                quantity=item.quantity,
+                price=item.book.price
+            )
 
-            # Create an Order for the correct item type
-            if item.book:
-                order_data['book'] = item.book
-            elif item.ebook:
-                order_data['ebook'] = item.ebook
-            elif item.accessory:
-                order_data['accessory'] = item.accessory
-            elif item.pencil:
-                order_data['pencil'] = item.pencil
-            elif item.other:
-                order_data['other'] = item.other
-            elif item.book_wrap:
-                order_data['book_wrap'] = item.book_wrap
-            elif item.bookmark:
-                order_data['bookmark'] = item.bookmark
-            elif item.booklet_folder:
-                order_data['booklet_folder'] = item.booklet_folder
-            elif item.school_office:
-                order_data['school_office'] = item.school_office
-
-            # Create the Order
-            Order.objects.create(**order_data)
-
-        cart_items.delete()  # Clear the cart after order creation
+        cart.items.all().delete()
+        messages.success(request, 'Your order has been placed successfully.')
         return redirect('order_success')
 
-    return render(request, 'store/checkout.html', {'cart_items': cart_items, 'total_price': total_price})
+    return render(request, 'store/checkout.html', {'cart_items': cart_items, 'total_cost': total_cost})
 
 
 @login_required
 def order_success(request):
-    # Fetch recent orders using order_date
-    orders = Order.objects.filter(user=request.user).order_by('-order_date')[:5]
-    return render(request, 'store/order_success.html', {'orders': orders})
+    # Get the most recent order for the current user
+    latest_order = Order.objects.filter(user=request.user).order_by('-order_date').first()
+
+    if latest_order:
+        order_items = OrderItem.objects.filter(order=latest_order)
+    else:
+        order_items = []
+
+    return render(request, 'store/order_success.html', {
+        'order': latest_order,
+        'order_items': order_items,
+    })
 
 
 @login_required
-def add_to_favorites(request, item_id):
-    # Fetch items from all possible models
-    book = Book.objects.filter(id=item_id).first()
-    ebook = Ebook.objects.filter(id=item_id).first()
-    accessory = Accessory.objects.filter(id=item_id).first()
-
-    # Check and add the item to favorites
-    if book:
-        favorite, created = Favorite.objects.get_or_create(user=request.user, book=book)
-    elif ebook:
-        favorite, created = Favorite.objects.get_or_create(user=request.user, ebook=ebook)
-    elif accessory:
-        favorite, created = Favorite.objects.get_or_create(user=request.user, accessory=accessory)
-    else:
-        messages.error(request, "Item not found.")
-        return redirect('home')
+def add_to_favorites(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    favorite, created = Favorite.objects.get_or_create(user=request.user, book=book)
 
     if created:
-        messages.success(request, 'Item added to your favorites.')
+        messages.success(request, f'{book.title} has been added to your favorites.')
     else:
-        messages.info(request, 'Item is already in your favorites.')
+        messages.info(request, f'{book.title} is already in your favorites.')
 
-    return redirect('home')
+    return redirect('book_detail', book_id=book_id)
 
 
 @login_required
 def add_review(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     if request.method == 'POST':
-        rating = request.POST['rating']
-        review_text = request.POST['review_text']
+        rating = request.POST.get('rating')
+        review_text = request.POST.get('review_text')
 
         Review.objects.create(
             user=request.user,
@@ -254,171 +227,7 @@ def view_favorites(request):
     return render(request, 'store/favorites.html', {'favorites': favorites})
 
 
-@login_required
 def view_reviews(request):
-    reviews = Review.objects.filter(user=request.user)
+    reviews = Review.objects.all()
     return render(request, 'store/reviews.html', {'reviews': reviews})
 
-
-@login_required
-def update_cart_quantity(request, item_id, operation):
-    cart_item = get_object_or_404(Cart, id=item_id, user=request.user)
-
-    # Handle the quantity increase/decrease
-    if operation == 'increase':
-        cart_item.quantity += 1
-    elif operation == 'decrease' and cart_item.quantity > 1:
-        cart_item.quantity -= 1
-    elif operation == 'decrease' and cart_item.quantity == 1:
-        # If quantity reaches 0, remove the item
-        cart_item.delete()
-        return redirect('view_cart')
-
-    # Update the total cost based on the item type
-    if cart_item.book:
-        cart_item.total_cost = cart_item.quantity * cart_item.book.price
-    elif cart_item.ebook:
-        cart_item.total_cost = cart_item.quantity * cart_item.ebook.price
-    elif cart_item.accessory:
-        cart_item.total_cost = cart_item.quantity * cart_item.accessory.price
-    elif cart_item.pencil:
-        cart_item.total_cost = cart_item.quantity * cart_item.pencil.price
-    elif cart_item.other:
-        cart_item.total_cost = cart_item.quantity * cart_item.other.price
-    elif cart_item.book_wrap:
-        cart_item.total_cost = cart_item.quantity * cart_item.book_wrap.price
-    elif cart_item.exlibris:
-        cart_item.total_cost = cart_item.quantity * cart_item.exlibris.price
-    elif cart_item.booklet_folder:
-        cart_item.total_cost = cart_item.quantity * cart_item.booklet_folder.price
-    elif cart_item.school_office:
-        cart_item.total_cost = cart_item.quantity * cart_item.school_office.price
-    else:
-        cart_item.total_cost = 0  # Set a default value or handle the error
-
-    cart_item.save()
-    return redirect('view_cart')
-
-
-def search(request):
-    query = request.GET.get('q', '')
-
-    if query:
-        # Fetching books, ebooks, and other items based on query
-        books = Book.objects.filter(
-            Q(title__icontains=query) |
-            Q(author__icontains=query) |
-            Q(description__icontains=query)
-        )
-        ebooks = Ebook.objects.filter(
-            Q(title__icontains=query) |
-            Q(author__icontains=query) |
-            Q(description__icontains=query)
-        )
-        accessories = Accessory.objects.filter(
-            Q(name__icontains=query) |
-            Q(description__icontains=query)
-        )
-        book_wraps = BookWrap.objects.filter(
-            Q(accessory__name__icontains=query) |
-            Q(color__icontains=query)
-        )
-        booklets_folders = BookletFolder.objects.filter(
-            Q(school_office__name__icontains=query) |
-            Q(size__icontains=query)
-        )
-        bookmarks = Bookmark.objects.filter(
-            Q(accessory__name__icontains=query) |
-            Q(design__icontains=query)
-        )
-        pencils = Pencil.objects.filter(
-            Q(school_office__name__icontains=query) |
-            Q(pencil_type__icontains=query)
-        )
-        school_and_office = SchoolOffice.objects.filter(
-            Q(name__icontains=query) |
-            Q(description__icontains=query)
-        )
-
-        # Combine results from all item types into one list
-        items = list(books) + list(ebooks) + list(accessories) + list(book_wraps) + \
-                list(school_and_office) + list(bookmarks) + list(pencils) + list(booklets_folders)
-    else:
-        items = []
-
-    return render(request, 'store/search_results.html', {'items': items})
-
-
-def about_us(request):
-    return render(request, 'store/about_us.html')
-
-
-def contact_us(request):
-    return render(request, 'store/contact_us.html')
-
-
-def terms_and_conditions(request):
-    return render(request, 'store/terms_and_conditions.html')
-
-
-def shipping_information(request):
-    return render(request, 'store/shipping_information.html')
-
-
-def books(request):
-    return render(request, 'store/books.html')
-
-
-def ebooks(request):
-    return render(request, 'store/ebooks.html')
-
-
-def accessories(request):
-    return render(request, 'store/accessories.html')
-
-
-def book_wraps(request):
-    book_wraps = BookWrap.objects.all()  # Fetch all book wraps
-    return render(request, 'store/book_wraps.html', {'book_wraps': book_wraps})
-
-
-def bookmarks(request):
-    bookmarks = Bookmark.objects.all()  # Fetch all bookmarks
-    return render(request, 'store/bookmarks.html', {'bookmarks': bookmarks})
-
-
-def school_and_office(request):
-    return render(request, 'store/school_and_office.html')
-
-
-def booklets_folders(request):
-    booklets_folders = BookletFolder.objects.all()  # Fetch all booklets/folders
-    return render(request, 'store/booklets_folders.html', {'booklets_folders': booklets_folders})
-
-
-def pencils(request):
-    pencils = Pencil.objects.all()  # Fetch all pencils
-    return render(request, 'store/pencils.html', {'pencils': pencils})
-
-
-
-def other(request):
-    other_items = Other.objects.all()  # Fetch all "Other" products
-    return render(request, 'store/other.html', {'other_items': other_items})
-
-
-
-def books_view(request):
-    books = Book.objects.all()  # Fetch all books from the database
-    return render(request, 'store/books.html', {'books': books})
-
-
-# View for E-books page
-def ebooks_view(request):
-    ebooks = Ebook.objects.all()  # Fetch all e-books
-    return render(request, 'store/ebooks.html', {'ebooks': ebooks})
-
-
-def ebook_detail(request, ebook_id):
-    ebook = get_object_or_404(Ebook, id=ebook_id)  # Fetch the e-book or return a 404 error
-    return render(request, 'store/e-book_details.html', {'ebook': ebook})

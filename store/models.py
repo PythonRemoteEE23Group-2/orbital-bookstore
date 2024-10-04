@@ -1,15 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class User(AbstractUser):
     profile_name = models.CharField(max_length=255, blank=True, null=True)
     email = models.EmailField(unique=True)
-    first_name = models.TextField(blank=True, null=True)
-    last_name = models.TextField(blank=True, null=True)
+    first_name = models.CharField(max_length=150, blank=True, default='')
+    last_name = models.CharField(max_length=150, blank=True, default='')
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    order_history = models.TextField(blank=True, null=True)
 
     groups = models.ManyToManyField(
         'auth.Group',
@@ -18,7 +18,7 @@ class User(AbstractUser):
     user_permissions = models.ManyToManyField(
         'auth.Permission',
         related_name='store_user_permissions',
-        blank=True
+        blank=True,
     )
 
 
@@ -31,7 +31,7 @@ class Category(models.Model):
 
 class Subcategory(models.Model):
     name = models.CharField(max_length=255)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='subcategories')
 
     def __str__(self):
         return self.name
@@ -42,169 +42,90 @@ class Book(models.Model):
     author = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     cover_art = models.ImageField(upload_to='book_covers/', blank=True, null=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
     availability = models.BooleanField(default=True)
     download_link = models.URLField(max_length=400)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    subcategory = models.ForeignKey(Subcategory, on_delete=models.CASCADE, blank=True, null=True)
+    subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, blank=True, null=True, related_name='books')
 
     def __str__(self):
         return self.title
-
-
-class Ebook(models.Model):
-    title = models.CharField(max_length=255)
-    author = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
-    cover_art = models.ImageField(upload_to='ebooks/', blank=True, null=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    availability = models.BooleanField(default=True)
-    download_link = models.URLField(max_length=400)
-
-    def __str__(self):
-        return self.title
-
-
-    # Accessory model
-class Accessory(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    availability = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.name
-
-
-# Book Wraps as a subcategory of Accessories
-class BookWrap(models.Model):
-    accessory = models.OneToOneField(Accessory, on_delete=models.CASCADE)
-    color = models.CharField(max_length=100)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    availability = models.BooleanField(default=True)
-
-    def __str__(self):
-        return f"Book Wrap - {self.accessory.name}"
-
-
-# Bookmark as a subcategory of Accessories
-class Bookmark(models.Model):
-    accessory = models.OneToOneField(Accessory, on_delete=models.CASCADE)
-    design = models.CharField(max_length=255)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    availability = models.BooleanField(default=True)
-
-    def __str__(self):
-        return f"Bookmark - {self.accessory.name}"
-
-    # School and Office Supplies model
-class SchoolOffice(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    availability = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.name
-
-    # Booklets/Folders as a subcategory of School and Office
-class BookletFolder(models.Model):
-    school_office = models.OneToOneField(SchoolOffice, on_delete=models.CASCADE)
-    size = models.CharField(max_length=50)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    availability = models.BooleanField(default=True)
-
-    def __str__(self):
-        return f"Booklet/Folder - {self.school_office.name}"
-
-
-    # Pencils as a subcategory of School and Office
-class Pencil(models.Model):
-    school_office = models.OneToOneField(SchoolOffice, on_delete=models.CASCADE)
-    pencil_type = models.CharField(max_length=50)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    availability = models.BooleanField(default=True)
-
-    def __str__(self):
-        return f"Pencil - {self.school_office.name}"
-
-
-    # Other supplies as a subcategory of School and Office
-class Other(models.Model):
-    school_office = models.OneToOneField(SchoolOffice, on_delete=models.CASCADE)
-    description = models.CharField(max_length=255)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    availability = models.BooleanField(default=True)
-
-    def __str__(self):
-        return f"Other - {self.school_office.name}"
 
 
 class Review(models.Model):
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    rating = models.IntegerField()
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='reviews')
+    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     review_text = models.TextField(blank=True, null=True)
     review_date = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ('book', 'user')
+
 
 class Favorite(models.Model):
-    fav_rating = models.IntegerField(default=1)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='favorited_by')
+
+    class Meta:
+        unique_together = ('user', 'book')
 
 
 class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, blank=True, null=True)
-    ebook = models.ForeignKey(Ebook, on_delete=models.CASCADE, blank=True, null=True)
-    accessory = models.ForeignKey(Accessory, on_delete=models.CASCADE, blank=True, null=True)
-    pencil = models.ForeignKey(Pencil, on_delete=models.CASCADE, blank=True, null=True)
-    other = models.ForeignKey(Other, on_delete=models.CASCADE, blank=True, null=True)
-    book_wrap = models.ForeignKey(BookWrap, on_delete=models.CASCADE, blank=True, null=True)
-    bookmark = models.ForeignKey(Bookmark, on_delete=models.CASCADE, blank=True, null=True)
-    booklet_folder = models.ForeignKey(BookletFolder, on_delete=models.CASCADE, blank=True, null=True)
-    school_office = models.ForeignKey(SchoolOffice, on_delete=models.CASCADE, blank=True, null=True)
-    quantity = models.IntegerField(default=1)
-    total_cost = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='cart')
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def total_cost(self):
+        return sum(item.subtotal for item in self.items.all())
+
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)])
+
+    @property
+    def subtotal(self):
+        return self.book.price * self.quantity
 
 
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('processing', 'Processing'),
+        ('completed', 'Completed'),
+        ('cancelled', 'Cancelled'),
+    ]
+
+    PAYMENT_STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('paid', 'Paid'),
+        ('failed', 'Failed'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
     order_date = models.DateTimeField(auto_now_add=True)
-
-    # Add fields for all item types
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, blank=True, null=True)
-    ebook = models.ForeignKey(Ebook, on_delete=models.CASCADE, blank=True, null=True)
-    accessory = models.ForeignKey(Accessory, on_delete=models.CASCADE, blank=True, null=True)
-    pencil = models.ForeignKey(Pencil, on_delete=models.CASCADE, blank=True, null=True)
-    other = models.ForeignKey(Other, on_delete=models.CASCADE, blank=True, null=True)
-    book_wrap = models.ForeignKey(BookWrap, on_delete=models.CASCADE, blank=True, null=True)
-    bookmark = models.ForeignKey(Bookmark, on_delete=models.CASCADE, blank=True, null=True)
-    booklet_folder = models.ForeignKey(BookletFolder, on_delete=models.CASCADE, blank=True, null=True)
-    school_office = models.ForeignKey(SchoolOffice, on_delete=models.CASCADE, blank=True, null=True)
-
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    quantity = models.IntegerField()
-    total_cost = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=50, default='Pending')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     payment_method = models.CharField(max_length=50)
-    payment_status = models.CharField(max_length=50)
-    delivery_email = models.CharField(max_length=255)
+    payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default='pending')
+    delivery_email = models.EmailField()
     email_sent_date = models.DateTimeField(null=True, blank=True)
-    download_link = models.CharField(max_length=255, null=True, blank=True)
-    download_expiry_date = models.DateTimeField(null=True, blank=True)
+
+    @property
+    def total_cost(self):
+        return sum(item.subtotal for item in self.items.all())
 
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
+
+    @property
+    def subtotal(self):
+        return self.price * self.quantity
 
     def __str__(self):
         return f'{self.book.title} - {self.order.user.username}'
-
-
-

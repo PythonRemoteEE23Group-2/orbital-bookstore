@@ -1,28 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Favorite Books</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #cbcfcc;
+        }
+        .book-cover {
+            width: 150px;
+            height: 225px;
+            object-fit: cover;
+        }
+        .favorite-book-card {
+            height: 100%;
+        }
+    </style>
 </head>
 <body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Your Favorite Books</h1>
 
-    <h1>Your Favorite Books</h1>
+        {% if favorites %}
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                {% for favorite in favorites %}
+                    <div class="col">
+                        <div class="card favorite-book-card">
+                            <div class="row g-0">
+                                <div class="col-md-4 d-flex align-items-center justify-content-center p-3">
+                                    <a href="{% url 'book_detail' favorite.book.id %}">
+                                        <img src="{{ favorite.book.cover_art }}" class="img-fluid rounded book-cover" alt="{{ favorite.book.title }} Cover Art">
+                                    </a>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ favorite.book.title }}</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">by {{ favorite.book.author }}</h6>
+                                        <p class="card-text">Price: ${{ favorite.book.price }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info" role="alert">
+                You have no favorite books yet.
+            </div>
+        {% endif %}
 
-    {% if favorites %}
-        <ul>
-        {% for favorite in favorites %}
-            <li>
-                <a href="{% url 'book_detail' favorite.book.id %}">
-                    <img src="{{ favorite.book.cover_art }}" alt="{{ favorite.book.title }} Cover Art" width="100">
-                    <strong>{{ favorite.book.title }}</strong> by {{ favorite.book.author }} - ${{ favorite.book.price }}
-                </a>
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>You have no favorite books yet.</p>
-    {% endif %}
+        <div class="mt-4">
+            <a href="{% url 'home' %}" class="btn btn-secondary">Back to Book List</a>
+        </div>
+    </div>
 
-    <a href="{% url 'home' %}">Back to Book List</a>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

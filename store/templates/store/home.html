@@ -1,234 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orbital Bookstore - Home</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh; /* Ensure the body takes the full height */
+            font-family: 'Roboto', sans-serif;
+            background-color: #cbcfcc !important;
         }
         .page-wrapper {
-            width: 100%;
             max-width: 1200px;
+            margin: 0 auto;
             padding: 20px;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
         }
-        .container {
-            width: 100%;
-            flex-grow: 1;
-        }
-        .weather-widget {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            z-index: 1000;
-            width: 300px;
-            overflow: hidden;
+        a {
+            text-decoration: none !important;
+            color: inherit; /* You can customize this to define the color of the links */
         }
         .book-list {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
-            list-style-type: none;
-            padding: 0;
             justify-content: center;
         }
         .book-item {
             width: calc(25% - 15px);
             min-width: 200px;
-            border: 1px solid #ddd;
-            padding: 10px;
-            box-sizing: border-box;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 15px;
+            text-align: center;
         }
         .book-cover {
-            width: 100%;
+            max-width: 100%;
             height: auto;
-            max-height: 200px;
-            object-fit: cover;
+            border-radius: 8px;
         }
-        .book-info {
-            margin-top: 10px;
+        .book-info h4 {
+            margin-top: 15px;
+            font-size: 1.2rem;
+            color: #333;
         }
-        @media (max-width: 768px) {
-            .book-item {
-                width: calc(50% - 10px);
-            }
+        .book-info p {
+            margin: 5px 0;
+            color: #777;
         }
-        .search-container {
+        .add-to-cart button {
+            background-color: #6cc8d9;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .add-to-cart button:hover {
+            background-color: #4eb065;
+        }
+        /* Category Filter and Search */
+        .search-bar, .category-filter {
+            margin-bottom: 20px;
             display: flex;
             justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            margin: 20px 0;
         }
-        .site-title {
-            font-size: 36px;
-            margin-bottom: 10px;
-            margin-top: -20px; /* Adjusted to move the title higher */
-            text-align: center;
-        }
-        .search-bar {
+        .search-bar input[type="text"] {
             width: 300px;
-            padding: 5px;
-            font-size: 16px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
         }
-        .search-button {
-            padding: 5px 10px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        footer {
-            background-color: #f8f9fa;
-            padding: 20px;
-            text-align: center;
-            margin-top: auto; /* This ensures that the footer is pushed to the bottom */
-            width: 100%;
-        }
-
-        /* Dropdown container */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        /* Dropdown button */
-        .dropbtn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 16px;
-            font-size: 16px;
+        .search-bar button {
+            background-color: #569080;
+            color: #fff;
             border: none;
-            cursor: pointer;
+            padding: 10px 20px;
+            margin-left: 10px;
+            border-radius: 5px;
         }
-
-        /* Dropdown content (hidden by default) */
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
+        .search-bar button:hover {
+            background-color: #0056b3;
         }
-
-        /* Dropdown links */
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-
-        /* Show the dropdown menu on hover */
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        /* Submenu styling */
-        .submenu {
-            position: relative;
-        }
-
-        .submenu-content {
-            display: none;
-            position: absolute;
-            left: 160px;
-            top: 0;
-            background-color: #f1f1f1;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        }
-
-        .submenu:hover .submenu-content {
-            display: block;
-        }
-
-        /* Styling for the links in the submenu */
-        .submenu-content a {
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
+        .category-filter select {
+            width: 200px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
         }
     </style>
 </head>
 <body>
     <div class="page-wrapper">
-        <div class="container">
-            {% include 'store/_navbar.html' %}
+        <!-- Navbar -->
+        {% include 'store/_navbar.html' %}
 
-            <!-- Title and Search Bar in the center -->
-            <div class="search-container">
-                <h1 class="site-title">Orbital Bookstore</h1>
-                <form method="GET" action="{% url 'search' %}">
-                    <input type="text" name="q" class="search-bar" placeholder="Search by title or author" required>
-                    <button type="submit" class="search-button">Search</button>
-                </form>
-            </div>
+        <h2 class="text-center my-4">Books That Orbit Your Imagination</h2>
 
-            <!-- Dropdown Menu -->
-            <div class="dropdown">
-                <button class="dropbtn">Products</button>
-                <div class="dropdown-content">
-                    <a href="{% url 'books' %}">Books</a>
-                    <a href="{% url 'ebooks' %}">E-books</a>
-                    <div class="submenu">
-                        <a href="{% url 'accessories' %}">Accessories</a>
-                        <div class="submenu-content">
-                            <a href="{% url 'book_wraps' %}">Book Wraps</a>
-                            <a href="{% url 'bookmarks' %}">Bookmark</a>
-                        </div>
-                    </div>
-                    <div class="submenu">
-                        <a href="{% url 'school_and_office' %}">School and Office</a>
-                        <div class="submenu-content">
-                            <a href="{% url 'booklets_folders' %}">Booklets/Folders</a>
-                            <a href="{% url 'pencils' %}">Pencils</a>
-                            <a href="{% url 'other' %}">Other</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <form method="GET" action="{% url 'home' %}">
+                <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search books...">
+                <button type="submit">Search</button>
+            </form>
         </div>
 
-            <!-- Books Available
-            <ul class="book-list">
-                {% for book in books %}
-                <li class="book-item">
-                    <a href="{% url 'book_detail' book.id %}">
-                        <img src="{{ book.cover_art.url }}" alt="{{ book.title }} Cover Art" class="book-cover">
-                        <div class="book-info">
-                            <h4>{{ book.title }}</h4>
-                            <p>by {{ book.author }}</p>
-                            <p>€{{ book.price }}</p>
-                        </div>
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>-->
+        <!-- Category Filter -->
+        <div class="category-filter">
+            <form method="GET" action="{% url 'home' %}">
+                <select name="category" onchange="this.form.submit()">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
 
-        <!-- Weather Widget fixed to top right -->
-        <div class="weather-widget">
-            <div id="ww_4b239e0ebbb27" v='1.3' loc='auto' a='{"t":"horizontal","lang":"en","sl_lpl":1,"ids":[],"font":"Arial","sl_ics":"one_a","sl_sot":"celsius","cl_bkg":"image","cl_font":"#FFFFFF","cl_cloud":"#FFFFFF","cl_persp":"#81D4FA","cl_sun":"#FFC107","cl_moon":"#FFC107","cl_thund":"#FF5722"}'><a href="https://weatherwidget.org/" id="ww_4b239e0ebbb27_u" target="_blank">HTML Weather Widget for website</a></div>
+        <!-- Book List -->
+        <h3 class="text-center mb-4">Books Available</h3>
+        <ul class="book-list">
+            {% for book in books %}
+            <li class="book-item">
+                <a href="{% url 'book_detail' book.id %}">
+                    <img src="{{ book.cover_art }}" alt="{{ book.title }} Cover Art" class="book-cover">
+                    <div class="book-info">
+                        <h4>{{ book.title }}</h4>
+                        <p>by {{ book.author }}</p>
+                        <p>${{ book.price }}</p>
+                        <p>Average Rating: {{ book.average_rating|default:"No ratings yet" }}</p>
+                    </div>
+                </a>
+                {% if user.is_authenticated %}
+                <div class="add-to-cart mt-3">
+                    <form method="POST" action="{% url 'add_to_cart' book.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Add to Cart</button>
+                    </form>
+                </div>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+
+        <!-- Weather Widget -->
+        <div class="weather-widget d-flex justify-content-center mt-5">
+            <div id="ww_4b239e0ebbb27" v='1.3' loc='auto' a='{"t":"horizontal","lang":"en","sl_lpl":1,"ids":[],
+            "font":"Arial","sl_ics":"one_a","sl_sot":"celsius","cl_bkg":"image","cl_font":"#FFFFFF",
+            "cl_cloud":"#FFFFFF","cl_persp":"#81D4FA","cl_sun":"#FFC107","cl_moon":"#FFC107","cl_thund":"#FF5722"}'>
+                <a href="https://weatherwidget.org/" id="ww_4b239e0ebbb27_u" target="_blank">
+                    HTML Weather Widget for website
+                </a>
+            </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer>
-        <p>
-            <a href="{% url 'about_us' %}">About Us</a> |
-            <a href="{% url 'contact_us' %}">Contact Us</a> |
-            <a href="{% url 'terms_and_conditions' %}">Terms & Conditions</a>
-        </p>
-    </footer>
-
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         (function() {
             var script = document.createElement('script');

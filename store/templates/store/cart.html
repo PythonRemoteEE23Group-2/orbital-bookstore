@@ -2,78 +2,138 @@
 <html lang="en">
 <head>
     <title>Your Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .page-wrapper {
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            flex-grow: 1;
+        }
+        .cart-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            list-style-type: none;
+            padding: 0;
+            justify-content: center;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            border: 1px solid #ddd;
+            padding: 10px;
+            box-sizing: border-box;
+            align-items: center;
+        }
+        .cart-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .book-cover {
+            width: 100px;
+            height: auto;
+            object-fit: cover;
+        }
+        .item-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .item-controls form {
+            display: flex;
+            gap: 5px;
+        }
+        button {
+            padding: 5px 10px;
+            background-color: #00bcd4;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0097a7;
+        }
+        .checkout-btn {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        .empty-cart {
+            text-align: center;
+            font-size: 1.2em;
+        }
+        .continue-shopping {
+            margin-top: 20px;
+            text-align: center;
+        }
+        a {
+            color: #00bcd4;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
+    <div class="page-wrapper">
+        <div class="container">
+            <h1>Your Cart</h1>
 
-    <h1>Your Cart</h1>
-
-    {% if cart_items %}
-        <ul>
-            {% for item in cart_items %}
-                <li>
-                    {% if item.book %}
-                        <img src="{{ item.book.cover_art.url }}" alt="{{ item.book.title }} Cover Art" width="100">
+            {% if cart_items %}
+            <ul class="cart-list">
+                {% for item in cart_items %}
+                <li class="cart-item">
+                    <div class="cart-info">
+                        <img src="{{ item.book.cover_art }}" alt="{{ item.book.title }} Cover Art" class="book-cover">
                         <strong>{{ item.book.title }}</strong> by {{ item.book.author }}<br>
-                        Price per item: €{{ item.book.price }}<br>
-                    {% elif item.ebook %}
-                        <img src="{{ item.ebook.cover_art.url }}" alt="{{ item.ebook.title }} Cover Art" width="100">
-                        <strong>{{ item.ebook.title }}</strong> by {{ item.ebook.author }}<br>
-                        Price per item: €{{ item.ebook.price }}<br>
-                    {% elif item.accessory %}
-                        <strong>{{ item.accessory.name }}</strong><br>
-                        Price per item: €{{ item.accessory.price }}<br>
-                    {% elif item.pencil %}
-                        <strong>{{ item.pencil.school_office.name }}</strong> - {{ item.pencil.pencil_type }}<br>
-                        Price per item: €{{ item.pencil.school_office.price }}<br>
-                    {% elif item.other %}
-                        <strong>{{ item.other.description }}</strong><br>
-                        Price per item: €{{ item.other.price }}<br>
-                    {% elif item.book_wrap %}
-                        <strong>{{ item.book_wrap.accessory.name }} - {{ item.book_wrap.color }}</strong><br>
-                        Price per item: €{{ item.book_wrap.accessory.price }}<br>
-                    {% elif item.bookmark %}
-                        <strong>{{ item.bookmark.accessory.name }} - {{ item.bookmark.design }}</strong><br>
-                        Price per item: €{{ item.bookmark.accessory.price }}<br>
-                    {% elif item.booklet_folder %}
-                        <strong>{{ item.booklet_folder.school_office.name }} - {{ item.booklet_folder.size }}</strong><br>
-                        Price per item: €{{ item.booklet_folder.school_office.price }}<br>
-                    {% elif item.accessory %}
-                        <strong>{{ item.school_office.name }}</strong><br>
-                        Price per item: €{{ item.school_office.price }}<br>
-                    {% endif %}
-                    <br>
-                    Quantity: {{ item.quantity }}<br>
-                    Total cost: €{{ item.total_cost }}
-
-                    <!-- Quantity adjustment buttons -->
-                    <form method="POST" action="{% url 'update_cart_quantity' item.id 'increase' %}" style="display: inline;">
-                        {% csrf_token %}
-                        <button type="submit">+</button>
-                    </form>
-                    <span>{{ item.quantity }}</span>
-                    <form method="POST" action="{% url 'update_cart_quantity' item.id 'decrease' %}" style="display: inline;">
-                        {% csrf_token %}
-                        <button type="submit">-</button>
-                    </form>
-
-                    <!-- Remove item button -->
-                    <form method="POST" action="{% url 'remove_from_cart' item.id %}" style="display: inline;">
-                        {% csrf_token %}
-                        <button type="submit">Remove</button>
-                    </form>
+                        Price per item: ${{ item.book.price }}<br>
+                        Total cost: ${{ item.subtotal }}
+                    </div>
+                    <div class="item-controls">
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="item_id" value="{{ item.id }}">
+                            <button type="submit" name="action" value="subtract">-</button>
+                            <span>{{ item.quantity }}</span>
+                            <button type="submit" name="action" value="add">+</button>
+                        </form>
+                    </div>
                 </li>
-            {% endfor %}
-        </ul>
+                {% endfor %}
+            </ul>
 
-        <form method="POST" action="{% url 'checkout' %}">
-            {% csrf_token %}
-            <button type="submit">Proceed to Checkout</button>
-        </form>
-    {% else %}
-        <p>Your cart is empty.</p>
-    {% endif %}
+            <div class="checkout-btn">
+                <p>Total Cart Value: ${{ cart.total_cost }}</p>
+                <form method="post" action="{% url 'checkout' %}">
+                    {% csrf_token %}
+                    <button type="submit">Proceed to Checkout</button>
+                </form>
+            </div>
 
-    <a href="{% url 'home' %}">Continue Shopping</a>
+            {% else %}
+            <p class="empty-cart">Your cart is empty.</p>
+            {% endif %}
 
+            <div class="continue-shopping">
+                <a href="{% url 'home' %}">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

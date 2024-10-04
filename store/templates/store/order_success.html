@@ -1,37 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Order Success</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        .downloads {
+            list-style-type: none;
+            padding: 0;
+        }
+        .downloads li {
+            margin: 10px 0;
+        }
+        .downloads a {
+            text-decoration: none;
+            color: #007BFF;
+            font-weight: bold;
+        }
+        .downloads a:hover {
+            text-decoration: underline;
+        }
+        .continue-shopping {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .continue-shopping:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
+
     <h1>Order Completed Successfully!</h1>
+
     <p>Thank you for your order. You will receive a confirmation email shortly.</p>
 
     <h2>Your Downloads</h2>
-    <ul>
-        {% for order in orders %}
-            {% if order.book %}
-                <li>{{ order.book.title }} - <a href="{{ order.book.download_link }}" target="_blank">Download</a></li>
-            {% elif order.ebook %}
-                <li>{{ order.ebook.title }} - <a href="{{ order.ebook.download_link }}" target="_blank">Download</a></li>
-            {% elif order.accessory %}
-                <li>{{ order.accessory.name }} - No download available for accessories.</li>
-            {% elif order.pencil %}
-                <li>{{ order.pencil.school_office.name }} - No download available for pencils.</li>
-            {% elif order.other %}
-                <li>{{ order.other.description }} - No download available for other items.</li>
-            {% elif order.book_wrap %}
-                <li>{{ order.book_wrap.accessory.name }} - No download available for book wraps.</li>
-            {% elif order.bookmark %}
-                <li>{{ order.bookmark.accessory.name }} - No download available for bookmark.</li>
-            {% elif order.booklet_folder %}
-                <li>{{ order.booklet_folder.school_office.name }} - No download available for booklets/folders.</li>
-            {% elif order.school_office %}
-                <li>{{ order.school_office.name }} - No download available for school and office supplies.</li>
-            {% endif %}
-        {% endfor %}
+
+    <ul class="downloads">
+    {% for item in order_items %}
+        <li>
+            <a href="{{ item.book.download_link }}">Download {{ item.book.title }}</a>
+        </li>
+    {% endfor %}
     </ul>
 
-    <a href="{% url 'home' %}">Continue Shopping</a>
+    <a href="{% url 'home' %}" class="continue-shopping">Continue Shopping</a>
+
 </body>
 </html>
