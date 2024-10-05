@@ -41,7 +41,7 @@ class Book(models.Model):
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    cover_art = models.ImageField(upload_to='book_covers/', blank=True, null=True)
+    cover_art = models.URLField(max_length=200, blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
     availability = models.BooleanField(default=True)
     download_link = models.URLField(max_length=400)
