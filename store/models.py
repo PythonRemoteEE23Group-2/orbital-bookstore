@@ -1,6 +1,20 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.conf import settings
+
+STATUS_CHOICES = [
+    ('pending', 'Pending'),
+    ('processing', 'Processing'),
+    ('completed', 'Completed'),
+    ('cancelled', 'Cancelled'),
+]
+
+PAYMENT_STATUS_CHOICES = [
+    ('pending', 'Pending'),
+    ('paid', 'Paid'),
+    ('failed', 'Failed'),
+]
 
 
 class User(AbstractUser):
@@ -44,7 +58,7 @@ class Book(models.Model):
     cover_art = models.URLField(max_length=200, blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
     availability = models.BooleanField(default=True)
-    download_link = models.URLField(max_length=400)
+    download_link = models.URLField(max_length=500, blank=True, null=True)
     subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, blank=True, null=True, related_name='books')
 
     def __str__(self):
@@ -72,7 +86,7 @@ class Favorite(models.Model):
 
 
 class Cart(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='cart')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='cart')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -83,8 +97,10 @@ class Cart(models.Model):
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)])
+    book = models.ForeignKey('Book', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    ordered = models.BooleanField(default=False)
+    order = models.ForeignKey('Order', null=True, blank=True, on_delete=models.SET_NULL, related_name='cart_items')
 
     @property
     def subtotal(self):
@@ -92,41 +108,26 @@ class CartItem(models.Model):
 
 
 class Order(models.Model):
-    STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('processing', 'Processing'),
-        ('completed', 'Completed'),
-        ('cancelled', 'Cancelled'),
-    ]
-
-    PAYMENT_STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('paid', 'Paid'),
-        ('failed', 'Failed'),
-    ]
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='orders')
     order_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     payment_method = models.CharField(max_length=50)
     payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default='pending')
     delivery_email = models.EmailField()
-    email_sent_date = models.DateTimeField(null=True, blank=True)
 
     @property
     def total_cost(self):
-        return sum(item.subtotal for item in self.items.all())
+        return sum(item.subtotal for item in self.cart_items.all())
 
-
-class OrderItem(models.Model):
-    order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
-
-    @property
-    def subtotal(self):
-        return self.price * self.quantity
-
-    def __str__(self):
-        return f'{self.book.title} - {self.order.user.username}'
+# class OrderItem(models.Model):
+#     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
+#     book = models.ForeignKey(Book, on_delete=models.CASCADE)
+#     quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+#     price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
+#
+#     @property
+#     def subtotal(self):
+#         return self.price * self.quantity
+#
+#     def __str__(self):
+#         return f'{self.book.title} - {self.order.user.username}'

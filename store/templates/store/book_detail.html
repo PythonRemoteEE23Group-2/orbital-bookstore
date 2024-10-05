@@ -26,13 +26,13 @@
                 </span>
             </p>
             {% if book.availability %}
-                <form method="post" action="#">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-add-to-cart mb-3">Add to Cart</button>
-                </form>
             {% endif %}
             {% if user.is_authenticated %}
                 <a href="{% url 'add_to_favorites' book.id %}" class="btn btn-outline-secondary mb-3">Add to Favorites</a>
+                <form method="post" action="{% url 'add_to_cart' book.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-add-to-cart mb-3">Add to Cart</button>
+                </form>
             {% endif %}
         </div>
     </div>

@@ -20,9 +20,22 @@
 
         <ul class="list-group list-group-flush mb-4 custom-list">
             {% for item in order_items %}
-            <li class="list-group-item custom-list-item">
-                <a href="{{ item.book.download_link }}" class="text-primary custom-download-link">Download {{ item.book.title }}</a>
-            </li>
+                <li>
+                    <!-- Debugging Output -->
+                    <p>Book: {{ item.book.title }}, Download Link: {{ item.book.download_link }}</p>
+
+                    {% if item.book.download_link %}
+                        <li class="list-group-item custom-list-item">
+                            <a href="{{ item.book.download_link }}" class="text-primary custom-download-link">
+                                Download {{ item.book.title }}
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="list-group-item custom-list-item">
+                            No download available for {{ item.book.title }}.
+                        </li>
+                    {% endif %}
+                </li>
             {% endfor %}
         </ul>
 
