@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,47 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ book.title }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        /* Custom styles */
-        body {
-            background-color: #cbcfcc;
-        }
-        .book-cover {
-            box-shadow: 1px 6px 10px #999797;
-            border-radius: 10px;
-        }
-        .book-title {
-            color: #0f2b49;
-        }
-        .review-card {
-            transition: transform 0.3s ease-in-out;
-        }
-        .review-card:hover {
-            transform: translateY(-5px);
-        }
-        .btn-add-to-cart {
-            background-color: #6cc8d9;
-            border-color: #6cc8d9;
-            color: white;
-        }
-        .btn-add-to-cart:hover {
-            background-color: #3b9863;
-            border-color: #3b9863;
-            color: white;
-        }
-        .btn-back-to-list {
-        background-color: #4a4a4a;
-        border-color: #4a4a4a;
-        color: white;
-        }
-        .btn-back-to-list:hover {
-        background-color: #3a3a3a;
-        border-color: #3a3a3a;
-        color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
+{% include 'store/_navbar.html' %}
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-4">

@@ -175,7 +175,6 @@ def checkout(request):
 
 @login_required
 def order_success(request):
-    # Get the most recent order for the current user
     latest_order = Order.objects.filter(user=request.user).order_by('-order_date').first()
 
     if latest_order:
@@ -200,6 +199,13 @@ def add_to_favorites(request, book_id):
         messages.info(request, f'{book.title} is already in your favorites.')
 
     return redirect('book_detail', book_id=book_id)
+
+
+@login_required
+def delete_favorite(request, favorite_id):
+    favorite = get_object_or_404(Favorite, id=favorite_id, user=request.user)
+    favorite.delete()
+    return redirect('view_favorites')
 
 
 @login_required
@@ -230,4 +236,3 @@ def view_favorites(request):
 def view_reviews(request):
     reviews = Review.objects.all()
     return render(request, 'store/reviews.html', {'reviews': reviews})
-
