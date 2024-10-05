@@ -1,51 +1,51 @@
+/* Custom Styling for Navbar */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 20px;
+    font-family: 'Libre Baskerville', serif; /* Peamine tekst */
 }
-
-.product {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 10px;
-    background-color: #fff;
-    transition: box-shadow 0.3s;
+.navbar {
+    background-color: #001f3f; /* Tume sinine */
+    padding: 10px 20px;
 }
-
-.product:hover {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+.navbar-brand {
+    color: #ffffff; /* Valge */
+    font-size: 24px;
+    font-weight: bold;
+    display: flex; /* Flexbox for alignment */
+    align-items: center; /* Center logo and text vertically */
+    font-family: 'Cormorant Garamond', serif; /* Logo ja poe nimi */
 }
-
-.button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-}
-
-.button:hover {
-    background-color: #0056b3;
-}
-
-@media (max-width: 600px) {
-    .product {
-        width: 100%;
-    }
-}
-
-.book-item {
-    margin-bottom: 20px;
-}
-
-.book-cover {
-    width: 100px;
+.navbar-brand img {
+    max-width: 80px; /* Logo size */
     height: auto;
+    margin-right: 10px; /* More space between logo and text */
 }
-
-.add-to-cart {
-    margin-top: 10px;
+.nav-link {
+    color: #ffffff !important; /* Valge */
+    font-size: 16px;
+    font-family: 'Libre Baskerville', serif; /* Lingid */
+}
+.nav-link:hover {
+    color: #ffc107 !important; /* Kuldne hover-efekt */
+}
+.nav-link.active {
+    font-weight: bold;
+    text-decoration: underline;
+}
+.navbar-toggler {
+    background-color: #ffffff; /* Valge */
+}
+.btn-logout {
+    color: #ffffff; /* Valge */
+    background-color: #007bff; /* Sinine */
+    border: none;
+}
+.btn-logout:hover {
+    background-color: #0056b3; /* Tumeda varjundi hover */
+}
+.cart-badge {
+    background-color: #ffc107; /* Kuldne */
+    font-size: 14px;
+    padding: 2px 8px;
+    border-radius: 50%;
+    color: #212529; /* Tumeda värv */
 }
