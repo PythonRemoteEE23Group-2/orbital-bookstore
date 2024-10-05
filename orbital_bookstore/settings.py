@@ -119,7 +119,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'store/static')]
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
@@ -131,6 +134,3 @@ AUTH_USER_MODEL = 'store.User'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-MEDIA_URL = '/media/'  # The base public URL for media files
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # The folder where media files are stored

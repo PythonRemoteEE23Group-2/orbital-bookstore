@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.hashers import make_password
 from django.db.models import Q, Avg
-from .models import Book, Category, Cart, CartItem, Order, OrderItem, Favorite, Review, User
+from .models import Book, Category, Cart, CartItem, Order, Favorite, Review, User, PAYMENT_STATUS_CHOICES
 
 logger = logging.getLogger(__name__)
 
@@ -151,35 +151,40 @@ def checkout(request):
                 'error_message': 'Please select a payment method.'
             })
 
+        # Create an order
         order = Order.objects.create(
             user=request.user,
             payment_method=payment_method,
-            payment_status='pending',
+            payment_status=PAYMENT_STATUS_CHOICES[0][0],
             delivery_email=delivery_email
         )
 
+        # Link each CartItem to the order and mark as ordered
         for item in cart_items:
-            OrderItem.objects.create(
-                order=order,
-                book=item.book,
-                quantity=item.quantity,
-                price=item.book.price
-            )
+            item.ordered = True
+            item.order = order
+            item.save()
 
-        cart.items.all().delete()
+        # Clear cart by removing the ordered items
+        cart.items.filter(ordered=True).delete()
+
+        # Confirm order placement
         messages.success(request, 'Your order has been placed successfully.')
         return redirect('order_success')
 
-    return render(request, 'store/checkout.html', {'cart_items': cart_items, 'total_cost': total_cost})
+    return render(request, 'store/checkout.html', {
+        'cart_items': cart_items,
+        'total_cost': total_cost
+    })
 
 
 @login_required
 def order_success(request):
-    # Get the most recent order for the current user
     latest_order = Order.objects.filter(user=request.user).order_by('-order_date').first()
 
     if latest_order:
-        order_items = OrderItem.objects.filter(order=latest_order)
+        order_items = CartItem.objects.filter(order=latest_order, ordered=True)
+
     else:
         order_items = []
 
@@ -200,6 +205,13 @@ def add_to_favorites(request, book_id):
         messages.info(request, f'{book.title} is already in your favorites.')
 
     return redirect('book_detail', book_id=book_id)
+
+
+@login_required
+def delete_favorite(request, favorite_id):
+    favorite = get_object_or_404(Favorite, id=favorite_id, user=request.user)
+    favorite.delete()
+    return redirect('view_favorites')
 
 
 @login_required
@@ -230,4 +242,3 @@ def view_favorites(request):
 def view_reviews(request):
     reviews = Review.objects.all()
     return render(request, 'store/reviews.html', {'reviews': reviews})
-

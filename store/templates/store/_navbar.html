@@ -1,74 +1,18 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Navbar</title>
-    {% load static %}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Cormorant+Garamond:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        /* Custom Styling for Navbar */
-        body {
-            font-family: 'Libre Baskerville', serif; /* Peamine tekst */
-        }
-        .navbar {
-            background-color: #001f3f; /* Tume sinine */
-            padding: 10px 20px;
-        }
-        .navbar-brand {
-            color: #ffffff; /* Valge */
-            font-size: 24px;
-            font-weight: bold;
-            display: flex; /* Flexbox for alignment */
-            align-items: center; /* Center logo and text vertically */
-            font-family: 'Cormorant Garamond', serif; /* Logo ja poe nimi */
-        }
-        .navbar-brand img {
-            max-width: 80px; /* Logo size */
-            height: auto;
-            margin-right: 5px; /* Space between logo and text */
-        }
-        .nav-link {
-            color: #ffffff !important; /* Valge */
-            font-size: 16px;
-            font-family: 'Libre Baskerville', serif; /* Lingid */
-        }
-        .nav-link:hover {
-            color: #007bff !important; /* Tume hall */
-        }
-        .nav-link.active {
-            font-weight: bold;
-            text-decoration: underline;
-        }
-        .navbar-toggler {
-            background-color: #ffffff; /* Valge */
-        }
-        .btn-logout {
-            color: #ffffff; /* Valge */
-            background-color: #007bff; /* Sinine */
-            border: none;
-        }
-        .btn-logout:hover {
-            background-color: #0056b3; /* Tumeda varjundi hover */
-        }
-        .cart-badge {
-            background-color: #ffc107; /* Kuldne */
-            font-size: 14px;
-            padding: 2px 8px;
-            border-radius: 50%;
-            color: #212529; /* Tumeda värv */
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'home' %}">
-            <img src="{% static 'images/logo.jpg' %}" alt="Orbital Bookstore Logo"> <!-- Logo here -->
-            Orbital Bookstore
-        </a>
+        <a class="navbar-brand" href="{% url 'home' %}">Orbital Bookstore</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -114,7 +58,6 @@
         </div>
     </div>
 </nav>
-
 
 <!-- Bootstrap JS (optional for toggle functionality) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

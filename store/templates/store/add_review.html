@@ -4,8 +4,7 @@
     <title>Add Review for {{ book.title }}</title>
 </head>
 <body>
-    <a href="{% url 'home' %}" class="back-home">Back to Home</a>
-
+{% include 'store/_navbar.html' %}
     <h1>Add a Review for {{ book.title }}</h1>
     <form method="POST">
         {% csrf_token %}
