@@ -24,7 +24,7 @@
 
 .nav-link {
     color: #fff !important;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .nav-link:hover {
@@ -82,11 +82,11 @@ a {
     text-decoration: none !important;
     color: inherit;
     font-family: 'Open Sans', sans-serif;
-    font-size: 1.1rem;
+    font-size: 18px;
 }
 
 .book-link {
-    color: #007BFF;
+    color: #133254;
     text-decoration: none;
 }
 
@@ -251,11 +251,11 @@ button:hover {
 }
 
 button[name="action"][value="subtract"] {
-    background-color: #e74c3c;
+    background-color: #7d2f27;
 }
 
 button[name="action"][value="subtract"]:hover {
-    background-color: #c0392b;
+    background-color: #8b2855;
 }
 
 /* Checkout and total styling */
@@ -464,7 +464,7 @@ button[name="action"][value="subtract"]:hover {
 /* Download link */
 .custom-download-link {
     font-weight: bold;
-    color: #007bff;
+    color: #215288;
     text-decoration: none;
 }
 
@@ -486,7 +486,7 @@ button[name="action"][value="subtract"]:hover {
 }
 /* Customize the delete button */
 .custom-delete-btn {
-    background-color: #dfbdba; /* Custom red */
+    background-color: #508cad; /* Custom red */
     border: none;
     padding: 10px 15px;
     font-size: 1rem;

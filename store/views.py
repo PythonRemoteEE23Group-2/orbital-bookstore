@@ -90,11 +90,7 @@ def add_to_cart(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     cart, _ = Cart.objects.get_or_create(user=request.user)
 
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, book=book)
-
-    if not created:
-        cart_item.quantity += 1
-        cart_item.save()
+    CartItem.objects.create(cart=cart, book=book)
 
     messages.success(request, f'{book.title} has been added to your cart.')
     return redirect('view_cart')
@@ -123,7 +119,11 @@ def view_cart(request):
         return redirect('view_cart')
 
     cart_items = cart.items.all()
-    return render(request, 'store/cart.html', {'cart': cart, 'cart_items': cart_items})
+    return render(
+        request,
+        'store/cart.html',
+        {'cart': cart, 'cart_items': cart_items, 'cart_items_count': cart.items.count()}
+    )
 
 
 @login_required
@@ -136,7 +136,7 @@ def delete_from_cart(request, cart_item_id):
 
 @login_required
 def checkout(request):
-    cart, _ = Cart.objects.get_or_create(user=request.user)
+    cart = Cart.objects.get(user=request.user)
     cart_items = cart.items.all()
     total_cost = cart.total_cost
 
@@ -148,6 +148,7 @@ def checkout(request):
             return render(request, 'store/checkout.html', {
                 'cart_items': cart_items,
                 'total_cost': total_cost,
+                'cart_items_count': cart.items.count(),
                 'error_message': 'Please select a payment method.'
             })
 
@@ -166,7 +167,7 @@ def checkout(request):
             item.save()
 
         # Clear cart by removing the ordered items
-        cart.items.filter(ordered=True).delete()
+
 
         # Confirm order placement
         messages.success(request, 'Your order has been placed successfully.')
@@ -174,7 +175,8 @@ def checkout(request):
 
     return render(request, 'store/checkout.html', {
         'cart_items': cart_items,
-        'total_cost': total_cost
+        'total_cost': total_cost,
+        'cart_items_count': cart.items.count(),
     })
 
 
@@ -183,14 +185,17 @@ def order_success(request):
     latest_order = Order.objects.filter(user=request.user).order_by('-order_date').first()
 
     if latest_order:
-        order_items = CartItem.objects.filter(order=latest_order, ordered=True)
+        order_items = CartItem.objects.filter(order=latest_order)
 
     else:
         order_items = []
 
+    Cart.objects.filter(user=request.user).delete()
+
     return render(request, 'store/order_success.html', {
         'order': latest_order,
         'order_items': order_items,
+        'cart_items_count': 0,
     })
 
 
@@ -236,9 +241,19 @@ def add_review(request, book_id):
 @login_required
 def view_favorites(request):
     favorites = Favorite.objects.filter(user=request.user)
-    return render(request, 'store/favorites.html', {'favorites': favorites})
+    cart_item = CartItem.objects.filter(cart__user=request.user)
+    return render(
+        request,
+        'store/favorites.html',
+        {'favorites': favorites, 'cart_items_count': cart_item.count()}
+    )
 
 
 def view_reviews(request):
     reviews = Review.objects.all()
-    return render(request, 'store/reviews.html', {'reviews': reviews})
+    cart_item = CartItem.objects.filter(cart__user=request.user)
+    return render(
+        request,
+        'store/reviews.html',
+        {'reviews': reviews, 'cart_items_count': cart_item.count()}
+    )
