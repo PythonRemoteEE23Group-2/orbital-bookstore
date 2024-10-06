@@ -40,6 +40,7 @@ def home(request):
 def book_detail(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     reviews = book.reviews.all()
+    cart_items_count = CartItem.objects.filter(cart__user=request.user)
     user_has_reviewed = False
     if request.user.is_authenticated:
         user_has_reviewed = reviews.filter(user=request.user).exists()
@@ -48,7 +49,9 @@ def book_detail(request, book_id):
         'book': book,
         'reviews': reviews,
         'user_has_reviewed': user_has_reviewed,
+        'cart_items_count': cart_items_count.count()
     }
+
     return render(request, 'store/book_detail.html', context)
 
 
@@ -168,7 +171,6 @@ def checkout(request):
 
         # Clear cart by removing the ordered items
 
-
         # Confirm order placement
         messages.success(request, 'Your order has been placed successfully.')
         return redirect('order_success')
@@ -251,9 +253,19 @@ def view_favorites(request):
 
 def view_reviews(request):
     reviews = Review.objects.all()
-    cart_item = CartItem.objects.filter(cart__user=request.user)
+
+    if request.user.is_authenticated:
+        cart_items_count = CartItem.objects.filter(cart__user=request.user).count()
+    else:
+        cart_items_count = None
+
     return render(
         request,
         'store/reviews.html',
-        {'reviews': reviews, 'cart_items_count': cart_item.count()}
+        {'reviews': reviews, 'cart_items_count': cart_items_count}
     )
+
+
+
+#get_cart_items_count()
+
