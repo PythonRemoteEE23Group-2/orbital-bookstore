@@ -40,16 +40,19 @@ def home(request):
 def book_detail(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     reviews = book.reviews.all()
-    cart_items_count = CartItem.objects.filter(cart__user=request.user)
+
+    cart_items_count = 0
     user_has_reviewed = False
+
     if request.user.is_authenticated:
+        cart_items_count = CartItem.objects.filter(cart__user=request.user).count()
         user_has_reviewed = reviews.filter(user=request.user).exists()
 
     context = {
         'book': book,
         'reviews': reviews,
         'user_has_reviewed': user_has_reviewed,
-        'cart_items_count': cart_items_count.count()
+        'cart_items_count': cart_items_count,
     }
 
     return render(request, 'store/book_detail.html', context)
