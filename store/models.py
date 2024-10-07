@@ -18,10 +18,10 @@ PAYMENT_STATUS_CHOICES = [
 
 
 class User(AbstractUser):
-    profile_name = models.CharField(max_length=255, blank=True, null=True)
+    profile_name = models.CharField(max_length=30, blank=True, null=True)
     email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=150, blank=True, default='')
-    last_name = models.CharField(max_length=150, blank=True, default='')
+    first_name = models.CharField(max_length=20, blank=True, default='')
+    last_name = models.CharField(max_length=30, blank=True, default='')
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
@@ -37,14 +37,14 @@ class User(AbstractUser):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=30)
 
     def __str__(self):
         return self.name
 
 
 class Subcategory(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=30)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='subcategories')
 
     def __str__(self):
@@ -52,8 +52,8 @@ class Subcategory(models.Model):
 
 
 class Book(models.Model):
-    title = models.CharField(max_length=255)
-    author = models.CharField(max_length=255)
+    title = models.CharField(max_length=150)
+    author = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     cover_art = models.URLField(max_length=200, blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
@@ -80,6 +80,7 @@ class Favorite(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='favorited_by')
     created_at = models.DateTimeField(auto_now_add=True)
+    fav_rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=True, blank=True)  # Lisa fav_rating
 
     class Meta:
         unique_together = ('user', 'book')
@@ -96,7 +97,7 @@ class Cart(models.Model):
 
 
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
+    cart = models.ForeignKey(Cart, on_delete=models.SET_NULL, related_name='items', null=True)
     book = models.ForeignKey('Book', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     ordered = models.BooleanField(default=False)
@@ -119,15 +120,3 @@ class Order(models.Model):
     def total_cost(self):
         return sum(item.subtotal for item in self.cart_items.all())
 
-# class OrderItem(models.Model):
-#     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
-#     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-#     quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-#     price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
-#
-#     @property
-#     def subtotal(self):
-#         return self.price * self.quantity
-#
-#     def __str__(self):
-#         return f'{self.book.title} - {self.order.user.username}'

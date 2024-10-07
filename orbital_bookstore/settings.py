@@ -63,7 +63,6 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "store.context_processors.cart_items_count",
             ],
         },
     },
@@ -129,6 +128,10 @@ LOGOUT_REDIRECT_URL = '/login/'
 LOGIN_URL = 'login'
 
 AUTH_USER_MODEL = 'store.User'
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
