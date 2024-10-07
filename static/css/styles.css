@@ -114,20 +114,29 @@ p {
 
 /* Book listing */
 .book-list {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
     justify-content: center;
+    padding: 20px;
 }
 
 .book-item {
-    width: calc(25% - 15px);
-    min-width: 200px;
+    width: 100%;
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     padding: 15px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.book-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
 .book-cover {
@@ -135,17 +144,26 @@ p {
     height: auto;
     border-radius: 10px;
     box-shadow: 1px 6px 10px #999797;
+    margin-bottom: 10px;
+}
+
+.book-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .book-info h4 {
-    margin-top: 15px;
-    font-size: 1.2rem;
+    margin-top: 10px;
+    font-size: 1.1rem;
     color: #333;
 }
 
 .book-info p {
     margin: 5px 0;
     color: #777;
+    font-size: 0.9rem;
 }
 
 /* Buttons */
@@ -157,6 +175,7 @@ p {
     border: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
+    margin-top: 10px;
 }
 
 .add-to-cart button:hover, .btn-add-to-cart:hover {
@@ -173,6 +192,19 @@ p {
 .btn-back-to-list:hover {
     background-color: #3a3a3a;
     border-color: #3a3a3a;
+}
+/* Custom Add to Favorites button */
+.btn-add-to-favorites {
+    background-color: #e1ac67;
+    color: #333;
+    border-color: #e1ac67;
+    transition: all 0.3s ease;
+}
+
+.btn-add-to-favorites:hover {
+    background-color: #ffcc00;
+    color: #000;
+    border-color: #ffcc00;
 }
 
 /* Cart Item Layout */
@@ -339,6 +371,7 @@ button[name="action"][value="subtract"]:hover {
     color: #666;
     margin-bottom: 10px;
 }
+
 /* Specific to review book links */
 .custom-review-link {
     color: #11406f;
@@ -350,6 +383,7 @@ button[name="action"][value="subtract"]:hover {
 .custom-review-link:hover {
     color: #333; /* Darker color on hover */
 }
+
 /* Back to home button */
 .back-to-home {
     margin-top: 20px;
@@ -414,6 +448,7 @@ button[name="action"][value="subtract"]:hover {
 .category-filter select:focus {
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
+
 /* Custom styles for the order success page */
 
 /* Customize container */
@@ -484,6 +519,7 @@ button[name="action"][value="subtract"]:hover {
 .custom-button:hover {
     background-color: #3b9863;
 }
+
 /* Customize the delete button */
 .custom-delete-btn {
     background-color: #508cad; /* Custom red */
@@ -496,13 +532,9 @@ button[name="action"][value="subtract"]:hover {
 .custom-delete-btn:hover {
     background-color: #c0392b;
 }
-body {
-    background-color: #cbcfcc !important;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-}
-.page-wrapper {
+
+/* Login and Register page styles */
+.login-register-wrapper {
     background-color: #ffffff;
     max-width: 400px;
     margin: 0 auto;
@@ -510,148 +542,32 @@ body {
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     border-radius: 8px;
 }
-.container {
-    padding: 40px;
-}
-h1 {
-    text-align: center;
-    color: #333;
-}
-form {
-    display: flex;
-    flex-direction: column;
-}
-label {
-    margin-top: 10px;
-    font-weight: bold;
-    color: #555;
-}
-input {
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-button {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #509fad;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-button:hover {
-    background-color: #0056b3;
-}
-.register-link {
-    text-align: center;
-    margin-top: 20px;
-}
-.register-link a {
-    color: #61857b;
-    text-decoration: none;
-}
-.register-link a:hover {
-    text-decoration: underline;
-}
-body {
-    background-color: #cbcfcc;
-    font-family: Arial, sans-serif;
-    margin: 0;
+
+.login-register-container {
     padding: 20px;
 }
 
-.page-wrapper {
-    background-color: #ffffff;
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}
-
-.container {
-    padding: 20px;
-}
-
-h1 {
-    text-align: center;
-    color: #333;
-}
-
-form {
+.login-register-form {
     display: flex;
     flex-direction: column;
 }
 
-label {
+.login-register-label {
     margin-top: 10px;
     font-weight: bold;
     color: #555;
 }
 
-input {
+.login-register-input {
     padding: 8px;
     margin-top: 5px;
     border: 1px solid #ddd;
     border-radius: 4px;
 }
 
-button {
+.login-register-button {
     margin-top: 20px;
     padding: 10px;
     background-color: #509fad;
     color: white;
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-.login-link {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.login-link a {
-    color: #61857b;
-    text-decoration: none;
-}
-
-.login-link a:hover {
-    text-decoration: underline;
-}
-/* styles.css */
-
-h1 {
-    font-family: 'Georgia', serif;
-    font-weight: bold;
-    color: #333;
-}
-
-.form-control {
-    box-shadow: none;
-    border-radius: 5px;
-}
-
-.card {
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.btn-primary {
-    background-color: #007bff;
-    border: none;
-    padding: 10px 0;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
-}
