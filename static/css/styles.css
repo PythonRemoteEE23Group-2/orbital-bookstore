@@ -496,3 +496,162 @@ button[name="action"][value="subtract"]:hover {
 .custom-delete-btn:hover {
     background-color: #c0392b;
 }
+body {
+    background-color: #cbcfcc !important;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+.page-wrapper {
+    background-color: #ffffff;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+.container {
+    padding: 40px;
+}
+h1 {
+    text-align: center;
+    color: #333;
+}
+form {
+    display: flex;
+    flex-direction: column;
+}
+label {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #555;
+}
+input {
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+button {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #509fad;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+button:hover {
+    background-color: #0056b3;
+}
+.register-link {
+    text-align: center;
+    margin-top: 20px;
+}
+.register-link a {
+    color: #61857b;
+    text-decoration: none;
+}
+.register-link a:hover {
+    text-decoration: underline;
+}
+body {
+    background-color: #cbcfcc;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.page-wrapper {
+    background-color: #ffffff;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.container {
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #555;
+}
+
+input {
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #509fad;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.login-link a {
+    color: #61857b;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+/* styles.css */
+
+h1 {
+    font-family: 'Georgia', serif;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-control {
+    box-shadow: none;
+    border-radius: 5px;
+}
+
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 0;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}

@@ -2,10 +2,12 @@ import logging
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
 from django.db.models import Q, Avg
+from django.contrib.auth.forms import UserCreationForm
 from .models import Book, Category, Cart, CartItem, Order, Favorite, Review, User, PAYMENT_STATUS_CHOICES
+from .forms import CustomUserCreationForm
 
 logger = logging.getLogger(__name__)
 
@@ -60,35 +62,18 @@ def book_detail(request, book_id):
 
 def register(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-
-        if password1 != password2:
-            messages.error(request, 'Passwords do not match.')
-            return render(request, 'store/register.html')
-
-        if User.objects.filter(username=username).exists():
-            messages.error(request, 'Username already taken.')
-            return render(request, 'store/register.html')
-
-        if User.objects.filter(email=email).exists():
-            messages.error(request, 'Email already registered.')
-            return render(request, 'store/register.html')
-
-        user = User.objects.create(
-            username=username,
-            email=email,
-            password=make_password(password1)
-        )
-
-        login(request, user)
-
-        messages.success(request, f'Account created for {user.username}!')
-        return redirect('home')
-
-    return render(request, 'store/register.html')
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # Log the user in after successful registration
+            messages.success(request, f'Account created for {user.username}!')
+            return redirect('home')  # Redirect to the home page or dashboard
+        else:
+            messages.error(request, 'Registration failed. Please correct the errors below.')
+            return render(request, 'store/register.html', {'form': form})
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'store/register.html', {'form': form})
 
 
 @login_required

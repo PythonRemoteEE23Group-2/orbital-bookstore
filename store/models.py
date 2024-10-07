@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.conf import settings
 
+
+
 STATUS_CHOICES = [
     ('pending', 'Pending'),
     ('processing', 'Processing'),
@@ -118,5 +120,3 @@ class Order(models.Model):
     @property
     def total_cost(self):
         return sum(item.subtotal for item in self.cart_items.all())
-
-
