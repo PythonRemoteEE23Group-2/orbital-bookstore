@@ -2,12 +2,11 @@ import logging
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth import login
 from django.db.models import Q, Avg
-from django.contrib.auth.forms import UserCreationForm
 from .models import Book, Category, Cart, CartItem, Order, Favorite, Review, User, PAYMENT_STATUS_CHOICES
 from .forms import CustomUserCreationForm
+from .utils import get_cart_items_count
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +25,7 @@ def home(request):
 
     categories = Category.objects.prefetch_related('subcategories__books')
 
-    cart_items_count = CartItem.objects.filter(cart__user=request.user).count() if request.user.is_authenticated else 0
+    cart_items_count = get_cart_items_count(request.user)
 
     books = books.annotate(average_rating=Avg('reviews__rating'))
 
@@ -43,12 +42,8 @@ def book_detail(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     reviews = book.reviews.all()
 
-    cart_items_count = 0
-    user_has_reviewed = False
-
-    if request.user.is_authenticated:
-        cart_items_count = CartItem.objects.filter(cart__user=request.user).count()
-        user_has_reviewed = reviews.filter(user=request.user).exists()
+    cart_items_count = get_cart_items_count(request.user)
+    user_has_reviewed = reviews.filter(user=request.user).exists() if request.user.is_authenticated else False
 
     context = {
         'book': book,
@@ -212,20 +207,27 @@ def delete_favorite(request, favorite_id):
 @login_required
 def add_review(request, book_id):
     book = get_object_or_404(Book, id=book_id)
+    cart_item = CartItem.objects.filter(cart__user=request.user)
     if request.method == 'POST':
         rating = request.POST.get('rating')
-        review_text = request.POST.get('review_text')
+        review_text = request.POST.get('review')  # Changed from 'review_text' to 'review'
 
-        Review.objects.create(
-            user=request.user,
-            book=book,
-            rating=rating,
-            review_text=review_text
-        )
-        messages.success(request, 'Your review has been added.')
-        return redirect('book_detail', book_id=book_id)
+        if rating and review_text:
+            Review.objects.create(
+                user=request.user,
+                book=book,
+                rating=int(rating),  # Convert to integer
+                review_text=review_text
+            )
+            messages.success(request, 'Your review has been added.')
+            return redirect('book_detail', book_id=book_id)
+        else:
+            messages.error(request, 'Please provide both rating and review text.')
 
-    return render(request, 'store/add_review.html', {'book': book})
+    return render(request,
+                  'store/add_review.html',
+                  {'book': book,'cart_items_count': cart_item.count()}
+    )
 
 
 @login_required
@@ -241,11 +243,7 @@ def view_favorites(request):
 
 def view_reviews(request):
     reviews = Review.objects.all()
-
-    if request.user.is_authenticated:
-        cart_items_count = CartItem.objects.filter(cart__user=request.user).count()
-    else:
-        cart_items_count = None
+    cart_items_count = get_cart_items_count(request.user) if request.user.is_authenticated else None
 
     return render(
         request,

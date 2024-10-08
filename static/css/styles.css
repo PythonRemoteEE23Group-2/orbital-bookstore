@@ -184,20 +184,20 @@ p {
 }
 
 .btn-back-to-list {
-    background-color: #4a4a4a;
-    border-color: #4a4a4a;
+    background-color: #3b9863;
+    border-color: #3b9863;
     color: white;
 }
 
 .btn-back-to-list:hover {
-    background-color: #3a3a3a;
-    border-color: #3a3a3a;
+    background-color: #6cc8d9;
+    border-color: #6cc8d9;
 }
 /* Custom Add to Favorites button */
 .btn-add-to-favorites {
-    background-color: #e1ac67;
+    background-color: #3b9863;
     color: #333;
-    border-color: #e1ac67;
+    border-color: #3b9863;
     transition: all 0.3s ease;
 }
 
@@ -284,12 +284,22 @@ button:hover {
 
 button[name="action"][value="subtract"] {
     background-color: #7d2f27;
+    border: none;
 }
 
 button[name="action"][value="subtract"]:hover {
-    background-color: #8b2855;
+    background-color: #df6aa0;
+    border: none;
+}
+button[name="action"][value="add"] {
+    background-color: #569080;
+    border: none;
 }
 
+button[name="action"][value="add"]:hover {
+    background-color: #a8e153;
+    border: none;
+}
 /* Checkout and total styling */
 .checkout-btn {
     display: flex;
@@ -512,7 +522,7 @@ button[name="action"][value="subtract"]:hover {
 .custom-button {
     background-color: #569080;
     border: none;
-    font-size: 1.2rem;
+    font-size: 16px;
     padding: 10px 20px;
 }
 
