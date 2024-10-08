@@ -21,7 +21,7 @@
             <h3 class="mb-3">Order Summary</h3>
             <ul class="list-group mb-4 col-md-6"> <!-- Shortened Order Summary with col-md-6 -->
                 {% for item in cart_items %}
-                <li class="list-group-item">{{ item.book.title }} - Quantity: {{ item.quantity }} - Price per item: ${{ item.book.price }}</li>
+                <li class="list-group-item">{{ item.book.title }} - Quantity: {{ item.quantity }} - Price per item: €{{ item.book.price }}</li>
                 {% endfor %}
             </ul>
             <p class="col-md-6"><strong>Total Price:</strong> ${{ total_price }}</p>

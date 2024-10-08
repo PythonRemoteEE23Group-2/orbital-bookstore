@@ -20,12 +20,12 @@ body {
     margin-right: 10px; /* More space between logo and text */
 }
 .nav-link {
-    color: #ffffff !important; /* Valge */
+    color: #007bff; /* Sinine värv lingi jaoks */
     font-size: 16px;
     font-family: 'Libre Baskerville', serif; /* Lingid */
 }
 .nav-link:hover {
-    color: #ffc107 !important; /* Kuldne hover-efekt */
+    color: #0056b3; /* Tumeda sinise hover-efekt */
 }
 .nav-link.active {
     font-weight: bold;
@@ -49,3 +49,13 @@ body {
     border-radius: 50%;
     color: #212529; /* Tumeda värv */
 }
+
+/* Raamatute pealkirjade ja autorite värvi muutmine */
+.book-info h4 {
+    color: #000000; /* Raamatute pealkirjad mustaks */
+}
+
+.book-info p {
+    color: #333333; /* Autorite nimed ja muu tekst heledam must */
+}
+

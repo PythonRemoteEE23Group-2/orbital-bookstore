@@ -28,7 +28,7 @@
                                     <div class="card-body">
                                         <h5 class="card-title">{{ favorite.book.title }}</h5>
                                         <h6 class="card-subtitle mb-2 text-muted">by {{ favorite.book.author }}</h6>
-                                        <p class="card-text">Price: ${{ favorite.book.price }}</p>
+                                        <p class="card-text">Price: €{{ favorite.book.price }}</p>
                                         <!-- Delete Button -->
                                         <form method="POST" action="{% url 'delete_favorite' favorite.id %}">
                                             {% csrf_token %}
