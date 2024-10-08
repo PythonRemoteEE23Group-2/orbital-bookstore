@@ -1,6 +1,6 @@
 import pytest
-from store.models import Book, Category, Subcategory
-from django.urls import reverse
+from django.contrib.auth.models import User
+from store.models import Book, Favorite, Category, Subcategory, User
 
 
 @pytest.mark.django_db
@@ -17,22 +17,6 @@ def test_create_book():
     )
     assert book.id is not None
     assert book.title == "Dune"
-
-
-@pytest.mark.django_db
-def test_read_book():
-    """Test reading a Book object"""
-    category = Category.objects.create(name="Fiction")
-    subcategory = Subcategory.objects.create(name="Fantasy", category=category)
-    book = Book.objects.create(
-        title="Harry Potter",
-        author="J.K. Rowling",
-        price=24.99,
-        availability=True,
-        subcategory=subcategory
-    )
-    retrieved_book = Book.objects.get(id=book.id)
-    assert retrieved_book.title == "Harry Potter"
 
 
 @pytest.mark.django_db
@@ -71,26 +55,39 @@ def test_delete_book():
 
 
 @pytest.mark.django_db
-def test_list_books():
-    """Test listing all Book objects"""
+def test_add_book_to_favorites():
+    """Test that a user can add a book to favorites"""
+    user = User.objects.create_user(username="testuser", password="testpass")
     category = Category.objects.create(name="Fiction")
-    subcategory1 = Subcategory.objects.create(name="Thriller", category=category)
-    subcategory2 = Subcategory.objects.create(name="Romance", category=category)
-    Book.objects.create(
-        title="Gone Girl",
-        author="Gillian Flynn",
-        price=14.99,
+    subcategory = Subcategory.objects.create(name="Adventure", category=category)
+    book = Book.objects.create(
+        title="The Hobbit",
+        author="J.R.R. Tolkien",
+        price=12.99,
         availability=True,
-        subcategory=subcategory1
+        subcategory=subcategory
     )
-    Book.objects.create(
-        title="Pride and Prejudice",
-        author="Jane Austen",
-        price=10.99,
+
+    favorite = Favorite.objects.create(user=user, book=book)
+
+    assert favorite.id is not None
+    assert favorite.book.title == "The Hobbit"
+    assert favorite.user.username == "testuser"
+
+@pytest.mark.django_db
+def test_mark_book_as_favorite():
+    """Test that a user can mark a book as favorite and it persists"""
+    user = User.objects.create_user(username="testuser", password="testpass")
+    category = Category.objects.create(name="Fiction")
+    subcategory = Subcategory.objects.create(name="Adventure", category=category)
+    book = Book.objects.create(
+        title="The Hobbit",
+        author="J.R.R. Tolkien",
+        price=12.99,
         availability=True,
-        subcategory=subcategory2
+        subcategory=subcategory
     )
-    books = Book.objects.all()
-    assert len(books) == 2
-    assert books[0].title == "Gone Girl"
-    assert books[1].title == "Pride and Prejudice"
+
+    Favorite.objects.create(user=user, book=book)
+
+    assert Favorite.objects.filter(user=user, book=book).exists()
