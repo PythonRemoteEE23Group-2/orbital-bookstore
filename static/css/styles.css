@@ -2,46 +2,58 @@
 body {
     font-family: 'Libre Baskerville', serif; /* Peamine tekst */
 }
+
 .navbar {
-    background-color: #001f3f; /* Tume sinine */
+    background-color: #002147; /* Tumedam sinine */
     padding: 10px 20px;
 }
+
 .navbar-brand {
     color: #ffffff; /* Valge */
     font-size: 24px;
     font-weight: bold;
     display: flex; /* Flexbox for alignment */
     align-items: center; /* Center logo and text vertically */
-    font-family: 'Cormorant Garamond', serif; /* Logo ja poe nimi */
 }
+
 .navbar-brand img {
     max-width: 80px; /* Logo size */
     height: auto;
     margin-right: 10px; /* More space between logo and text */
 }
+
 .nav-link {
-    color: #007bff; /* Sinine värv lingi jaoks */
+    color: #a6c8ff; /* Heledam sinine värv lingi jaoks */
     font-size: 16px;
-    font-family: 'Libre Baskerville', serif; /* Lingid */
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5); /* Teksti varjund */
+    text-decoration: none; /* Eemaldab allajoonimise */
 }
+
 .nav-link:hover {
-    color: #0056b3; /* Tumeda sinise hover-efekt */
+    color: #ffffff; /* Valge hover-efekt */
+    text-decoration: none; /* Eemaldab hover allajoonimise */
 }
+
 .nav-link.active {
     font-weight: bold;
-    text-decoration: underline;
+    text-decoration: none !important; /* Eemaldab aktiivse lingi allajoonimise */
+    color: #ffffff !important; /* Tagage, et aktiivne link on valge */
 }
+
 .navbar-toggler {
     background-color: #ffffff; /* Valge */
 }
+
 .btn-logout {
     color: #ffffff; /* Valge */
     background-color: #007bff; /* Sinine */
     border: none;
 }
+
 .btn-logout:hover {
     background-color: #0056b3; /* Tumeda varjundi hover */
 }
+
 .cart-badge {
     background-color: #ffc107; /* Kuldne */
     font-size: 14px;
@@ -53,9 +65,74 @@ body {
 /* Raamatute pealkirjade ja autorite värvi muutmine */
 .book-info h4 {
     color: #000000; /* Raamatute pealkirjad mustaks */
+    margin-bottom: 10px;
+    text-decoration: none !important; /* Eemaldab alljoonimise */
 }
 
 .book-info p {
     color: #333333; /* Autorite nimed ja muu tekst heledam must */
+    margin-bottom: 5px;
+    text-decoration: none !important; /* Eemaldab alljoonimise */
 }
 
+/* Raamatukaante suurus */
+.book-cover {
+    width: 100%; /* Täidab kogu konteineri laiuse */
+    height: auto; /* Säilitab õige proportsiooni */
+    object-fit: contain; /* Ei lõika kaanest midagi ära */
+    max-height: 300px; /* Maksimaalne kõrgus */
+}
+
+/* Paigutus 4 raamatut kõrvuti */
+.book-list {
+    display: grid; /* Grid süsteem */
+    grid-template-columns: repeat(4, 1fr); /* 4 võrdses tulbas */
+    gap: 20px; /* Vahe raamatute vahel */
+    justify-items: center; /* Raamatud keskjoonduvad */
+}
+
+/* Raamatu konteineri suurus */
+.book-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Lisame natuke varju */
+}
+
+.book-item a {
+    text-decoration: none; /* Eemaldab allajoonimise linkidelt */
+    color: black; /* Must värv linkidele */
+}
+
+.book-item a:hover {
+    color: #007bff; /* Sinine hover-efekt linkidele */
+    text-decoration: none; /* Eemaldab hover allajoonimise */
+}
+
+/* "Add to Cart" nupp */
+.add-to-cart button {
+    width: 80%; /* Laiem nupp */
+    padding: 10px;
+    background-color: #007bff; /* Sinine taust */
+    color: white; /* Valge tekst */
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Pealkirjade ja teksti stiil */
+.book-info h4 {
+    color: #000;
+    margin-bottom: 10px;
+}
+
+.book-info p {
+    color: #333;
+    margin-bottom: 5px;
+}
