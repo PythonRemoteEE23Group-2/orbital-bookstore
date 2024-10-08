@@ -69,26 +69,30 @@
             <div class="row">
                 {% for book in books %}
                 <div class="col-md-3"> <!-- Kolm raamatut reas (Bootstrap'i grid) -->
-                    <div class="book-item">
-                        <a href="{% url 'book_detail' book.id %}">
-                            <img src="{{ book.cover_art }}" alt="{{ book.title }} Cover Art" class="book-cover img-fluid">
-                            <div class="book-info text-center">
-                                <h4>{{ book.title }}</h4>
-                                <p>by {{ book.author }}</p>
-                                <p>€{{ book.price }}</p>
-                                <p>Average Rating: {{ book.average_rating|default:"No ratings yet" }}</p>
-                            </div>
-                        </a>
-                        {% if user.is_authenticated %}
-                        <div class="add-to-cart mt-3">
-                            <form method="POST" action="{% url 'add_to_cart' book.id %}">
-                                {% csrf_token %}
-                                <button type="submit">Add to Cart</button>
-                            </form>
-                        </div>
-                        {% endif %}
-                    </div>
-                </div> <!-- col-md-3 -->
+    <div class="book-item">
+        <a href="{% url 'book_detail' book.id %}">
+            <img src="{{ book.cover_art }}" alt="{{ book.title }} Cover Art" class="book-cover img-fluid">
+            <div class="book-info text-center">
+                <h4>{{ book.title }}</h4>
+                <p>by {{ book.author }}</p>
+                <p class="price">€{{ book.price }}</p> <!-- Lisatud class="price" -->
+                <p>Average Rating: {{ book.average_rating|default:"No ratings yet" }}</p>
+            </div>
+        </a>
+        {% if user.is_authenticated %}
+        <div class="add-to-cart mt-3">
+            <form method="POST" action="{% url 'add_to_cart' book.id %}">
+                {% csrf_token %}
+                <button type="submit">
+                    <i class="fas fa-shopping-cart"></i> <!-- Ostukorvi ikoon -->
+                    <i class="fas fa-plus"></i> <!-- Plussmärk -->
+                </button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+                    <!-- col-md-3 -->
                 {% endfor %}
             </div> <!-- row -->
         </div> <!-- container -->
