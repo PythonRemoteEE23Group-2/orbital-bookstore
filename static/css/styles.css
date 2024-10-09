@@ -1,10 +1,10 @@
 /* Custom Styling for Navbar */
 body {
-    font-family: 'Libre Baskerville', serif; /* Peamine tekst */
-    background: linear-gradient(to bottom,  #e1e1e1, #002147ˇ       1xw );/* Valge kuni helesinine gradient */
+    background: url('/static/images/pexels-lumber.jpg') repeat;
+    background-color: #fdf3e7;
     color: #333;
+    font-family: 'Georgia', serif;
 }
-
 
 .navbar {
     background-color: #002147; /* Tumedam sinine */
