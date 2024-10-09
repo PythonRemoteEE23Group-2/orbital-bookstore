@@ -2,6 +2,8 @@
 
 Orbital Bookstore is an online bookstore where users can browse, add books to their cart, make purchases, and leave reviews. This application is built using Django, a Python web framework.
 
+![Project Screenshot](.static/images/screenshot.png)
+
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
