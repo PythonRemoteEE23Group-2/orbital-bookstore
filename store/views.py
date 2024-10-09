@@ -243,7 +243,8 @@ def view_favorites(request):
 
 def view_reviews(request):
     reviews = Review.objects.all()
-    cart_items_count = get_cart_items_count(request.user) if request.user.is_authenticated else None
+    cart_items_count = get_cart_items_count(request.user) \
+        if request.user.is_authenticated else None
 
     return render(
         request,

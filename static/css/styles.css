@@ -70,7 +70,7 @@ body {
 /* Page wrapper */
 .page-wrapper {
     background-color: #ffffff;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 30px auto;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -100,7 +100,7 @@ h1, h2, h3 {
     font-family: 'Baskerville', sans-serif;
     font-size: 30px !important;
     color: #2c3e50;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    text-shadow: 2px 2px 5px #b0a2b2;
     font-weight: 700;
 }
 
@@ -118,9 +118,32 @@ p {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
     justify-content: center;
-    padding: 20px;
+    padding: 20px 0;
+}
+/* Responsive adjustments */
+@media (min-width: 1000px) {
+    .book-list {
+        grid-template-columns: repeat(5, 1fr); /* Force 5 columns on larger screens */
+    }
 }
 
+@media (max-width: 1199px) and (min-width: 992px) {
+    .book-list {
+        grid-template-columns: repeat(4, 1fr); /* 4 columns on medium-large screens */
+    }
+}
+
+@media (max-width: 991px) and (min-width: 768px) {
+    .book-list {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns on medium screens */
+    }
+}
+
+@media (max-width: 767px) {
+    .book-list {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on small screens */
+    }
+}
 .book-item {
     width: 100%;
     background: #fff;
