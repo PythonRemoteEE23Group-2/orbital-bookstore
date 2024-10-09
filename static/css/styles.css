@@ -326,3 +326,12 @@ body {
     color: #ff4757; /* Red heart on hover */
 }
 
+.btn-danger {
+    background-color: red !important;
+    border-color: darkred !important;
+}
+
+.btn-danger:hover {
+    background-color: darkred !important;
+}
+

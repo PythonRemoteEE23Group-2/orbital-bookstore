@@ -141,10 +141,11 @@ def delete_from_cart(request, cart_item_id):
 
 
 @login_required
+@login_required
 def checkout(request):
     cart = Cart.objects.get(user=request.user)
     cart_items = cart.items.all()
-    total_cost = cart.total_cost
+    total_cost = cart.total_cost  # Calculating the total cost of the cart
 
     if request.method == 'POST':
         payment_method = request.POST.get('payment_method')
@@ -153,7 +154,7 @@ def checkout(request):
         if not payment_method:
             return render(request, 'store/checkout.html', {
                 'cart_items': cart_items,
-                'total_cost': total_cost,
+                'total_cost': total_cost,  # Passing total cost to the template
                 'cart_items_count': cart.items.count(),
                 'error_message': 'Please select a payment method.'
             })
@@ -180,7 +181,7 @@ def checkout(request):
 
     return render(request, 'store/checkout.html', {
         'cart_items': cart_items,
-        'total_cost': total_cost,
+        'total_cost': total_cost,  # Ensure total_cost is passed to the template
         'cart_items_count': cart.items.count(),
     })
 
