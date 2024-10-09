@@ -6,77 +6,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ book.title }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-{% include 'store/_navbar.html' %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-4">
-            <img src="{{ book.cover_art }}" alt="{{ book.title }} Cover Art" class="img-fluid mb-3 book-cover" width="300">
-        </div>
-        <div class="col-md-8">
-            <h1 class="mb-3 book-title">{{ book.title }}</h1>
-            <p>{{ book.description }}</p>
-            <p>Price: €{{ book.price }}</p>
-            <p>
-                Availability:
-                <span class="badge {% if book.availability %}bg-success{% else %}bg-danger{% endif %}">
-                    {% if book.availability %}In Stock{% else %}Out of Stock{% endif %}
-                </span>
-            </p>
-            {% if book.availability %}
-            {% endif %}
-            {% if user.is_authenticated %}
-                <a href="{% url 'add_to_favorites' book.id %}" class="btn btn-outline-secondary mb-3">Add to Favorites</a>
-                <form method="post" action="{% url 'add_to_cart' book.id %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-add-to-cart mb-3">Add to Cart</button>
-                </form>
-            {% endif %}
-        </div>
-    </div>
+    {% include 'store/_navbar.html' %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4">
+                <img src="{{ book.cover_art }}" alt="{{ book.title }} Cover Art" class="img-fluid mb-3 book-cover" width="300">
+            </div>
+            <div class="col-md-8">
+                <h1 class="mb-3 book-title">{{ book.title }}</h1>
+                <p>{{ book.description }}</p>
+                <p>Price: €{{ book.price }}</p>
+                <p>
+                    Availability:
+                    <span class="badge {% if book.availability %}bg-success{% else %}bg-danger{% endif %}">
+                        {% if book.availability %}In Stock{% else %}Out of Stock{% endif %}
+                    </span>
+                </p>
 
-    <div class="row mt-5">
-        <div class="col-12">
-            <h2>Reviews</h2>
-            <ul class="list-unstyled">
-                {% for review in reviews %}
-                    <li class="mb-3">
-                        <div class="card review-card">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ review.user.username }}</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">{{ review.rating }} stars</h6>
-                                <p class="card-text">{{ review.review_text }}</p>
-                                {% if review.user == user %}
-                                    <p class="text-muted">This is your review</p>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </li>
-                {% empty %}
-                    <li>No reviews yet.</li>
-                {% endfor %}
-            </ul>
-
-            {% if user.is_authenticated %}
-                {% if user_has_reviewed %}
-                    <p class="text-muted">You have already submitted a review for this book.</p>
-                {% else %}
-                    <a href="{% url 'add_review' book.id %}" class="btn btn-secondary">Write a Review</a>
+                {% if user.is_authenticated %}
+                    <form method="POST" action="{% url 'add_to_favorites' book.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-favorite">
+                            {% if is_favorite %}
+                                <i class="fas fa-heart heart-icon favorite"></i> <!-- Solid red heart for favorite -->
+                            {% else %}
+                                <i class="far fa-heart heart-icon"></i> <!-- Empty heart for not favorite -->
+                            {% endif %}
+                        </button>
+                    </form>
+                    <form method="post" action="{% url 'add_to_cart' book.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                    </form>
                 {% endif %}
-            {% else %}
-                <p>Please <a href="{% url 'login' %}">log in</a> to write a review.</p>
-            {% endif %}
+            </div>
         </div>
-    </div>
 
-    <div class="row mt-3">
-        <div class="col-12">
-            <a href="{% url 'home' %}" class="btn btn-back-to-list">Back to Book List</a>
+        <div class="row mt-5">
+            <div class="col-12">
+                <h2>Reviews</h2>
+                <ul class="list-unstyled">
+                    {% for review in reviews %}
+                        <li class="mb-3">
+                            <div class="card review-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ review.user.username }}</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">{{ review.rating }} stars</h6>
+                                    <p class="card-text">{{ review.review_text }}</p>
+                                    {% if review.user == user %}
+                                        <p class="text-muted">This is your review</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </li>
+                    {% empty %}
+                        <li>No reviews yet.</li>
+                    {% endfor %}
+                </ul>
+
+                {% if user.is_authenticated %}
+                    {% if user_has_reviewed %}
+                        <p class="text-muted">You have already submitted a review for this book.</p>
+                    {% else %}
+                        <a href="{% url 'add_review' book.id %}" class="btn btn-secondary">Write a Review</a>
+                    {% endif %}
+                {% else %}
+                    <p>Please <a href="{% url 'login' %}">log in</a> to write a review.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-12">
+                <a href="{% url 'home' %}" class="btn btn-back-to-list">Back to Book List</a>
+            </div>
         </div>
     </div>
-</div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -1,7 +1,7 @@
 /* Custom Styling for Navbar */
 body {
     font-family: 'Libre Baskerville', serif; /* Peamine tekst */
-    background: linear-gradient(to bottom right, #f0e68c, #002147); /* Tumesinine ja kuldne gradient */
+    background: linear-gradient(to bottom,  #e1e1e1, #002147ˇ       1xw );/* Valge kuni helesinine gradient */
     color: #333;
 }
 
@@ -135,6 +135,29 @@ body {
     text-decoration: none; /* Eemaldab hover allajoonimise */
 }
 
+/* Global Button Styles */
+.btn {
+    background-color: #007bff;  /* Your primary blue color */
+    color: white;  /* White text for contrast */
+    border: none;  /* No borders */
+    padding: 10px 20px;  /* Padding for a good size */
+    border-radius: 5px;  /* Rounded corners */
+    cursor: pointer;
+    font-weight: bold;  /* Bold text for readability */
+}
+
+/* Hover effect for buttons */
+.btn:hover {
+    background-color: #0056b3;  /* Darker shade of blue on hover */
+}
+
+/* Disabled button styling */
+.btn:disabled {
+    background-color: #ccc;  /* Gray for disabled buttons */
+    cursor: not-allowed;
+}
+
+
 /* "Add to Cart" nupp */
 .add-to-cart button {
     width: 60px;
@@ -235,4 +258,71 @@ body {
     transform: translateY(-2px); /* Kergelt tõstmine hover'i ajal */
 }
 
+.continue-shopping {
+    margin-top: 30px; /* Lisa ruumi ülevalt */
+    text-align: center; /* Keskita link */
+}
+
+.continue-shopping a {
+    color: #ffffff; /* Valge tekst */
+    background-color: #28a745; /* Roheline taust */
+    padding: 12px 20px; /* Ruum ümbritseva lingi ümber */
+    border-radius: 5px; /* Ümarad nurgad */
+    text-decoration: none; /* Eemalda allajoonimine */
+    font-size: 18px; /* Suurem font */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Pehme vari */
+    transition: background-color 0.3s, transform 0.3s; /* Sujuvad üleminekud */
+}
+
+.continue-shopping a:hover {
+    background-color: #218838; /* Tumeda varjundi hover efekt */
+    transform: translateY(-2px); /* Kergelt tõstmine hover'i ajal */
+}
+
+.back-to-book-list {
+    margin-top: 30px; /* Lisa ruumi ülevalt */
+    text-align: center; /* Keskita link */
+}
+
+.back-to-book-list a {
+    color: #ffffff; /* Valge tekst */
+    background-color: #007bff; /* Sinine taust */
+    padding: 12px 20px; /* Ruum ümbritseva lingi ümber */
+    border-radius: 5px; /* Ümarad nurgad */
+    text-decoration: none; /* Eemalda allajoonimine */
+    font-size: 18px; /* Suurem font */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Pehme vari */
+    transition: background-color 0.3s, transform 0.3s; /* Sujuvad üleminekud */
+}
+
+.back-to-book-list a:hover {
+    background-color: #0056b3; /* Tumeda varjundi hover efekt */
+    transform: translateY(-2px); /* Kergelt tõstmine hover'i ajal */
+}
+
+/* Favorite heart button */
+/* Favorite heart button */
+.btn-favorite {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.heart-icon {
+    transition: color 0.3s ease-in-out;
+}
+
+.heart-icon.favorite {
+    color: #ff4757; /* Solid red for favorite */
+}
+
+.heart-icon:not(.favorite) {
+    color: #333; /* Default color for non-favorite */
+}
+
+.btn-favorite:hover .heart-icon {
+    color: #ff4757; /* Red heart on hover */
+}
 

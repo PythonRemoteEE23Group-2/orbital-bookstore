@@ -8,6 +8,7 @@ from django.db.models import Q, Avg
 from django.contrib.auth.forms import UserCreationForm
 from .models import Book, Category, Cart, CartItem, Order, Favorite, Review, User, PAYMENT_STATUS_CHOICES
 from .forms import CustomUserCreationForm
+from django.contrib.auth.models import User
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +43,9 @@ def home(request):
 def book_detail(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     reviews = book.reviews.all()
+    user = request.user
+    is_favorite = False
+
 
     cart_items_count = 0
     user_has_reviewed = False
@@ -49,12 +53,14 @@ def book_detail(request, book_id):
     if request.user.is_authenticated:
         cart_items_count = CartItem.objects.filter(cart__user=request.user).count()
         user_has_reviewed = reviews.filter(user=request.user).exists()
+        is_favorite = Favorite.objects.filter(user=request.user, book=book).exists()
 
     context = {
         'book': book,
         'reviews': reviews,
         'user_has_reviewed': user_has_reviewed,
         'cart_items_count': cart_items_count,
+        'is_favorite': is_favorite,
     }
 
     return render(request, 'store/book_detail.html', context)
