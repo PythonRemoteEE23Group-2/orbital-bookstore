@@ -1,9 +1,11 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
+from .views import home, toggle_favorites
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('', home, name='home'),
     path('book/<int:book_id>/', views.book_detail, name='book_detail'),
     path('add-to-cart/<int:book_id>/', views.add_to_cart, name='add_to_cart'),
     path('cart/', views.view_cart, name='view_cart'),
@@ -18,4 +20,7 @@ urlpatterns = [
     path('add-to-favorites/<int:book_id>/', views.add_to_favorites, name='add_to_favorites'),
     path('reviews/', views.view_reviews, name='view_reviews'),
     path('add-review/<int:book_id>/', views.add_review, name='add_review'),
+    path('book/<int:book_id>/toggle-favorites/', views.toggle_favorites, name='toggle_favorites'),
+    path('book/<int:book_id>/', views.book_detail, name='book_detail'),
+    path('toggle_favorites/<int:book_id>/', toggle_favorites, name='toggle_favorites'),
 ]

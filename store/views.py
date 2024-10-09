@@ -39,6 +39,15 @@ def home(request):
         'query': query,
     })
 
+@login_required
+def toggle_favorites(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    favorite, created = Favorite.objects.get_or_create(user=request.user, book=book)
+
+    if not created:
+        favorite.delete()
+
+    return redirect('book_detail', book_id=book.id)
 
 def book_detail(request, book_id):
     book = get_object_or_404(Book, id=book_id)
@@ -58,9 +67,9 @@ def book_detail(request, book_id):
     context = {
         'book': book,
         'reviews': reviews,
+        'is_favorite': is_favorite,
         'user_has_reviewed': user_has_reviewed,
         'cart_items_count': cart_items_count,
-        'is_favorite': is_favorite,
     }
 
     return render(request, 'store/book_detail.html', context)
@@ -243,7 +252,6 @@ def view_favorites(request):
         'store/favorites.html',
         {'favorites': favorites, 'cart_items_count': cart_item.count()}
     )
-
 
 def view_reviews(request):
     reviews = Review.objects.all()
