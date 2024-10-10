@@ -335,3 +335,83 @@ body {
     background-color: darkred !important;
 }
 
+/* Ostukorvi koguväärtuse stiilid */
+.cart-total-wrapper {
+    background-color: #f1f1f1; /* Kergelt hall taust, mis sobib lehe üldise kujundusega */
+    padding: 15px;
+    border: 1px solid #ccc; /* Peenem hall ääris */
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.total-amount {
+    font-size: 1.4em;  /* Veidi väiksem font */
+    font-weight: 600;  /* Pisut kergem, kuid siiski esiletõstetud */
+    color: #333;       /* Tumehall font, mis sobib neutraalselt igasuguse kujundusega */
+    background-color: #fff;  /* Valge taust, et tekst oleks selge */
+    padding: 8px;
+    border-radius: 5px; /* Pehmed nurgad */
+    display: inline-block;
+}
+
+.total-amount::before {
+    content: "🛒 ";  /* Lisab ikooni kogusumma ette */
+}
+
+@media (max-width: 768px) {
+    .total-amount {
+        font-size: 1.5em; /* Kohandab fonti mobiiliseadmetes */
+    }
+}
+
+/* Väiksemad font-suurused ja värvimuutused */
+.custom-heading {
+    font-size: 2rem; /* Vähendatud pealkirja suurus */
+    color: #28a745; /* Heleroheline värv */
+    font-weight: bold;
+}
+
+.custom-message {
+    font-size: 1.25rem; /* Vähendatud sõnumi suurus */
+    color: #333; /* Tumehall tekst */
+}
+
+.custom-download-heading {
+    font-size: 1.75rem; /* Väiksem teine pealkiri */
+    color: #007bff; /* Sinine värv */
+}
+
+.custom-list-item {
+    font-size: 1rem; /* Väiksem kirja suurus */
+    background-color: #f8f9fa; /* Heledam taust */
+    padding: 0.75rem;
+}
+
+.custom-download-link {
+    color: #007bff; /* Sinine link */
+    text-decoration: none;
+}
+
+.custom-download-link:hover {
+    text-decoration: underline; /* Hover efekt lingile */
+}
+
+.custom-button {
+    font-size: 1.2rem; /* Veidi suurem nuppude font */
+    background-color: #007bff; /* Sinine nupu taust */
+    border: none;
+}
+
+.custom-button:hover {
+    background-color: #0056b3; /* Tumedam sinine hover efekt */
+}
+
+/* Lisa vahe ja raam */
+.custom-container {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 2rem;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
