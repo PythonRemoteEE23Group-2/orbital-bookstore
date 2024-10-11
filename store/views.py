@@ -268,6 +268,4 @@ def view_reviews(request):
         {'reviews': reviews, 'cart_items_count': cart_items_count}
     )
 
-
-
 #get_cart_items_count()
