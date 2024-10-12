@@ -2,13 +2,10 @@ import logging
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth import login
 from django.db.models import Q, Avg
-from django.contrib.auth.forms import UserCreationForm
-from .models import Book, Category, Cart, CartItem, Order, Favorite, Review, User, PAYMENT_STATUS_CHOICES
+from .models import Book, Category, Cart, CartItem, Order, Favorite, Review, PAYMENT_STATUS_CHOICES
 from .forms import CustomUserCreationForm
-from django.contrib.auth.models import User
 
 logger = logging.getLogger(__name__)
 
@@ -145,7 +142,7 @@ def delete_from_cart(request, cart_item_id):
 def checkout(request):
     cart = Cart.objects.get(user=request.user)
     cart_items = cart.items.all()
-    total_cost = cart.total_cost  # Calculating the total cost of the cart
+    total_cost = cart.total_cost
 
     if request.method == 'POST':
         payment_method = request.POST.get('payment_method')
@@ -154,12 +151,11 @@ def checkout(request):
         if not payment_method:
             return render(request, 'store/checkout.html', {
                 'cart_items': cart_items,
-                'total_cost': total_cost,  # Passing total cost to the template
+                'total_cost': total_cost,
                 'cart_items_count': cart.items.count(),
                 'error_message': 'Please select a payment method.'
             })
 
-        # Create an order
         order = Order.objects.create(
             user=request.user,
             payment_method=payment_method,

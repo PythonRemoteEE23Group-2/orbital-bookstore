@@ -1,147 +1,144 @@
 body {
     background: url('/static/images/pexels-lumber.jpg') repeat;
     background-color: #fdf3e7;
-    background-size: cover; /* Adjust background image size */
+    background-size: cover;
     color: #333;
     font-family: 'Georgia', serif;
 }
 
 .input-group {
     display: flex;
-    max-width: 500px; /* Piira maksimaalne laius */
-    width: 100%; /* Laius täidab konteineri */
+    max-width: 500px;
+    width: 100%;
 }
 
 .container .row {
-    align-items: center; /* Align items vertically */
-    margin-bottom: 20px; /* Space below the search and category filters */
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 /* Navbar Styles */
 .navbar {
-    background-color: #002147; /* Darker blue */
+    background-color: #002147;
     padding: 10px 20px;
 }
 
 .navbar-brand {
-    color: #ffffff; /* White */
+    color: #ffffff;
     font-size: 24px;
     font-weight: bold;
-    display: flex; /* Flexbox for alignment */
-    align-items: center; /* Center logo and text vertically */
+    display: flex;
+    align-items: center;
 }
 
 .navbar-brand img {
-    max-width: 80px; /* Logo size */
+    max-width: 80px;
     height: auto;
-    margin-right: 10px; /* Space between logo and text */
+    margin-right: 10px;
 }
 
 .nav-link {
-    color: #a6c8ff; /* Lighter blue for links */
+    color: #a6c8ff;
     font-size: 16px;
-    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5); /* Text shadow */
-    text-decoration: none; /* Remove underline */
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+    text-decoration: none;
 }
 
 .nav-link:hover {
-    color: #ffffff; /* White hover effect */
+    color: #ffffff;
 }
 
 .nav-link.active {
-    font-weight: bold; /* Active link bold */
-    text-decoration: none !important; /* Remove active link underline */
-    color: #ffffff !important; /* Ensure active link is white */
+    font-weight: bold;
+    text-decoration: none !important;
+    color: #ffffff !important;
 }
 
 .navbar-toggler {
-    background-color: #ffffff; /* White */
+    background-color: #ffffff;
 }
 
 .btn-logout {
-    color: #ffffff; /* White */
-    background-color: #007bff; /* Blue */
+    color: #ffffff;
+    background-color: #007bff;
     border: none;
-    margin-top: 0; /* Adjust this value if needed */
+    margin-top: 0;
     padding: 5px 10px;
 }
 
 .btn-logout:hover {
-    background-color: #0056b3; /* Darker shade on hover */
+    background-color: #0056b3;
 }
 
 .cart-badge {
-    background-color: #ffc107; /* Golden */
+    background-color: #ffc107;
     font-size: 14px;
     padding: 2px 8px;
     border-radius: 50%;
-    color: #212529; /* Dark color */
+    color: #212529;
 }
 
-/* Book titles and authors color */
 .book-info h4 {
     color: #000;
     margin-bottom: 10px;
-    font-weight: bold; /* Bold text */
+    font-weight: bold;
     font-size: 18px;
     min-height: 60px;
-    max-height: 60px; /* Limit title height */
-    overflow: hidden; /* Hide overflow text */
-    text-overflow: ellipsis; /* Add ... if text overflows */
-    white-space: normal; /* Allow text wrapping */
+    max-height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* Max 2 lines */
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     height: 60px;
 }
 
 .book-info p {
-    color: #333333; /* Author names and other text color */
+    color: #333333;
     margin-bottom: 5px;
-    text-decoration: none !important; /* Remove underline */
+    text-decoration: none !important;
     min-height: 20px;
-    max-height: 40px; /* Piira autoriinfo kõrgust */
+    max-height: 40px;
     overflow: hidden;
 }
 
-/* Book cover size */
 .book-cover {
     width: 100%;
     height: auto;
     max-height: 250px;
-    object-fit: contain; /* Fit covers without stretching */
-    margin-bottom: 10px; /* Space between title and cover */
+    object-fit: contain;
+    margin-bottom: 10px;
 }
 
 .book-info .price {
-    font-size: 20px; /* Larger font size */
-    font-weight: bold; /* Bold text */
-    color: #28a745 !important; /* Green */
-    margin-top: 10px; /* Space above */
+    font-size: 20px;
+    font-weight: bold;
+    color: #28a745 !important;
+    margin-top: 10px;
 }
 
-/* Layout for 4 books side by side */
 .book-list {
-    display: grid; /* Grid system */
+    display: grid;
     flex-wrap: wrap;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     grid-auto-rows: 1fr;
-    gap: 30px; /* Space between books */
-    row-gap: 40px; /* Larger vertical gap */
-    justify-items: center; /* Center books */
+    gap: 30px;
+    row-gap: 40px;
+    justify-items: center;
 }
 
 .book-item {
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Tagab, et ruum jaguneb ühtlaselt */
+    justify-content: space-between;
     align-items: center;
     text-align: center;
     background-color: #f8f9fa;
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 15px;
-    height: 600px; /* Kindel kõrgus, et tagada ühtlane suurus */
+    height: 600px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
     margin-bottom: 20px;
@@ -150,38 +147,35 @@ body {
 
 
 .book-item:hover {
-    transform: scale(1.03); /* Slight enlargement on hover */
+    transform: scale(1.03);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .book-item a {
-    text-decoration: none; /* Remove underline */
-    color: black; /* Black color for links */
+    text-decoration: none;
+    color: black;
 }
 
 .book-item a:hover {
-    color: #007bff; /* Blue hover effect for links */
+    color: #007bff;
 }
 
-/* Global Button Styles */
 .btn {
-    background-color: #007bff;  /* Primary blue color */
-    color: white;  /* White text */
-    border: none;  /* No borders */
-    padding: 10px 20px;  /* Padding for size */
-    border-radius: 5px;  /* Rounded corners */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
     cursor: pointer;
-    font-weight: bold;  /* Bold text */
+    font-weight: bold;
 }
 
-/* Hover effect for buttons */
 .btn:hover {
-    background-color: #0056b3;  /* Darker blue on hover */
+    background-color: #0056b3;
 }
 
-/* Disabled button styling */
 .btn:disabled {
-    background-color: #ccc;  /* Gray for disabled buttons */
+    background-color: #ccc;
     cursor: not-allowed;
 }
 
@@ -189,13 +183,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: auto; /* Asetab nupu konteineri allossa */
-    margin-bottom: 15px; /* Lisa ruumi nupu ja konteineri alumise ääre vahele */
+    margin-top: auto;
+    margin-bottom: 15px;
 }
 
 .add-to-cart button {
     width: 50px;
-    height: 50px; /* Veenduge, et nupp ei oleks liiga kõrge */
+    height: 50px;
     padding: 0;
     background: linear-gradient(135deg, #007bff, #0056b3);
     color: white;
@@ -207,123 +201,115 @@ body {
     font-size: 18px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease, box-shadow 0.3s;
-    margin: 0 auto; /* Keskendab nupu */
+    margin: 0 auto;
     visibility: visible;
 }
 
 .add-to-cart button i {
-    font-size: 20px; /* Suurus ikoonile */
-    margin-right: 5px; /* Lisa vajadusel vahe teksti ja ikooni vahel */
+    font-size: 20px;
+    margin-right: 5px;
 }
 
 .add-to-cart button:hover {
-    background: linear-gradient(135deg, #0056b3, #003f7f); /* Darker shade on hover */
+    background: linear-gradient(135deg, #0056b3, #003f7f);
 }
 
 .total-amount {
-    font-weight: bold; /* Bold text */
+    font-weight: bold;
 }
 
 .widget {
-    margin: 20px auto; /* Adds margin */
-    text-align: center; /* Centers the widget */
-    max-width: 400px; /* Optional: limit widget width */
+    margin: 20px auto;
+    text-align: center;
+    max-width: 400px;
 }
 
-/* Custom styles for the input group to ensure full width and center alignment */
 .input-group {
     display: flex;
-    width: 100%; /* Full width of the parent container */
-    margin: 0 auto; /* Center alignment */
-    max-width: 600px; /* Optional: max width */
+    width: 100%;
+    margin: 0 auto;
+    max-width: 600px;
 }
 
-/* Adjust category filter to ensure it fits nicely */
 .category-filter .form-select {
-    width: auto; /* Auto width */
+    width: auto;
 }
 
 .review {
-    background-color: rgba(255, 255, 255, 0.9); /* White background with 90% opacity */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Adds a shadow for depth */
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Styling for the cart page */
 .page-wrapper {
-    background-color: #f8f9fa; /* Light background color */
-    padding: 20px; /* Padding around the page */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .list-group-item {
-    border: 1px solid #dee2e6; /* Light border for items */
-    border-radius: 8px; /* Rounded corners for items */
-    margin-bottom: 15px; /* Space between items */
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    margin-bottom: 15px;
 }
 
 .book-cover {
-    width: 100%; /* Cover takes the full width of its container */
-    max-width: 250px; /* Set a maximum width for the cover */
-    height: auto; /* Maintain aspect ratio */
-    max-height: 300px; /* Optional: Set a max height for better control */
-    object-fit: contain; /* Ensure the cover image is fully visible without distortion */
-    margin-bottom: 10px; /* Space between the image and the book info */
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+    max-height: 300px;
+    object-fit: contain;
+    margin-bottom: 10px;
 }
 
 .item-controls {
-    display: flex; /* Flexbox paigutus */
-    flex-direction: row; /* Horisontaalne suund */
-    align-items: center; /* Vertikaalne joondus keskel */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .item-controls form {
-    display: flex; /* Flexbox paigutus */
-    flex-direction: row; /* Horisontaalne suund */
-    align-items: center; /* Vertikaalne joondus keskel */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .item-controls button {
-    margin: 0 5px; /* Lisab horisontaalset vahet nuppude vahel */
-    min-width: 40px; /* Nuppude miinimumlaius */
+    margin: 0 5px;
+    min-width: 40px;
 }
 
 .cart-total-wrapper {
-    font-size: 1.2rem; /* Larger font for total */
+    font-size: 1.2rem;
 }
 
 .empty-cart {
-    font-size: 1.5rem; /* Larger font for empty cart message */
-    color: #dc3545; /* Red color for emphasis */
+    font-size: 1.5rem;
+    color: #dc3545;
 }
 
 .btn-danger {
-    background-color: #dc3545; /* Bootstrap's red color */
-    border-color: #dc3545; /* Matching border color */
+    background-color: #dc3545;
+    border-color: #dc3545;
 }
 
 .btn-danger:hover {
-    background-color: #c82333; /* Darker red for hover effect */
-    border-color: #bd2130; /* Darker border on hover */
+    background-color: #c82333;
+    border-color: #bd2130;
 }
 
-/* styles.css */
-
-/* Ensure the "Proceed to Checkout" button is green */
 .btn-success {
-    background-color: #28a745 !important; /* Green background */
-    border-color: #28a745 !important; /* Green border */
-    color: white !important; /* White text */
+    background-color: #28a745 !important;
+    border-color: #28a745 !important;
+    color: white !important;
 }
 
-/* Optional: Customize the "Continue Shopping" button */
 .btn-primary {
-    background-color: #007bff !important; /* Blue background */
-    border-color: #007bff !important; /* Blue border */
-    color: white !important; /* White text */
+    background-color: #007bff !important;
+    border-color: #007bff !important;
+    color: white !important;
 }
 
-/* Common styles for .page-wrapper */
 .page-wrapper {
     background-color: #ffffff;
     margin: 0 auto;
@@ -335,26 +321,22 @@ body {
 .login-page .page-wrapper,
 .register-page .page-wrapper {
     max-width: 400px;
-    margin: 50px auto; /* Lisab 50px ruumi konteineri ja navbari vahele */
-    padding-top: 20px; /* Võimalik lisada ka sisemine polster, kui vajalik */
+    margin: 50px auto;
+    padding-top: 20px;
 }
 
-
-/* Wider width for cart and reviews pages */
 .cart-page .page-wrapper,
 .review-page .page-wrapper {
     max-width: 1200px;
     padding: 40px;
 }
 
-/* Ensure full width for container inside cart and reviews pages */
 .cart-page .container,
 .review-page .container {
     width: 100%;
-    max-width: 100%; /* Remove Bootstrap's default container width limitations */
+    max-width: 100%;
 }
 
-/* Ensure that row inside cart and reviews pages behaves correctly */
 .cart-page .row,
 .review-page .row {
     margin-right: 0;
@@ -363,41 +345,39 @@ body {
 
 .page-wrapper {
     background-color: #ffffff;
-    margin: 80px auto; /* Lisab 80px ruumi navbari ja konteineri vahele */
+    margin: 80px auto;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
 
-/* Globaalne vormi stiilide kohandus */
 form {
     display: flex;
-    flex-direction: column; /* Tagame, et kõik vormi elemendid on vertikaalses reas */
-    align-items: flex-start; /* Vasakule joondus */
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .form-group {
     display: flex;
-    flex-direction: column; /* Iga vormigrupp hoiab label ja input vertikaalselt koos */
+    flex-direction: column;
     width: 100%;
-    margin-bottom: 15px; /* Kindel ruum vormigruppide vahel */
+    margin-bottom: 15px;
 }
 
 label {
     font-weight: bold;
-    margin-bottom: 5px; /* Väike ruum labeli ja sisestuskasti vahel */
+    margin-bottom: 5px;
 }
 
 input {
-    width: 100%; /* Sisestuskast täidab kogu konteineri laiuse */
+    width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
 }
 
-/* Kohandatud nupu paigutus ja stiil */
 button {
-    width: 100%; /* Nupp joondub kogu konteineri laiuses */
+    width: 100%;
     margin-top: 20px;
     padding: 10px;
     background-color: #509fad;
@@ -412,7 +392,6 @@ button:hover {
     background-color: #0056b3;
 }
 
-/* Registreerimislehe paigutus */
 .page-wrapper.register-page {
     max-width: 400px;
     margin: 50px auto;
@@ -421,26 +400,22 @@ button:hover {
     border-radius: 8px;
 }
 
-/* Kohandatud login-link stiil */
 .login-link {
     text-align: center;
     margin-top: 20px;
 }
 
-/* Ensure all book covers have the same size */
 .favorite-book-card .book-cover {
-    width: 100%; /* Full width within its column */
-    height: 250px; /* Set a fixed height */
-    object-fit: cover; /* Ensures the image maintains aspect ratio and covers the area */
-    margin-bottom: 10px; /* Add some space between the cover and the title */
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    margin-bottom: 10px;
 }
 
-/* Ensure all cards have the same height */
 .favorite-book-card {
-    height: 100%; /* Make all cards fill available height */
+    height: 100%;
 }
 
-/* Make sure the card columns are aligned properly */
 .favorite-book-card .card-body {
     display: flex;
     flex-direction: column;
@@ -448,50 +423,47 @@ button:hover {
     height: 100%;
 }
 
-/* Ensure the "Remove" button stays aligned */
 .custom-delete-btn {
-    align-self: flex-start; /* Keep aligned on the left */
+    align-self: flex-start;
     margin-top: 10px;
 }
 
-/* Add space below the container holding the button */
 .container {
-    margin-bottom: 50px; /* Creates 50px of space at the bottom */
+    margin-bottom: 50px;
 }
 
-/* Optionally, ensure the button has some margin around it */
 .btn.btn-primary {
-    margin-top: 20px; /* Space above the button */
-    margin-bottom: 20px; /* Space below the button */
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .search-category-container {
-    display: flex; /* Flexbox layout */
-    justify-content: center; /* Joondab sisu keskmesse */
-    align-items: center; /* Vertikaalne joondamine */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .search-bar {
-    width: 400px; /* Otsinguriba laius */
-    height: 40px; /* Otsinguriba kõrgus */
-    padding: 8px 12px; /* Padjand */
-    border: 1px solid #007bff; /* Sinine ääris */
-    border-radius: 0.25rem; /* Nurkade ümardamine */
-    box-sizing: border-box; /* Kaasa ääris ja padjand */
+    width: 400px;
+    height: 40px;
+    padding: 8px 12px;
+    border: 1px solid #007bff;
+    border-radius: 0.25rem;
+    box-sizing: border-box;
 }
 
 .search-button {
-    width: 100px; /* Nupu laius */
-    height: 40px; /* Nupu kõrgus sama, et sobida otsinguribaga */
-    margin-left: 5px; /* Vasakult marginaal */
-    border-radius: 0.25rem; /* Nurkade ümardamine */
-    background-color: #007bff; /* Sinine taustavärv */
-    color: white; /* Valge tekstivärv */
-    border: 1px solid #007bff; /* Sinine ääris */
-    display: inline-flex; /* Paigutab sisu keskele */
-    align-items: center; /* Vertikaalne joondamine */
-    justify-content: center; /* Horisontaalne joondamine */
-    padding: 0; /* Eemalda padjand */
+    width: 100px;
+    height: 40px;
+    margin-left: 5px;
+    border-radius: 0.25rem;
+    background-color: #007bff;
+    color: white;
+    border: 1px solid #007bff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
 }
 
 .book-item {
@@ -499,17 +471,17 @@ button:hover {
 }
 
 .book-cover {
-    height: 300px; /* Reguleeri vastavalt vajadusele */
+    height: 300px;
     object-fit: cover;
 }
 
 .price {
     font-weight: bold;
-    color: #28a745; /* Roheline värv */
+    color: #28a745;
 }
 
 .add-to-cart .custom-add-to-cart-btn {
-    background-color: #007bff; /* Sinine värv */
+    background-color: #007bff;
     color: white;
     border: none;
     cursor: pointer;
@@ -519,22 +491,22 @@ body {
     background-color: #cbcfcc;
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 0; /* Muuda padding 0-ks, et vältida tühikuid */
-    position: relative; /* Vajalik, et positsioneerimine töötaks */
-    min-height: 100vh; /* Veenduge, et keha katab vähemalt 100% kõrguse */
+    padding: 0;
+    position: relative;
+    min-height: 100vh;
 }
 
 .login-wrapper {
     background-color: #ffffff;
     max-width: 400px;
-    margin: auto; /* Keskita horisontaalselt */
+    margin: auto;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     border-radius: 8px;
-    position: absolute; /* Muudame positsioneerimise absoluutseks */
-    top: 50%; /* Ülemine serv 50% kõrgusest */
-    left: 50%; /* Vasak serv 50% laiusest */
-    transform: translate(-50%, -50%); /* Keskita vorm vertikaalselt ja horisontaalselt */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 h1 {
@@ -590,7 +562,7 @@ button:hover {
 }
 
 .welcome-message {
-    line-height: 1.5; /* Adjust this to control vertical spacing */
-    margin-top: 10px; /* Add margin to create space above the message */
+    line-height: 1.5;
+    margin-top: 10px;
 }
 
