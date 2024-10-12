@@ -27,14 +27,14 @@
                 <!-- Home Link with Icon -->
                 <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">
-                        <i class="fas fa-home"></i> Home <!-- Maja ikoon -->
+                        <i class="fas fa-home"></i> Home
                     </a>
                 </li>
 
                 <!-- Reviews Link with Icon -->
                 <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == 'view_reviews' %}active{% endif %}" href="{% url 'view_reviews' %}">
-                        <i class="fas fa-star"></i> Reviews <!-- Tärn ikoon -->
+                        <i class="fas fa-star"></i> Reviews
                     </a>
                 </li>
 
@@ -42,22 +42,22 @@
                 {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == 'view_cart' %}active{% endif %}" href="{% url 'view_cart' %}">
-                        <i class="fas fa-shopping-cart"></i> Cart <span class="cart-badge">{{ cart_items_count }}</span> <!-- Ostukorvi ikoon -->
+                        <i class="fas fa-shopping-cart"></i> Cart <span class="cart-badge">{{ cart_items_count }}</span>
                     </a>
                 </li>
 
                 <!-- Favorites Link with Icon -->
                 <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == 'view_favorites' %}active{% endif %}" href="{% url 'view_favorites' %}">
-                        <i class="fas fa-heart"></i> Favorites <!-- Süda ikoon -->
+                        <i class="fas fa-heart"></i> Favorites
                     </a>
                 </li>
                 {% endif %}
             </ul>
-            <ul class="navbar-nav">
+            <ul class="navbar-nav ms-auto align-items-center"> <!-- Flexbox alignment here -->
                 {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <span class="nav-link">Welcome, {{ user.username }}!</span>
+                    <span class="nav-link welcome-message">Welcome, {{ user.username }}!</span>
                 </li>
                 <li class="nav-item">
                     <form method="POST" action="{% url 'logout' %}">
