@@ -63,7 +63,7 @@
                     <div class="add-to-cart mt-3">
                         <form method="POST" action="{% url 'add_to_cart' book.id %}">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="custom-add-to-cart-btn">
                                 <i class="fas fa-shopping-cart"></i>
                                 <i class="fas fa-plus"></i>
                             </button>

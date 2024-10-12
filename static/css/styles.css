@@ -151,23 +151,23 @@ body {
     justify-items: center; /* Center books */
 }
 
-/* Book container size */
 .book-item {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-between; /* Tagab, et ruum jaguneb ühtlaselt */
     align-items: center;
     text-align: center;
     background-color: #f8f9fa;
     border: 1px solid #ddd;
     border-radius: 5px;
-    padding: 10px;
-    height: 100%; /* Täielik kõrgus */
-    min-height: 500px; /* Standardne miinimumkõrgus, et kõik konteinerid oleksid ühtlased */
+    padding: 15px;
+    height: 600px; /* Kindel kõrgus, et tagada ühtlane suurus */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
-    margin-bottom: 20px; /* Kindel vahemaa all */
+    margin-bottom: 20px;
 }
+
+
 
 .book-item:hover {
     transform: scale(1.03); /* Slight enlargement on hover */
@@ -205,22 +205,35 @@ body {
     cursor: not-allowed;
 }
 
-/* "Add to Cart" button */
+.add-to-cart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto; /* Asetab nupu konteineri allossa */
+    margin-bottom: 15px; /* Lisa ruumi nupu ja konteineri alumise ääre vahele */
+}
+
 .add-to-cart button {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px; /* Veenduge, et nupp ei oleks liiga kõrge */
     padding: 0;
-    background: linear-gradient(135deg, #007bff, #0056b3); /* Gradient blue */
+    background: linear-gradient(135deg, #007bff, #0056b3);
     color: white;
     border: none;
-    border-radius: 50%; /* Circular shape */
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px; /* Larger icon */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    font-size: 18px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease, box-shadow 0.3s;
-    position: relative; /* Position for plus icon */
+    margin: 0 auto; /* Keskendab nupu */
+    visibility: visible;
+}
+
+.add-to-cart button i {
+    font-size: 20px; /* Suurus ikoonile */
+    margin-right: 5px; /* Lisa vajadusel vahe teksti ja ikooni vahel */
 }
 
 .add-to-cart button:hover {
@@ -275,7 +288,7 @@ body {
 
 .book-cover {
     width: 100%; /* Cover takes the full width of its container */
-    max-width: 200px; /* Set a maximum width for the cover */
+    max-width: 250px; /* Set a maximum width for the cover */
     height: auto; /* Maintain aspect ratio */
     max-height: 300px; /* Optional: Set a max height for better control */
     object-fit: contain; /* Ensure the cover image is fully visible without distortion */
