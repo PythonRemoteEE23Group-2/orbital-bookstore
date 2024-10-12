@@ -375,3 +375,60 @@ body {
     border-radius: 8px;
 }
 
+/* Globaalne vormi stiilide kohandus */
+form {
+    display: flex;
+    flex-direction: column; /* Tagame, et kõik vormi elemendid on vertikaalses reas */
+    align-items: flex-start; /* Vasakule joondus */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column; /* Iga vormigrupp hoiab label ja input vertikaalselt koos */
+    width: 100%;
+    margin-bottom: 15px; /* Kindel ruum vormigruppide vahel */
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px; /* Väike ruum labeli ja sisestuskasti vahel */
+}
+
+input {
+    width: 100%; /* Sisestuskast täidab kogu konteineri laiuse */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Kohandatud nupu paigutus ja stiil */
+button {
+    width: 100%; /* Nupp joondub kogu konteineri laiuses */
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #509fad;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Registreerimislehe paigutus */
+.page-wrapper.register-page {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+/* Kohandatud login-link stiil */
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+}
