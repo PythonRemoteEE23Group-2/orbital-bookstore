@@ -7,35 +7,30 @@ body {
     font-family: 'Georgia', serif;
 }
 
-/* Search and Category Container */
-.search-category-container {
-    display: flex; /* Align items in a row */
-    justify-content: center; /* Center items horizontally */
-    align-items: center; /* Center items vertically */
-    gap: 10px; /* Space between search bar and dropdown */
+/.search-category-container {
+    display: flex;
+    justify-content: center; /* Keskne joondus */
+    align-items: center;
+    flex-wrap: wrap; /* Kindlustab, et komponendid ei lähe laiali */
+    gap: 10px; /* Vahe otsingu ja kategooria vahel */
+    margin-bottom: 20px; /* Lisa ruum allpool */
 }
 
-/* Search Bar */
 .search-bar {
-    flex: 1; /* Make search bar fill available space */
-    min-width: 300px; /* Set a minimum width for the search bar */
-}
-
-.search-bar input {
-    height: 50px; /* Search bar height */
-    font-size: 1.25rem; /* Larger font size */
-    width: 100%; /* Full width */
-}
-
-/* Category Filter */
-.category-filter {
-    width: 200px; /* Fixed width for category dropdown */
+    flex: 1;
+    min-width: 300px; /* Miinimumlaius otsingukastile */
 }
 
 .category-filter select {
-    height: 40px; /* Category filter height */
-    font-size: 1rem; /* Smaller font size */
-    width: 100%; /* Full width */
+    height: 45px; /* Veidi kõrgem dropdown */
+    font-size: 1rem; /* Veidi suurem font */
+}
+
+/* Otsingukasti ja kategooria dropdowni kohandatud laiuse ja joondus */
+.input-group {
+    width: 100%; /* Täielik laius */
+    max-width: 400px; /* Maksimaalne laius */
+    margin-right: 10px;
 }
 
 /* Additional styling for container alignment */
@@ -159,22 +154,19 @@ body {
 /* Book container size */
 .book-item {
     display: flex;
-    flex: 1 1 200px;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     text-align: center;
-    height: 100%;
-    padding: 10px;
     background-color: #f8f9fa;
     border: 1px solid #ddd;
     border-radius: 5px;
+    padding: 10px;
+    height: 100%; /* Täielik kõrgus */
+    min-height: 500px; /* Standardne miinimumkõrgus, et kõik konteinerid oleksid ühtlased */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    flex-grow: 1;
-    min-height: 450px;
-    margin-bottom: 30px;
     transition: transform 0.3s ease;
-    align-self: stretch; /* Täida saadaval olev kõrgus */
+    margin-bottom: 20px; /* Kindel vahemaa all */
 }
 
 .book-item:hover {
