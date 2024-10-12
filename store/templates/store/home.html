@@ -6,111 +6,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orbital Bookstore - Home</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        .search-bar {
-            text-align: center; /* Joondab sisu keskele */
-            margin: 20px 0; /* Lisab natuke ruumi pealkirja ja otsinguriba vahele */
-        }
-        .search-bar input {
-            width: 50%; /* Otsinguriba laius */
-            padding: 10px; /* Padding sisesisule */
-            border: 1px solid #ccc; /* Piir */
-            border-radius: 5px; /* Nurgad ümaraks */
-        }
-        .search-bar button {
-            padding: 10px 15px; /* Nuppude padding */
-            border: none; /* Ilma piiriteta */
-            border-radius: 5px; /* Nurgad ümaraks */
-            background-color: #007bff; /* Sinine taust */
-            color: #fff; /* Valge tekst */
-            cursor: pointer; /* Näitab, et nuppu saab klikkida */
-        }
-        .search-bar button:hover {
-            background-color: #0056b3; /* Tumeda varjundi hover */
-        }
-        .book-item {
-            margin-bottom: 30px; /* Vahe raamatute vahel */
-        }
-    </style>
 </head>
 <body>
     {% include 'store/_navbar.html' %}
-    <div class="page-wrapper">
+
+    <div class="container mt-5">
         <h2 class="text-center my-4">Books That Orbit Your Imagination</h2>
 
-        <!-- Search Bar placed below the title -->
-        <div class="search-bar">
-            <form method="GET" action="{% url 'home' %}">
-                <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search books...">
-                <button type="submit">Search</button>
-            </form>
-        </div>
+        <div class="row mb-4">
+            <div class="col-md-12 text-center"> <!-- Centering Container -->
+                <div class="search-category-container"> <!-- Flex container for search and categories -->
+                    <div class="search-bar"> <!-- Search Bar -->
+                        <form method="GET" action="{% url 'home' %}" class="d-flex">
+                            <div class="input-group">
+                                <input type="text" name="q" class="form-control" value="{{ request.GET.q }}" placeholder="Search books...">
+                                <button type="submit" class="btn btn-outline-success">Search</button>
+                            </div>
+                        </form>
+                    </div>
 
-        <!-- Category Filter -->
-        <div class="category-filter text-center mb-4">
-            <form method="GET" action="{% url 'home' %}">
-                <select name="category" onchange="this.form.submit()">
-                    <option value="">All Categories</option>
-                    {% for category in categories %}
-                        <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>
-                            {{ category.name }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </form>
+                    <div class="category-filter"> <!-- Category Filter Section -->
+                        <form method="GET" action="{% url 'home' %}">
+                            <select name="category" onchange="this.form.submit()" class="form-select">
+                                <option value="">All Categories</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>
+                                        {{ category.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Book List -->
         <h3 class="text-center mb-4">Books Available</h3>
-        <div class="container">
-            <div class="row">
-                {% for book in books %}
-                <div class="col-md-3"> <!-- Kolm raamatut reas (Bootstrap'i grid) -->
-    <div class="book-item">
-        <a href="{% url 'book_detail' book.id %}">
-            <img src="{{ book.cover_art }}" alt="{{ book.title }} Cover Art" class="book-cover img-fluid">
-            <div class="book-info text-center">
-                <h4>{{ book.title }}</h4>
-                <p>by {{ book.author }}</p>
-                <p class="price">€{{ book.price }}</p> <!-- Lisatud class="price" -->
-                <p>Average Rating: {{ book.average_rating|default:"No ratings yet" }}</p>
+        <div class="row">
+            {% for book in books %}
+            <div class="col-md-3"> <!-- Book Item -->
+                <div class="book-item">
+                    <a href="{% url 'book_detail' book.id %}">
+                        <img src="{{ book.cover_art }}" alt="{{ book.title }} Cover Art" class="book-cover img-fluid">
+                        <div class="book-info text-center">
+                            <h4>{{ book.title }}</h4>
+                            <p>by {{ book.author }}</p>
+                            <p class="price">€{{ book.price }}</p>
+                            <p>Average Rating: {{ book.average_rating|default:"No ratings yet" }}</p>
+                        </div>
+                    </a>
+                    {% if user.is_authenticated %}
+                    <div class="add-to-cart mt-3">
+                        <form method="POST" action="{% url 'add_to_cart' book.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-shopping-cart"></i>
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
             </div>
-        </a>
-        {% if user.is_authenticated %}
-        <div class="add-to-cart mt-3">
-            <form method="POST" action="{% url 'add_to_cart' book.id %}">
-                {% csrf_token %}
-                <button type="submit">
-                    <i class="fas fa-shopping-cart"></i> <!-- Ostukorvi ikoon -->
-                    <i class="fas fa-plus"></i> <!-- Plussmärk -->
-                </button>
-            </form>
-        </div>
-        {% endif %}
-    </div>
-</div>
-                    <!-- col-md-3 -->
-                {% endfor %}
-            </div> <!-- row -->
-        </div> <!-- container -->
+            {% endfor %}
+        </div> <!-- row -->
+    </div> <!-- container -->
 
-        <!-- Weather Widget -->
-        <div class="weather-widget d-flex justify-content-center mt-5">
-            <div id="ww_4b239e0ebbb27" v='1.3' loc='auto' a='{"t":"horizontal","lang":"en","sl_lpl":1,"ids":[],
-            "font":"Arial","sl_ics":"one_a","sl_sot":"celsius","cl_bkg":"image","cl_font":"#FFFFFF",
-            "cl_cloud":"#FFFFFF","cl_persp":"#81D4FA","cl_sun":"#FFC107","cl_moon":"#FFC107","cl_thund":"#FF5722"}'>
-                <a href="https://weatherwidget.org/" id="ww_4b239e0ebbb27_u" target="_blank">
-                    HTML Weather Widget for website
-                </a>
-            </div>
+    <!-- Weather Widget -->
+    <div class="widget">
+        <div id="ww_4b239e0ebbb27" v='1.3' loc='auto' a='{"t":"horizontal","lang":"en","sl_lpl":1,"ids":[],
+        "font":"Arial","sl_ics":"one_a","sl_sot":"celsius","cl_bkg":"image","cl_font":"#FFFFFF",
+        "cl_cloud":"#FFFFFF","cl_persp":"#81D4FA","cl_sun":"#FFC107","cl_moon":"#FFC107","cl_thund":"#FF5722"}'>
+            <a href="https://weatherwidget.org/" id="ww_4b239e0ebbb27_u" target="_blank">
+                HTML Weather Widget for website
+            </a>
         </div>
     </div>
 
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         (function() {
             var script = document.createElement('script');

@@ -2,17 +2,56 @@
 body {
     background: url('/static/images/pexels-lumber.jpg') repeat;
     background-color: #fdf3e7;
+    background-size: cover; /* Adjust background image size */
     color: #333;
     font-family: 'Georgia', serif;
 }
 
+/* Search and Category Container */
+.search-category-container {
+    display: flex; /* Align items in a row */
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+    gap: 10px; /* Space between search bar and dropdown */
+}
+
+/* Search Bar */
+.search-bar {
+    flex: 1; /* Make search bar fill available space */
+    min-width: 300px; /* Set a minimum width for the search bar */
+}
+
+.search-bar input {
+    height: 50px; /* Search bar height */
+    font-size: 1.25rem; /* Larger font size */
+    width: 100%; /* Full width */
+}
+
+/* Category Filter */
+.category-filter {
+    width: 200px; /* Fixed width for category dropdown */
+}
+
+.category-filter select {
+    height: 40px; /* Category filter height */
+    font-size: 1rem; /* Smaller font size */
+    width: 100%; /* Full width */
+}
+
+/* Additional styling for container alignment */
+.container .row {
+    align-items: center; /* Align items vertically */
+    margin-bottom: 20px; /* Space below the search and category filters */
+}
+
+/* Navbar Styles */
 .navbar {
-    background-color: #002147; /* Tumedam sinine */
+    background-color: #002147; /* Darker blue */
     padding: 10px 20px;
 }
 
 .navbar-brand {
-    color: #ffffff; /* Valge */
+    color: #ffffff; /* White */
     font-size: 24px;
     font-weight: bold;
     display: flex; /* Flexbox for alignment */
@@ -22,133 +61,137 @@ body {
 .navbar-brand img {
     max-width: 80px; /* Logo size */
     height: auto;
-    margin-right: 10px; /* More space between logo and text */
+    margin-right: 10px; /* Space between logo and text */
 }
 
 .nav-link {
-    color: #a6c8ff; /* Heledam sinine värv lingi jaoks */
+    color: #a6c8ff; /* Lighter blue for links */
     font-size: 16px;
-    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5); /* Teksti varjund */
-    text-decoration: none; /* Eemaldab allajoonimise */
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5); /* Text shadow */
+    text-decoration: none; /* Remove underline */
 }
 
 .nav-link:hover {
-    color: #ffffff; /* Valge hover-efekt */
-    text-decoration: none; /* Eemaldab hover allajoonimise */
+    color: #ffffff; /* White hover effect */
 }
 
 .nav-link.active {
-    font-weight: bold;
-    text-decoration: none !important; /* Eemaldab aktiivse lingi allajoonimise */
-    color: #ffffff !important; /* Tagage, et aktiivne link on valge */
+    font-weight: bold; /* Active link bold */
+    text-decoration: none !important; /* Remove active link underline */
+    color: #ffffff !important; /* Ensure active link is white */
 }
 
 .navbar-toggler {
-    background-color: #ffffff; /* Valge */
+    background-color: #ffffff; /* White */
 }
 
 .btn-logout {
-    color: #ffffff; /* Valge */
-    background-color: #007bff; /* Sinine */
+    color: #ffffff; /* White */
+    background-color: #007bff; /* Blue */
     border: none;
 }
 
 .btn-logout:hover {
-    background-color: #0056b3; /* Tumeda varjundi hover */
+    background-color: #0056b3; /* Darker shade on hover */
 }
 
 .cart-badge {
-    background-color: #ffc107; /* Kuldne */
+    background-color: #ffc107; /* Golden */
     font-size: 14px;
     padding: 2px 8px;
     border-radius: 50%;
-    color: #212529; /* Tumeda värv */
+    color: #212529; /* Dark color */
 }
 
-/* Raamatute pealkirjade ja autorite värvi muutmine */
+/* Book titles and authors color */
 .book-info h4 {
     color: #000;
     margin-bottom: 10px;
-    font-weight: bold; /* Paks tekst */
+    font-weight: bold; /* Bold text */
     font-size: 18px;
     min-height: 60px;
-    max-height: 60px; /* Piirab pealkirja kõrguse */
-    overflow: hidden; /* Varjab ülearuse teksti */
-    text-overflow: ellipsis; /* Lisab ... kui tekst ei mahu ära */
-    white-space: normal; /* Lubab teksti mähkimise */
+    max-height: 60px; /* Limit title height */
+    overflow: hidden; /* Hide overflow text */
+    text-overflow: ellipsis; /* Add ... if text overflows */
+    white-space: normal; /* Allow text wrapping */
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* Lubab maksimaalselt 2 rida */
+    -webkit-line-clamp: 2; /* Max 2 lines */
     -webkit-box-orient: vertical;
 }
 
 .book-info p {
-    color: #333333; /* Autorite nimed ja muu tekst heledam must */
+    color: #333333; /* Author names and other text color */
     margin-bottom: 5px;
-    text-decoration: none !important; /* Eemaldab alljoonimise */
+    text-decoration: none !important; /* Remove underline */
 }
 
-/* Raamatukaante suurus */
+/* Book cover size */
 .book-cover {
     width: 100%;
-    height: 250px; /* Fikseeritud kõrgus raamatukaanele */
-    object-fit: contain; /* Tagab, et kaaned mahutatakse konteineri sisse ilma venitamata */
-    margin-bottom: 10px; /* Lisab natuke vahet pealkirja ja kaane vahel */
+    height: 250px; /* Fixed height for book cover */
+    object-fit: contain; /* Fit covers without stretching */
+    margin-bottom: 10px; /* Space between title and cover */
 }
 
 .book-info .price {
-    font-size: 20px; /* Suurem kirja suurus */
-    font-weight: bold; /* Paks tekst */
-    color: #28a745 !important; /* Võib muuta värvi (roheline) */
-    margin-top: 10px; /* Lisab vahet üleval */
+    font-size: 20px; /* Larger font size */
+    font-weight: bold; /* Bold text */
+    color: #28a745 !important; /* Green */
+    margin-top: 10px; /* Space above */
 }
 
-/* Paigutus 4 raamatut kõrvuti */
+/* Layout for 4 books side by side */
 .book-list {
-    display: grid; /* Grid süsteem */
-    grid-template-columns: repeat(4, 1fr); /* 4 võrdses tulbas */
-    gap: 20px; /* Vahe raamatute vahel */
-    row-gap: 40px; /* Suurem vertikaalne vahe ridade vahel */
-    justify-items: center; /* Raamatud keskjoonduvad */
+    display: grid; /* Grid system */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+    gap: 20px; /* Space between books */
+    row-gap: 40px; /* Larger vertical gap */
+    justify-items: center; /* Center books */
 }
 
-/* Raamatu konteineri suurus */
+/* Book container size */
 .book-item {
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Raamat ja pealkiri joondatakse konteineri piires */
+    justify-content: space-between; /* Space between book and title */
     align-items: center;
     text-align: center;
     padding: 10px;
     background-color: #f8f9fa;
     border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Lisame natuke varju */
-    min-height: 450px; /* Määrab kindla minimaalse kõrguse konteinerile */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    min-height: 450px;
+    margin-bottom: 30px;
+    transition: transform 0.3s ease; /* Animation */
+}
+
+.book-item:hover {
+    transform: scale(1.03); /* Slight enlargement on hover */
 }
 
 .book-item a {
-    text-decoration: none; /* Eemaldab allajoonimise linkidelt */
-    color: black; /* Must värv linkidele */
+    text-decoration: none; /* Remove underline */
+    color: black; /* Black color for links */
 }
 
 .book-item a:hover {
-    color: #007bff; /* Sinine hover-efekt linkidele */
-    text-decoration: none; /* Eemaldab hover allajoonimise */
+    color: #007bff; /* Blue hover effect for links */
 }
 
 /* Global Button Styles */
 .btn {
-    background-color: #007bff;  /* Your primary blue color */
-    color: white;  /* White text for contrast */
+    background-color: #007bff;  /* Primary blue color */
+    color: white;  /* White text */
     border: none;  /* No borders */
-    padding: 10px 20px;  /* Padding for a good size */
+    padding: 10px 20px;  /* Padding for size */
     border-radius: 5px;  /* Rounded corners */
     cursor: pointer;
-    font-weight: bold;  /* Bold text for readability */
+    font-weight: bold;  /* Bold text */
 }
 
 /* Hover effect for buttons */
 .btn:hover {
-    background-color: #0056b3;  /* Darker shade of blue on hover */
+    background-color: #0056b3;  /* Darker blue on hover */
 }
 
 /* Disabled button styling */
@@ -157,261 +200,56 @@ body {
     cursor: not-allowed;
 }
 
-
-/* "Add to Cart" nupp */
+/* "Add to Cart" button */
 .add-to-cart button {
     width: 60px;
     height: 60px;
     padding: 0;
-    background: linear-gradient(135deg, #007bff, #0056b3); /* Gradient sinise tooniga */
+    background: linear-gradient(135deg, #007bff, #0056b3); /* Gradient blue */
     color: white;
     border: none;
-    border-radius: 50%; /* Täisring kuju */
+    border-radius: 50%; /* Circular shape */
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px; /* Suurem ikoon */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Pehme vari */
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    position: relative; /* Positsiooni määramine plussmärgi jaoks */
+    font-size: 22px; /* Larger icon */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    transition: background-color 0.3s ease, box-shadow 0.3s;
+    position: relative; /* Position for plus icon */
 }
-
 
 .add-to-cart button:hover {
-    background: linear-gradient(135deg, #0056b3, #003f7f); /* Hover-efekt tumedama sinisega */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-.add-to-cart button i {
-    margin: 0; /* Eemaldab liigse vahe ikooni ümbert */
-}
-
-.add-to-cart button i.fa-shopping-cart {
-    font-size: 22px; /* Ostukorvi suurus */
-}
-
-.add-to-cart button i.fa-plus {
-    position: absolute;
-    top: 8px; /* Plussmärk liigub üles */
-    right: 8px; /* Paigutus nupu paremasse nurka */
-    font-size: 14px; /* Väiksem plussmärgi suurus */
-    color: #ffffff; /* Plussmärgi värv */
-}
-
-/* Pealkirjade ja teksti stiil */
-.book-info h4 {
-    color: #000;
-    margin-bottom: 10px;
-}
-
-.book-info p {
-    color: #333;
-    margin-bottom: 5px;
-}
-
-/* Review kastikesed */
-.review {
-    border: 1px solid #dee2e6; /* Hele hall äär */
-    border-radius: 10px; /* Ümarad nurgad */
-    padding: 20px; /* Sisemine ruum */
-    margin-bottom: 20px; /* Vahe arvustuste vahel */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Pehme vari */
-    background-color: #ffffff; /* Valge taust */
-}
-
-/* Pealkiri ja kasutaja nimi */
-.review-heading {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.review-user {
-    font-size: 14px;
-    color: #6c757d; /* Hele hall tekst */
-    margin-bottom: 10px;
-}
-
-/* Hinnang */
-.review p {
-    margin-bottom: 10px;
-}
-
-.back-to-home {
-    margin-top: 30px; /* Lisa natuke ruumi ülevalt */
-    text-align: center; /* Keskita link */
-}
-
-.back-to-home a {
-    color: #ffffff; /* Valge tekst */
-    background-color: #007bff; /* Sinine taust */
-    padding: 12px 20px; /* Ruum ümbritseva lingi ümber */
-    border-radius: 5px; /* Ümarad nurgad */
-    text-decoration: none; /* Eemalda allajoonimine */
-    font-size: 18px; /* Suurem font */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Pehme vari */
-    transition: background-color 0.3s, transform 0.3s; /* Sujuvad üleminekud */
-}
-
-.back-to-home a:hover {
-    background-color: #0056b3; /* Tumeda varjundi hover efekt */
-    transform: translateY(-2px); /* Kergelt tõstmine hover'i ajal */
-}
-
-.continue-shopping {
-    margin-top: 30px; /* Lisa ruumi ülevalt */
-    text-align: center; /* Keskita link */
-}
-
-.continue-shopping a {
-    color: #ffffff; /* Valge tekst */
-    background-color: #28a745; /* Roheline taust */
-    padding: 12px 20px; /* Ruum ümbritseva lingi ümber */
-    border-radius: 5px; /* Ümarad nurgad */
-    text-decoration: none; /* Eemalda allajoonimine */
-    font-size: 18px; /* Suurem font */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Pehme vari */
-    transition: background-color 0.3s, transform 0.3s; /* Sujuvad üleminekud */
-}
-
-.continue-shopping a:hover {
-    background-color: #218838; /* Tumeda varjundi hover efekt */
-    transform: translateY(-2px); /* Kergelt tõstmine hover'i ajal */
-}
-
-.back-to-book-list {
-    margin-top: 30px; /* Lisa ruumi ülevalt */
-    text-align: center; /* Keskita link */
-}
-
-.back-to-book-list a {
-    color: #ffffff; /* Valge tekst */
-    background-color: #007bff; /* Sinine taust */
-    padding: 12px 20px; /* Ruum ümbritseva lingi ümber */
-    border-radius: 5px; /* Ümarad nurgad */
-    text-decoration: none; /* Eemalda allajoonimine */
-    font-size: 18px; /* Suurem font */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Pehme vari */
-    transition: background-color 0.3s, transform 0.3s; /* Sujuvad üleminekud */
-}
-
-.back-to-book-list a:hover {
-    background-color: #0056b3; /* Tumeda varjundi hover efekt */
-    transform: translateY(-2px); /* Kergelt tõstmine hover'i ajal */
-}
-
-/* Favorite heart button */
-/* Favorite heart button */
-.btn-favorite {
-    background-color: transparent;
-    border: none;
-    padding: 0;
-    font-size: 1.5rem;
-    cursor: pointer;
-}
-
-.heart-icon {
-    transition: color 0.3s ease-in-out;
-}
-
-.heart-icon.favorite {
-    color: #ff4757; /* Solid red for favorite */
-}
-
-.heart-icon:not(.favorite) {
-    color: #333; /* Default color for non-favorite */
-}
-
-.btn-favorite:hover .heart-icon {
-    color: #ff4757; /* Red heart on hover */
-}
-
-.btn-danger {
-    background-color: red !important;
-    border-color: darkred !important;
-}
-
-.btn-danger:hover {
-    background-color: darkred !important;
-}
-
-/* Ostukorvi koguväärtuse stiilid */
-.cart-total-wrapper {
-    background-color: #f1f1f1; /* Kergelt hall taust, mis sobib lehe üldise kujundusega */
-    padding: 15px;
-    border: 1px solid #ccc; /* Peenem hall ääris */
-    border-radius: 8px;
-    margin-top: 20px;
+    background: linear-gradient(135deg, #0056b3, #003f7f); /* Darker shade on hover */
 }
 
 .total-amount {
-    font-size: 1.4em;  /* Veidi väiksem font */
-    font-weight: 600;  /* Pisut kergem, kuid siiski esiletõstetud */
-    color: #333;       /* Tumehall font, mis sobib neutraalselt igasuguse kujundusega */
-    background-color: #fff;  /* Valge taust, et tekst oleks selge */
-    padding: 8px;
-    border-radius: 5px; /* Pehmed nurgad */
-    display: inline-block;
+    font-weight: bold; /* Bold text */
 }
 
-.total-amount::before {
-    content: "🛒 ";  /* Lisab ikooni kogusumma ette */
+.widget {
+    margin: 20px auto; /* Adds margin */
+    text-align: center; /* Centers the widget */
+    max-width: 400px; /* Optional: limit widget width */
 }
 
-@media (max-width: 768px) {
-    .total-amount {
-        font-size: 1.5em; /* Kohandab fonti mobiiliseadmetes */
-    }
+/* Custom styles for the input group to ensure full width and center alignment */
+.input-group {
+    width: 100%; /* Full width of the parent container */
+    margin: 0 auto; /* Center alignment */
+    max-width: 400px; /* Optional: max width */
 }
 
-/* Väiksemad font-suurused ja värvimuutused */
-.custom-heading {
-    font-size: 2rem; /* Vähendatud pealkirja suurus */
-    color: #28a745; /* Heleroheline värv */
-    font-weight: bold;
+/* Search bar specific styles */
+.search-bar {
+    width: auto; /* Auto width for responsiveness */
 }
 
-.custom-message {
-    font-size: 1.25rem; /* Vähendatud sõnumi suurus */
-    color: #333; /* Tumehall tekst */
+/* Adjust category filter to ensure it fits nicely */
+.category-filter .form-select {
+    width: auto; /* Auto width */
 }
 
-.custom-download-heading {
-    font-size: 1.75rem; /* Väiksem teine pealkiri */
-    color: #007bff; /* Sinine värv */
+.review {
+    background-color: rgba(255, 255, 255, 0.9); /* White background with 90% opacity */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Adds a shadow for depth */
 }
-
-.custom-list-item {
-    font-size: 1rem; /* Väiksem kirja suurus */
-    background-color: #f8f9fa; /* Heledam taust */
-    padding: 0.75rem;
-}
-
-.custom-download-link {
-    color: #007bff; /* Sinine link */
-    text-decoration: none;
-}
-
-.custom-download-link:hover {
-    text-decoration: underline; /* Hover efekt lingile */
-}
-
-.custom-button {
-    font-size: 1.2rem; /* Veidi suurem nuppude font */
-    background-color: #007bff; /* Sinine nupu taust */
-    border: none;
-}
-
-.custom-button:hover {
-    background-color: #0056b3; /* Tumedam sinine hover efekt */
-}
-
-/* Lisa vahe ja raam */
-.custom-container {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 2rem;
-    background-color: #fff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-

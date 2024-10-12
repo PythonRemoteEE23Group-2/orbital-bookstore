@@ -2,33 +2,25 @@
 
 Orbital Bookstore is an online bookstore where users can browse, add books to their cart, make purchases, and leave reviews. This application is built using Django, a Python web framework.
 
-![Project Screenshot](./static/images/homepage.png)
+## Features
+
+Book Catalog: Users can browse through a collection of books sorted by categories and subcategories.
+User Authentication: Users can sign up, log in, and manage their profiles.
+Shopping Cart: Users can add books to their cart and proceed with the purchase.
+Order History: Users can view their past purchases and order details.
+Admin Panel: Admins can manage books, users, and orders through the Django admin interface.
+Book Reviews: Registered users can leave reviews and ratings for books.
+
+![homepage.png](static/images/homepage.png)
 
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
 
 - Python 3.12 or higher
-- Django 4.0
+- DDjango 5.1 or higher
 - PostgreSQL 14 (or any other database you plan to use)
 - Git
-- asgiref==3.8.1
-- Django==5.1.1
-- mysqlclient==2.2.4
--psycopg2-binary==2.9.9
-- python-decouple==3.8
-- sqlparse==0.5.1
-- pip~=24.0
-- wheel~=0.43.0
-- utils~=1.0.2
-- pillow~=10.3.0
-- tornado~=6.4
-- numpy~=2.1.0
-- requests~=2.32.3
-- setuptools~=69.5.1
-- packaging~=24.1
-- pyparsing~=3.1.2
-- pytest~=8.2.0
 
 ## Installation
 
@@ -64,24 +56,55 @@ pip install -r requirements.txt
 ```
 
 ### 4. Configure the database
-By default, the project is set up to work with PostgreSQL. Update the DATABASES setting in the settings.py file according to your database configuration:
+
+Instead of hardcoding database credentials in the `settings.py` file, we will use environment variables for better security and flexibility.
+
+#### Step 1: Create a `.env` file
+In the root directory of the project, create a `.env` file with the following content:
+
+```
+DATABASE_NAME=your-database-name
+DATABASE_USER=your-database-user
+DATABASE_PASSWORD=your-database-password
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+```
+
+Replace the values with your actual database details.
+
+#### Step 2: Configure `settings.py`
+Update your `settings.py` file to read from the `.env` file. Install the `python-dotenv` package by adding it to your `requirements.txt` or by running:
+
 ```bash
+pip install python-dotenv
+```
+
+Then, modify the `settings.py` file to load environment variables:
+
+```python
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from the .env file
+load_dotenv()
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'your-database-name',
-        'USER': 'your-database-user',
-        'PASSWORD': 'your-database-password',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.getenv('DATABASE_NAME'),
+        'USER': os.getenv('DATABASE_USER'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        'HOST': os.getenv('DATABASE_HOST'),
+        'PORT': os.getenv('DATABASE_PORT', '5432'),
     }
 }
 ```
 
+By using the `.env` file, you ensure that sensitive information like database credentials is not hardcoded in your codebase, improving security and making it easier to manage configurations in different environments.
+
 ### 5. Apply migrations
-Run the following commands to apply the database migrations:
+Run the following command to apply the database migrations:
 ```bash
-python manage.py makemigrations
 python manage.py migrate
 ```
 ### 6. Create a superuser
@@ -98,31 +121,14 @@ python manage.py runserver
 ```
 Visit http://127.0.0.1:8000/ in your browser to see the website.
 
-## Features
-
-Book Catalog: Users can browse through a collection of books sorted by categories and subcategories.
-User Authentication: Users can sign up, log in, and manage their profiles.
-Shopping Cart: Users can add books to their cart and proceed with the purchase.
-Order History: Users can view their past purchases and order details.
-Admin Panel: Admins can manage books, users, and orders through the Django admin interface.
-Book Reviews: Registered users can leave reviews and ratings for books.
-
 ## Testing
 
 To run the tests for the project, execute the following command:
 ```bash
-python manage.py test
+pytest
 ```
 This will run all unit tests for the app, ensuring that the functionality works as expected.
 
-## Deployment
-
-For production deployment, ensure you configure the following settings:
-
-Database: Use a production-level database like PostgreSQL or MySQL.
-Static Files: Run python manage.py collectstatic to collect static files.
-Server: Use a production-ready web server like Gunicorn or uWSGI along with Nginx.
-
 ## Credits
 
-This project was developed as part of a team effort.
+This project was developed as part of a team effort: Merlyn Mey & Tarmo Kõuhkna

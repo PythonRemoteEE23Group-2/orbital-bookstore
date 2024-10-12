@@ -30,21 +30,22 @@
                 {% if user.is_authenticated %}
                     <form method="POST" action="{% url 'toggle_favorites' book.id %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-favorite">
+                        <button type="submit" class="btn btn-favorite" aria-label="Lisa lemmikutesse">
                             {% if is_favorite %}
                                 <i class="fas fa-heart heart-icon favorite"></i> <!-- Solid red heart for favorite -->
                             {% else %}
                                 <i class="far fa-heart heart-icon"></i> <!-- Empty heart for not favorite -->
                             {% endif %}
-                        </button>
+                            <span class="favorite-text">- Add to favorites</span> <!-- Lisatud tekst -->
+                         </button>
                     </form>
+
                     <form method="post" action="{% url 'add_to_cart' book.id %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                        <button type="submit" class="btn btn-primary">Add to cart</button>
                     </form>
-                {% endif %}
-            </div>
-        </div>
+            {% endif %}
+
 
         <div class="row mt-5">
             <div class="col-12">

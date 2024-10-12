@@ -44,7 +44,7 @@
             </ul>
 
             <div class="d-flex justify-content-between align-items-center mt-4 cart-total-wrapper">
-                 <p class="mb-0 total-amount">Total Cart Value: €{{ cart.total_cost }}</p>
+                 <p class=".total-amount">Total Cart Value: €{{ cart.total_cost }}</p>
                  <form method="post" action="{% url 'checkout' %}">
                      {% csrf_token %}
                      <button type="submit" class="btn btn-success">Proceed to Checkout</button>
