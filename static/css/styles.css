@@ -253,3 +253,63 @@ body {
     background-color: rgba(255, 255, 255, 0.9); /* White background with 90% opacity */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Adds a shadow for depth */
 }
+
+/* Styling for the cart page */
+.page-wrapper {
+    background-color: #f8f9fa; /* Light background color */
+    padding: 20px; /* Padding around the page */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+.list-group-item {
+    border: 1px solid #dee2e6; /* Light border for items */
+    border-radius: 8px; /* Rounded corners for items */
+    margin-bottom: 15px; /* Space between items */
+}
+
+.book-cover {
+    width: 60px; /* Fixed width for book cover */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.item-controls button {
+    min-width: 40px; /* Minimum width for buttons */
+}
+
+.cart-total-wrapper {
+    font-size: 1.2rem; /* Larger font for total */
+}
+
+.empty-cart {
+    font-size: 1.5rem; /* Larger font for empty cart message */
+    color: #dc3545; /* Red color for emphasis */
+}
+
+.btn-danger {
+    background-color: #dc3545; /* Bootstrap's red color */
+    border-color: #dc3545; /* Matching border color */
+}
+
+.btn-danger:hover {
+    background-color: #c82333; /* Darker red for hover effect */
+    border-color: #bd2130; /* Darker border on hover */
+}
+
+/* styles.css */
+
+/* Ensure the "Proceed to Checkout" button is green */
+.btn-success {
+    background-color: #28a745 !important; /* Green background */
+    border-color: #28a745 !important; /* Green border */
+    color: white !important; /* White text */
+}
+
+/* Optional: Customize the "Continue Shopping" button */
+.btn-primary {
+    background-color: #007bff !important; /* Blue background */
+    border-color: #007bff !important; /* Blue border */
+    color: white !important; /* White text */
+}
+
+/* Additional styles can be added here */
