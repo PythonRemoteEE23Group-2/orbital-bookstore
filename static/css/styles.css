@@ -1,4 +1,3 @@
-/* Custom Styling for Navbar */
 body {
     background: url('/static/images/pexels-lumber.jpg') repeat;
     background-color: #fdf3e7;
@@ -7,33 +6,12 @@ body {
     font-family: 'Georgia', serif;
 }
 
-/.search-category-container {
-    display: flex;
-    justify-content: center; /* Keskne joondus */
-    align-items: center;
-    flex-wrap: wrap; /* Kindlustab, et komponendid ei lähe laiali */
-    gap: 10px; /* Vahe otsingu ja kategooria vahel */
-    margin-bottom: 20px; /* Lisa ruum allpool */
-}
-
-.search-bar {
-    flex: 1;
-    min-width: 300px; /* Miinimumlaius otsingukastile */
-}
-
-.category-filter select {
-    height: 45px; /* Veidi kõrgem dropdown */
-    font-size: 1rem; /* Veidi suurem font */
-}
-
-/* Otsingukasti ja kategooria dropdowni kohandatud laiuse ja joondus */
 .input-group {
-    width: 100%; /* Täielik laius */
-    max-width: 400px; /* Maksimaalne laius */
-    margin-right: 10px;
+    display: flex;
+    max-width: 500px; /* Piira maksimaalne laius */
+    width: 100%; /* Laius täidab konteineri */
 }
 
-/* Additional styling for container alignment */
 .container .row {
     align-items: center; /* Align items vertically */
     margin-bottom: 20px; /* Space below the search and category filters */
@@ -252,14 +230,10 @@ body {
 
 /* Custom styles for the input group to ensure full width and center alignment */
 .input-group {
+    display: flex;
     width: 100%; /* Full width of the parent container */
     margin: 0 auto; /* Center alignment */
-    max-width: 400px; /* Optional: max width */
-}
-
-/* Search bar specific styles */
-.search-bar {
-    width: auto; /* Auto width for responsiveness */
+    max-width: 600px; /* Optional: max width */
 }
 
 /* Adjust category filter to ensure it fits nicely */
@@ -487,4 +461,55 @@ button:hover {
 .btn.btn-primary {
     margin-top: 20px; /* Space above the button */
     margin-bottom: 20px; /* Space below the button */
+}
+
+.search-category-container {
+    display: flex; /* Flexbox layout */
+    justify-content: center; /* Joondab sisu keskmesse */
+    align-items: center; /* Vertikaalne joondamine */
+}
+
+.search-bar {
+    width: 400px; /* Otsinguriba laius */
+    height: 40px; /* Otsinguriba kõrgus */
+    padding: 8px 12px; /* Padjand */
+    border: 1px solid #007bff; /* Sinine ääris */
+    border-radius: 0.25rem; /* Nurkade ümardamine */
+    box-sizing: border-box; /* Kaasa ääris ja padjand */
+}
+
+.search-button {
+    width: 100px; /* Nupu laius */
+    height: 40px; /* Nupu kõrgus sama, et sobida otsinguribaga */
+    margin-left: 5px; /* Vasakult marginaal */
+    border-radius: 0.25rem; /* Nurkade ümardamine */
+    background-color: #007bff; /* Sinine taustavärv */
+    color: white; /* Valge tekstivärv */
+    border: 1px solid #007bff; /* Sinine ääris */
+    display: inline-flex; /* Paigutab sisu keskele */
+    align-items: center; /* Vertikaalne joondamine */
+    justify-content: center; /* Horisontaalne joondamine */
+    padding: 0; /* Eemalda padjand */
+}
+
+
+.book-item {
+    margin-bottom: 20px;
+}
+
+.book-cover {
+    height: 300px; /* Reguleeri vastavalt vajadusele */
+    object-fit: cover;
+}
+
+.price {
+    font-weight: bold;
+    color: #28a745; /* Roheline värv */
+}
+
+.add-to-cart .custom-add-to-cart-btn {
+    background-color: #007bff; /* Sinine värv */
+    color: white;
+    border: none;
+    cursor: pointer;
 }

@@ -19,29 +19,25 @@
         <div class="row mb-4">
             <div class="col-md-12 text-center"> <!-- Centering Container -->
                 <div class="search-category-container"> <!-- Flex container for search and categories -->
-                    <div class="search-bar"> <!-- Search Bar -->
-                        <form method="GET" action="{% url 'home' %}" class="d-flex">
-                            <div class="input-group">
-                                <input type="text" name="q" class="form-control" value="{{ request.GET.q }}" placeholder="Search books...">
-                                <button type="submit" class="btn btn-outline-success">Search</button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="category-filter"> <!-- Category Filter Section -->
-                        <form method="GET" action="{% url 'home' %}">
-                            <select name="category" onchange="this.form.submit()" class="form-select">
-                                <option value="">All Categories</option>
-                                {% for category in categories %}
-                                    <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>
-                                        {{ category.name }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </form>
-                    </div>
+                    <form method="GET" action="{% url 'home' %}" class="d-flex justify-content-center align-items-center"> <!-- added align-items-center -->
+                        <input type="text" name="search-bar" class="form-control search-bar" value="{{ request.GET.q }}" placeholder="Search books...">
+                        <button class="search-button">Search</button>
+                    </form>
                 </div>
             </div>
+        </div>
+
+        <div class="category-filter"> <!-- Category Filter Section -->
+            <form method="GET" action="{% url 'home' %}">
+                <select name="category" onchange="this.form.submit()" class="form-select">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
         </div>
 
         <!-- Book List -->
