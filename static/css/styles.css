@@ -424,3 +424,41 @@ button:hover {
     text-align: center;
     margin-top: 20px;
 }
+
+/* Ensure all book covers have the same size */
+.favorite-book-card .book-cover {
+    width: 100%; /* Full width within its column */
+    height: 250px; /* Set a fixed height */
+    object-fit: cover; /* Ensures the image maintains aspect ratio and covers the area */
+    margin-bottom: 10px; /* Add some space between the cover and the title */
+}
+
+/* Ensure all cards have the same height */
+.favorite-book-card {
+    height: 100%; /* Make all cards fill available height */
+}
+
+/* Make sure the card columns are aligned properly */
+.favorite-book-card .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+/* Ensure the "Remove" button stays aligned */
+.custom-delete-btn {
+    align-self: flex-start; /* Keep aligned on the left */
+    margin-top: 10px;
+}
+
+/* Add space below the container holding the button */
+.container {
+    margin-bottom: 50px; /* Creates 50px of space at the bottom */
+}
+
+/* Optionally, ensure the button has some margin around it */
+.btn.btn-primary {
+    margin-top: 20px; /* Space above the button */
+    margin-bottom: 20px; /* Space below the button */
+}
