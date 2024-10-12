@@ -282,8 +282,21 @@ body {
     margin-bottom: 10px; /* Space between the image and the book info */
 }
 
+.item-controls {
+    display: flex; /* Flexbox paigutus */
+    flex-direction: row; /* Horisontaalne suund */
+    align-items: center; /* Vertikaalne joondus keskel */
+}
+
+.item-controls form {
+    display: flex; /* Flexbox paigutus */
+    flex-direction: row; /* Horisontaalne suund */
+    align-items: center; /* Vertikaalne joondus keskel */
+}
+
 .item-controls button {
-    min-width: 40px; /* Minimum width for buttons */
+    margin: 0 5px; /* Lisab horisontaalset vahet nuppude vahel */
+    min-width: 40px; /* Nuppude miinimumlaius */
 }
 
 .cart-total-wrapper {
