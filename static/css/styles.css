@@ -117,6 +117,7 @@ body {
     display: -webkit-box;
     -webkit-line-clamp: 2; /* Max 2 lines */
     -webkit-box-orient: vertical;
+    height: 60px;
 }
 
 .book-info p {
@@ -128,7 +129,8 @@ body {
 /* Book cover size */
 .book-cover {
     width: 100%;
-    height: 250px; /* Fixed height for book cover */
+    height: auto;
+    max-height: 250px;
     object-fit: contain; /* Fit covers without stretching */
     margin-bottom: 10px; /* Space between title and cover */
 }
@@ -143,8 +145,10 @@ body {
 /* Layout for 4 books side by side */
 .book-list {
     display: grid; /* Grid system */
+    flex-wrap: wrap;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
-    gap: 20px; /* Space between books */
+    grid-auto-rows: 1fr;
+    gap: 30px; /* Space between books */
     row-gap: 40px; /* Larger vertical gap */
     justify-items: center; /* Center books */
 }
@@ -152,21 +156,27 @@ body {
 /* Book container size */
 .book-item {
     display: flex;
+    flex: 1 1 200px;
     flex-direction: column;
-    justify-content: space-between; /* Space between book and title */
+    justify-content: space-between;
     align-items: center;
     text-align: center;
+    height: 100%;
     padding: 10px;
     background-color: #f8f9fa;
+    border: 1px solid #ddd;
     border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex-grow: 1;
     min-height: 450px;
     margin-bottom: 30px;
-    transition: transform 0.3s ease; /* Animation */
+    transition: transform 0.3s ease;
+    align-self: stretch; /* Täida saadaval olev kõrgus */
 }
 
 .book-item:hover {
     transform: scale(1.03); /* Slight enlargement on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .book-item a {
@@ -269,8 +279,12 @@ body {
 }
 
 .book-cover {
-    width: 60px; /* Fixed width for book cover */
+    width: 100%; /* Cover takes the full width of its container */
+    max-width: 200px; /* Set a maximum width for the cover */
     height: auto; /* Maintain aspect ratio */
+    max-height: 300px; /* Optional: Set a max height for better control */
+    object-fit: contain; /* Ensure the cover image is fully visible without distortion */
+    margin-bottom: 10px; /* Space between the image and the book info */
 }
 
 .item-controls button {
@@ -312,4 +326,38 @@ body {
     color: white !important; /* White text */
 }
 
-/* Additional styles can be added here */
+/* Common styles for .page-wrapper */
+.page-wrapper {
+    background-color: #ffffff;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+/* Narrow width for login and register pages */
+.login-page .page-wrapper,
+.register-page .page-wrapper {
+    max-width: 400px;
+}
+
+/* Wider width for cart and reviews pages */
+.cart-page .page-wrapper,
+.review-page .page-wrapper {
+    max-width: 1200px;
+    padding: 40px;
+}
+
+/* Ensure full width for container inside cart and reviews pages */
+.cart-page .container,
+.review-page .container {
+    width: 100%;
+    max-width: 100%; /* Remove Bootstrap's default container width limitations */
+}
+
+/* Ensure that row inside cart and reviews pages behaves correctly */
+.cart-page .row,
+.review-page .row {
+    margin-right: 0;
+    margin-left: 0;
+}
