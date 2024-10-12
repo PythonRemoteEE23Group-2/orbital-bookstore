@@ -492,7 +492,6 @@ button:hover {
     padding: 0; /* Eemalda padjand */
 }
 
-
 .book-item {
     margin-bottom: 20px;
 }
@@ -512,4 +511,78 @@ button:hover {
     color: white;
     border: none;
     cursor: pointer;
+}
+
+body {
+    background-color: #cbcfcc;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0; /* Muuda padding 0-ks, et vältida tühikuid */
+    position: relative; /* Vajalik, et positsioneerimine töötaks */
+    min-height: 100vh; /* Veenduge, et keha katab vähemalt 100% kõrguse */
+}
+
+.login-wrapper {
+    background-color: #ffffff;
+    max-width: 400px;
+    margin: auto; /* Keskita horisontaalselt */
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    position: absolute; /* Muudame positsioneerimise absoluutseks */
+    top: 50%; /* Ülemine serv 50% kõrgusest */
+    left: 50%; /* Vasak serv 50% laiusest */
+    transform: translate(-50%, -50%); /* Keskita vorm vertikaalselt ja horisontaalselt */
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #555;
+}
+
+input {
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #509fad;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.register-link a {
+    color: #61857b;
+    text-decoration: none;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
 }
