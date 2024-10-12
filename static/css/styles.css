@@ -124,6 +124,9 @@ body {
     color: #333333; /* Author names and other text color */
     margin-bottom: 5px;
     text-decoration: none !important; /* Remove underline */
+    min-height: 20px;
+    max-height: 40px; /* Piira autoriinfo kõrgust */
+    overflow: hidden;
 }
 
 /* Book cover size */
@@ -335,11 +338,13 @@ body {
     border-radius: 8px;
 }
 
-/* Narrow width for login and register pages */
 .login-page .page-wrapper,
 .register-page .page-wrapper {
     max-width: 400px;
+    margin: 50px auto; /* Lisab 50px ruumi konteineri ja navbari vahele */
+    padding-top: 20px; /* Võimalik lisada ka sisemine polster, kui vajalik */
 }
+
 
 /* Wider width for cart and reviews pages */
 .cart-page .page-wrapper,
@@ -361,3 +366,12 @@ body {
     margin-right: 0;
     margin-left: 0;
 }
+
+.page-wrapper {
+    background-color: #ffffff;
+    margin: 80px auto; /* Lisab 80px ruumi navbari ja konteineri vahele */
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
