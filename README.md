@@ -121,14 +121,42 @@ python manage.py runserver
 ```
 Visit http://127.0.0.1:8000/ in your browser to see the website.
 
-## Testing
+### 8. Testing Setup
 
-To run the tests for the project, execute the following command:
+Before running the tests, ensure the necessary testing libraries are installed.
+
+#### Install testing packages:
+
+Run the following command to install the required packages for running tests:
+
+```bash
+pip install pytest pytest-django python-dotenv
+```
+
+### Pytest Configuration
+
+To configure pytest for your Django project, create a `pytest.ini` file in the root directory with the following content:
+
+```ini
+[pytest]
+DJANGO_SETTINGS_MODULE = your_project_name.settings
+python_files = tests.py test_*.py *_tests.py
+```
+
+Replace `your_project_name` with the name of your Django project.
+
+This ensures pytest can properly locate your Django settings and tests.
+
+### Running tests:
+
+You can run your tests using the following command:
+
 ```bash
 pytest
 ```
-This will run all unit tests for the app, ensuring that the functionality works as expected.
+This ensures all the tests in your project will be executed.
 
-## Credits
+### 9. Credits
 
 This project was developed as part of a team effort: Merlyn Mey & Tarmo Kõuhkna
+

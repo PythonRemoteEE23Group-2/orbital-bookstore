@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import login
-from django.db.models import Q, Avg
+from django.db.models import Avg
 from .models import Book, Category, Cart, CartItem, Order, Favorite, Review, PAYMENT_STATUS_CHOICES
 from .forms import CustomUserCreationForm
 
@@ -11,18 +11,18 @@ logger = logging.getLogger(__name__)
 
 
 def home(request):
-    query = request.GET.get('q')
-    selected_category = request.GET.get('category')
+    search_query = request.GET.get('search_bar', '')
+    category_id = request.GET.get('category', '')
 
     books = Book.objects.all()
 
-    if query:
-        books = books.filter(Q(title__icontains=query) | Q(author__icontains=query))
+    if search_query:
+        books = books.filter(title__icontains=search_query)
 
-    if selected_category:
-        books = books.filter(subcategory__category__id=selected_category)
+    if category_id:
+        books = books.filter(subcategory__category__id=category_id)
 
-    categories = Category.objects.prefetch_related('subcategories__books')
+    categories = Category.objects.all()
 
     cart_items_count = CartItem.objects.filter(cart__user=request.user).count() if request.user.is_authenticated else 0
 
@@ -32,9 +32,10 @@ def home(request):
         'categories': categories,
         'books': books,
         'cart_items_count': cart_items_count,
-        'selected_category': selected_category,
-        'query': query,
+        'search_query': search_query,
+        'category_id': category_id,
     })
+
 
 @login_required
 def toggle_favorites(request, book_id):
@@ -46,12 +47,12 @@ def toggle_favorites(request, book_id):
 
     return redirect('book_detail', book_id=book.id)
 
+
 def book_detail(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     reviews = book.reviews.all()
     user = request.user
     is_favorite = False
-
 
     cart_items_count = 0
     user_has_reviewed = False
@@ -249,7 +250,6 @@ def view_favorites(request):
         'store/favorites.html',
         {'favorites': favorites, 'cart_items_count': cart_item.count()}
     )
-
 def view_reviews(request):
     reviews = Review.objects.all()
 

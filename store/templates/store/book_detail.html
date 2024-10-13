@@ -32,11 +32,11 @@
                         {% csrf_token %}
                         <button type="submit" class="btn btn-favorite" aria-label="Lisa lemmikutesse">
                             {% if is_favorite %}
-                                <i class="fas fa-heart heart-icon favorite"></i> <!-- Solid red heart for favorite -->
+                                <i class="fas fa-heart heart-icon favorite"></i>
                             {% else %}
-                                <i class="far fa-heart heart-icon"></i> <!-- Empty heart for not favorite -->
+                                <i class="far fa-heart heart-icon"></i>
                             {% endif %}
-                            <span class="favorite-text">- Add to favorites</span> <!-- Lisatud tekst -->
+                            <span class="favorite-text">- Add to favorites</span>
                          </button>
                     </form>
 

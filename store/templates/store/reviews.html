@@ -12,25 +12,25 @@
     {% include 'store/_navbar.html' %}
 
     <div class="page-wrapper">
-        <div class="container mt-5"> <!-- Added margin-top for spacing -->
-            <h1 class="mb-4">All Reviews</h1> <!-- Added margin-bottom for spacing -->
+        <div class="container mt-5">
+            <h1 class="mb-4">All Reviews</h1>
 
             {% if reviews %}
                 <div class="row">
                     {% for review in reviews %}
-                        <div class="col-md-4 mb-4"> <!-- Responsive column -->
-                            <div class="review border rounded p-3"> <!-- Added border and padding -->
+                        <div class="col-md-4 mb-4">
+                            <div class="review border rounded p-3">
                                 <div class="review-heading mb-2">
                                     <a href="{% url 'book_detail' review.book.id %}" class="book-link custom-review-link">
-                                        <strong>{{ review.book.title }}</strong> <!-- Made the title bold -->
+                                        <strong>{{ review.book.title }}</strong>
                                     </a>
                                 </div>
 
-                                <div class="review-user text-muted"> <!-- Changed to text-muted for user -->
+                                <div class="review-user text-muted">
                                     by {{ review.user.username }}
                                 </div>
 
-                                <p class="rating">Rating: <strong>{{ review.rating }}</strong></p> <!-- Made rating bold -->
+                                <p class="rating">Rating: <strong>{{ review.rating }}</strong></p>
 
                                 <p>{{ review.review_text }}</p>
                             </div>
@@ -41,12 +41,12 @@
                 <p>No reviews available yet.</p>
             {% endif %}
 
-            <div class="back-to-home mt-4"> <!-- Added margin-top for spacing -->
-                <a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a> <!-- Styled button -->
+            <div class="back-to-home mt-4">
+                <a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> <!-- Include Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

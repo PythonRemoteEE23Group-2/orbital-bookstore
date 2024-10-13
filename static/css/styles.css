@@ -3,7 +3,7 @@ body {
     background-color: #fdf3e7;
     background-size: cover;
     color: #333;
-    font-family: 'Georgia', serif;
+    font-family: 'Lora', serif;
 }
 
 .input-group {
@@ -17,7 +17,6 @@ body {
     margin-bottom: 20px;
 }
 
-/* Navbar Styles */
 .navbar {
     background-color: #002147;
     padding: 10px 20px;
@@ -487,14 +486,6 @@ button:hover {
     cursor: pointer;
 }
 
-body {
-    background-color: #cbcfcc;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    position: relative;
-    min-height: 100vh;
-}
 
 .login-wrapper {
     background-color: #ffffff;
